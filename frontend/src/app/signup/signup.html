@@ -1,7 +1,8 @@
 <div class="login-container">
-  <form #loginForm="ngForm" (ngSubmit)="login()" class="login-card">
 
-    <h2>Login</h2>
+  <form #signupForm="ngForm" (ngSubmit)="signup()" class="login-card">
+
+    <h2>Sign Up</h2>
 
     <input
       type="email"
@@ -14,7 +15,7 @@
     />
 
     <div class="error" *ngIf="emailInput.invalid && emailInput.touched">
-      Please enter a valid email
+      Enter a valid email
     </div>
 
     <input
@@ -31,14 +32,23 @@
       Password must be at least 6 characters
     </div>
 
-    <button type="submit" [disabled]="loginForm.invalid">
-      Login
+    <input
+      type="password"
+      placeholder="Confirm Password"
+      name="confirmPassword"
+      [(ngModel)]="confirmPassword"
+      required
+    />
+
+    <button type="submit" [disabled]="signupForm.invalid">
+      Sign Up
     </button>
 
     <p class="signup-link">
-      Don't have an account?
-      <a routerLink="/signup">Sign up</a>
+      Already have an account?
+      <a routerLink="/">Login</a>
     </p>
 
   </form>
+
 </div>
