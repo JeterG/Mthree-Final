@@ -2,9 +2,16 @@
 
 Final Capstone Project for Sakib and Jeter
 
+## Rubric
+
+![Rubric](Rubric.png)
+
+
 ## Springboot Generation
 
 ![Springboot Generation](Springboot.png)
+
+
 
 ## Rest Api Documentation
 
