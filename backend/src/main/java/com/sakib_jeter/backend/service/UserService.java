@@ -2,9 +2,12 @@ package com.sakib_jeter.backend.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.sakib_jeter.backend.entity.User;
 import com.sakib_jeter.backend.repository.UserRepository;
 
+@Service
 public class UserService {
     private UserRepository userRepository;
 
@@ -34,8 +37,9 @@ public class UserService {
         }
     }
 
-    public User updateUser(Long id, User user) {
-        User currentUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    public User updateUser(User user) {
+        User currentUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         currentUser.setEmail(user.getEmail());
         currentUser.setLastLogin(user.getLastLogin());
