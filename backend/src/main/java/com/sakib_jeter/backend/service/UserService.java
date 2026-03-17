@@ -34,8 +34,9 @@ public class UserService {
         }
     }
 
-    public User updateUser(Long id, User user) {
-        User currentUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    public User updateUser(User user) {
+        User currentUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         currentUser.setEmail(user.getEmail());
         currentUser.setLastLogin(user.getLastLogin());
