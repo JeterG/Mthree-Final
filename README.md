@@ -5,13 +5,16 @@ Final Capstone Project for Sakib and Jeter
 ## Rubric
 
 <!-- ![Rubric](Rubric.png) -->
+
 ## Full Stack Project Evaluation Rubric
+
 **Technology Stack:** Angular + Spring Boot + MySQL
 **Total Marks:** 25
 
 ---
 
 ### 1. Problem Understanding & Project Idea — 2 marks
+
 - [ ] Clear explanation of the problem statement
 - [ ] Relevance of the project
 - [ ] Understanding of requirements
@@ -19,6 +22,7 @@ Final Capstone Project for Sakib and Jeter
 ---
 
 ### 2. Angular Frontend Implementation — 5 marks
+
 - [ ] Components
 - [ ] Services
 - [ ] Routing
@@ -29,6 +33,7 @@ Final Capstone Project for Sakib and Jeter
 ---
 
 ### 3. Spring Boot Backend Implementation — 5 marks
+
 - [ ] Proper REST API design
 - [ ] Controllers
 - [ ] Service layer
@@ -38,6 +43,7 @@ Final Capstone Project for Sakib and Jeter
 ---
 
 ### 4. Database Design (MySQL) — 3 marks
+
 - [ ] Proper table structure
 - [ ] Relationships
 - [ ] Normalization
@@ -46,18 +52,21 @@ Final Capstone Project for Sakib and Jeter
 ---
 
 ### 5. Integration (Frontend ↔ Backend) — 3 marks
+
 - [ ] Angular communicating with Spring Boot APIs using HTTP requests
 - [ ] Handling responses correctly
 
 ---
 
 ### 6. Functionality — 5 marks
+
 - [ ] Application correctly performs all operations
 - [ ] Proper validations
 
 ---
 
 ### 7. Code Quality & Project Structure — 1 mark
+
 - [ ] Clean code
 - [ ] Proper folder structure
 - [ ] Naming conventions
@@ -66,6 +75,7 @@ Final Capstone Project for Sakib and Jeter
 ---
 
 ### 8. Presentation & Explanation — 1 mark
+
 - [ ] Ability to explain project workflow and architecture
 - [ ] Able to answer questions confidently
 
@@ -73,12 +83,9 @@ Final Capstone Project for Sakib and Jeter
 
 **Total: 25 marks**
 
-
 ## Springboot Generation
 
 ![Springboot Generation](Springboot.png)
-
-
 
 ## Rest Api Documentation
 
@@ -95,3 +102,12 @@ Final Capstone Project for Sakib and Jeter
       - password : VARCHAR(255), not null
       - created_at : DATE, not null
       - last_login : DATE
+    - Transactions
+      - id : BIGINT, primary key, not null auto generated
+      - stock_symbol : VARCHAR(10), not null
+      - price : DECIMAL(10,2), not null
+      - quantity : DECIMAL(10,2), not null
+      - total_amount : DECIMAL(10,2), not null
+      - type : ENUM(BUY, SELL), not null
+      - user_id : BIGINT, foreign key references users(id), not null
+      - created_at : DATETIME, not null persistent
