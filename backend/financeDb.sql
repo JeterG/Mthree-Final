@@ -6,8 +6,22 @@ CREATE TABLE
     IF NOT EXISTS users (
         id BIGINT NOT NULL AUTO_INCREMENT,
         email VARCHAR(255) NOT NULL UNIQUE,
-        PASSWORD VARCHAR(255) NOT NULL,
-        created_at DATE,
-        last_login DATE,
+        password VARCHAR(255) NOT NULL,
+        created_at DATETIME,
+        last_login DATETIME,
         PRIMARY KEY (id)
-    )
+    );
+
+CREATE TABLE
+    IF NOT EXISTS transactions (
+        id BIGINT NOT NULL AUTO_INCREMENT,
+        stock_symbol VARCHAR(10) NOT NULL,
+        price DECIMAL(10, 2) NOT NULL,
+        quantity DECIMAL(10, 2) NOT NULL,
+        total_amount DECIMAL(10, 2) NOT NULL,
+        type ENUM ('BUY', 'SELL') NOT NULL,
+        user_id BIGINT NOT NULL,
+        created_at DATETIME NOT NULL,
+        PRIMARY KEY (id),
+        FOREIGN KEY (user_id) REFERENCES users (id)
+    );
