@@ -2,9 +2,12 @@ package com.sakib_jeter.backend.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.sakib_jeter.backend.entity.User;
 import com.sakib_jeter.backend.repository.UserRepository;
 
+@Service
 public class UserService {
     private UserRepository userRepository;
 
