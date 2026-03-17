@@ -4,6 +4,7 @@
 
     <h2>Sign Up</h2>
 
+    <!-- EMAIL -->
     <input
       type="email"
       placeholder="Email"
@@ -15,9 +16,10 @@
     />
 
     <div class="error" *ngIf="emailInput.invalid && emailInput.touched">
-      Enter a valid email
+      Valid email is required
     </div>
 
+    <!-- PASSWORD -->
     <input
       type="password"
       placeholder="Password"
@@ -25,29 +27,50 @@
       [(ngModel)]="password"
       required
       minlength="6"
+      pattern="^(?=.*[A-Z])(?=.*[0-9]).{6,}$"
       #passwordInput="ngModel"
     />
 
-    <div class="error" *ngIf="passwordInput.invalid && passwordInput.touched">
-      Password must be at least 6 characters
+    <div class="error" *ngIf="passwordInput.touched && passwordInput.invalid">
+      <div *ngIf="passwordInput.errors?.['required']">
+        Password is required
+      </div>
+      <div *ngIf="passwordInput.errors?.['minlength']">
+        Must be at least 6 characters
+      </div>
+      <div *ngIf="passwordInput.errors?.['pattern']">
+        Must contain 1 uppercase letter and 1 number
+      </div>
     </div>
 
+    <!-- CONFIRM PASSWORD -->
     <input
       type="password"
       placeholder="Confirm Password"
       name="confirmPassword"
       [(ngModel)]="confirmPassword"
       required
+      #confirmPasswordInput="ngModel"
     />
 
+    <div class="error" *ngIf="confirmPasswordInput.touched && password !== confirmPassword">
+      Passwords do not match
+    </div>
+
+    <!-- BACKEND ERROR -->
+    <div class="error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+
+    <!-- SUBMIT -->
     <button type="submit" [disabled]="signupForm.invalid">
       Sign Up
     </button>
-
-    <p class="signup-link">
-      Already have an account?
-      <a routerLink="/">Login</a>
-    </p>
 
   </form>
 
