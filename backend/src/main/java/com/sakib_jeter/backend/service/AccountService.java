@@ -21,10 +21,8 @@ public class AccountService {
     }
 
     public Account getAccountByUserId(Long userId) {
-        Account account = accountRepository.findByUserId(userId);
-        if (account == null)
-            throw new RuntimeException("Account not found");
-        return account;
+        return accountRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
     }
 
     public Account createAccount(Account account) {
