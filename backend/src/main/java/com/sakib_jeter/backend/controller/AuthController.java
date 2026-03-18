@@ -25,5 +25,10 @@ public class AuthController {
         service.register(request.getEmail(), request.getPassword());
 
         return ResponseEntity.ok("User registered successfully");
+    } 
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody SignupRequest request) {
+        service.login(request.getEmail(), request.getPassword());
+        return ResponseEntity.ok("Login successful");
     }
 }

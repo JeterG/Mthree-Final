@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.sakib_jeter.backend.entity.User;
 import com.sakib_jeter.backend.repository.UserRepository;
 import com.sakib_jeter.backend.exception.EmailAlreadyExistsException;
+import java.time.LocalDateTime;
 
 @Service
 public class SignupService {
@@ -20,19 +21,32 @@ public class SignupService {
 
     public void register(String email, String password) {
 
-        // 🔍 Check if email already exists
+        //Checks if email already exists
         if (repo.existsByEmail(email)) {
             throw new EmailAlreadyExistsException("Email already exists");
         }
 
-        // 🧱 Create user
+        //Creates user
         User user = new User();
         user.setEmail(email);
 
-        // 🔐 Hash password (IMPORTANT)
+        //hashes password w bcrypt
         user.setPassword(encoder.encode(password));
 
         // createdAt is handled by @PrePersist
         repo.save(user);
     }
+    public void login(String email, String password) {
+
+        User user = repo.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!encoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        //updates last login
+        user.setLastLogin(LocalDateTime.now());
+        repo.save(user);
+}
 }
