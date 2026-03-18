@@ -1,67 +1,69 @@
 package com.sakib_jeter.backend.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import java.util.*;
+import org.springframework.stereotype.Service;
+
+import com.sakib_jeter.backend.entity.StockCache;
+import com.sakib_jeter.backend.repository.StockCacheRepository;
 
 @Service
 public class MarketService {
 
-    private final String FINNHUB_KEY = "d6tbgghr01qhkb43ge2gd6tbgghr01qhkb43ge30";
+    private final StockCacheRepository stockCacheRepository;
 
-    // 🔥 REAL-TIME STORAGE
-    private final Map<String, List<Double>> priceHistory = new HashMap<>();
-    private final Map<String, List<Long>> timeHistory = new HashMap<>();
+    // Stocks shown in the ticker
+    private static final String[] TICKER_SYMBOLS = {
+            "AAPL", "AMZN", "GOOGL", "JPM", "META", "MSFT", "NVDA", "TSLA", "V", "WMT"
+    };
 
-    // ✅ QUOTE (unchanged)
-    public Map<String, Object> getQuote(String symbol) {
-        RestTemplate restTemplate = new RestTemplate();
-
-        String url = "https://finnhub.io/api/v1/quote?symbol=" + symbol + "&token=" + FINNHUB_KEY;
-
-        try {
-            return restTemplate.getForObject(url, Map.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Map.of("error", "quote_failed");
-        }
+    public MarketService(StockCacheRepository stockCacheRepository) {
+        this.stockCacheRepository = stockCacheRepository;
     }
 
-    // 🔥 REAL-TIME CHART (QUOTE-BASED)
-    public Map<String, Object> getRealtimeChart(String symbol) {
+    // Read from cache only — cache is populated by the seed endpoint
+    public StockCache getOrFetch(String symbol) {
+        return stockCacheRepository.findById(symbol).orElse(null);
+    }
 
-        Map<String, Object> quote = getQuote(symbol);
+    // Returns all cached stocks — used by buy stock search dropdown
+    public List<StockCache> getAllCachedStocks() {
+        return stockCacheRepository.findAll();
+    }
 
-        if (quote == null || quote.get("c") == null) {
-            return Map.of("s", "error");
+    // Ticker data — reads from cache only, never calls Finnhub
+    public List<Map<String, Object>> getMostActiveStocks() {
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (String symbol : TICKER_SYMBOLS) {
+            Optional<StockCache> cached = stockCacheRepository.findById(symbol);
+            if (cached.isPresent()) {
+                result.add(buildTicker(cached.get()));
+            }
         }
+        return result;
+    }
 
-        double currentPrice = ((Number) quote.get("c")).doubleValue();
-        long now = System.currentTimeMillis();
+    // Build ticker map from stock cache entry
+    private Map<String, Object> buildTicker(StockCache stock) {
+        BigDecimal current = stock.getCurrentPrice();
+        BigDecimal open = stock.getOpenPrice() != null ? stock.getOpenPrice() : current;
+        BigDecimal change = current.subtract(open);
+        BigDecimal pct = open.signum() != 0
+                ? change.divide(open, 2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100))
+                : BigDecimal.ZERO;
 
-        priceHistory.putIfAbsent(symbol, new ArrayList<>());
-        timeHistory.putIfAbsent(symbol, new ArrayList<>());
-
-        List<Double> prices = priceHistory.get(symbol);
-        List<Long> times = timeHistory.get(symbol);
-
-        // 🔥 avoid duplicate spam (only every ~10s)
-        if (times.isEmpty() || now - times.get(times.size() - 1) > 9000) {
-            prices.add(currentPrice);
-            times.add(now);
-        }
-
-        // 🔥 keep last 100 points max
-        if (prices.size() > 100) {
-            prices.remove(0);
-            times.remove(0);
-        }
-
-        return Map.of(
-                "s", "ok",
-                "c", prices,
-                "t", times
-        );
+        Map<String, Object> ticker = new HashMap<>();
+        ticker.put("symbol", stock.getSymbol());
+        ticker.put("name", stock.getSymbol());
+        ticker.put("price", current);
+        ticker.put("change", change);
+        ticker.put("changesPercentage", pct);
+        return ticker;
     }
 }

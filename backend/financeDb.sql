@@ -36,3 +36,25 @@ CREATE TABLE
         PRIMARY KEY (id),
         FOREIGN KEY (user_id) REFERENCES users (id)
     );
+
+CREATE TABLE
+    IF NOT EXISTS stock_cache (
+        symbol VARCHAR(10) NOT NULL,
+        current_price DECIMAL(10, 2),
+        open_price DECIMAL(10, 2),
+        high_price DECIMAL(10, 2),
+        low_price DECIMAL(10, 2),
+        updated_at DATETIME,
+        PRIMARY KEY (symbol)
+    );
+
+CREATE TABLE
+    IF NOT EXISTS stock_history_cache (
+        id BIGINT NOT NULL AUTO_INCREMENT,
+        symbol VARCHAR(10),
+        time_interval VARCHAR(20),
+        history_json LONGTEXT,
+        cached_at DATETIME,
+        expires_at DATETIME,
+        PRIMARY KEY (id)
+    );
