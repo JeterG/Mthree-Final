@@ -1,23 +1,18 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  OnDestroy
-} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import Chart from 'chart.js/auto';
+import { HttpClient } from '@angular/common/http';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Chart, registerables } from 'chart.js';
+
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './home.html',
-  styleUrls: ['./home.css']
+  styleUrls: ['./home.css'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-
   data: any;
   selectedSymbol: string = 'AAPL';
 
@@ -33,121 +28,90 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
+    if (this.intervalId) clearInterval(this.intervalId);
   }
 
-  // 🔹 Tab click
+  // Switch to a different symbol
   selectSymbol(symbol: string) {
     this.selectedSymbol = symbol;
     this.loadData(symbol);
   }
 
-  // 🔥 LOAD + POLL
+  // Load quote and chart, then poll every 30 seconds
+  // History data is daily so no need to poll faster than that
   loadData(symbol: string) {
-
-    // clear previous polling
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
+    if (this.intervalId) clearInterval(this.intervalId);
 
     this.fetchQuote(symbol);
     this.fetchChart(symbol);
 
-    // 🔥 poll every 10s
     this.intervalId = setInterval(() => {
       this.fetchQuote(symbol);
-      this.fetchChart(symbol);
-    }, 10000);
+    }, 30000); // only poll quote — chart data is daily and won't change
   }
 
-  // ✅ QUOTE
+  // Fetch current price from cache via /api/market/quote/{symbol}
   fetchQuote(symbol: string) {
-    this.http.get(`http://localhost:8080/api/market/${symbol}`)
-      .subscribe({
-        next: (res: any) => {
-          this.data = res;
-        },
-        error: (err) => {
-          console.error('Quote error:', err);
-        }
-      });
+    this.http.get(`http://localhost:8080/api/market/quote/${symbol}`).subscribe({
+      next: (res: any) => (this.data = res),
+      error: (err) => console.error('Quote error:', err),
+    });
   }
 
-  // ✅ CHART
+  // Fetch 1 year of daily history from /api/market/history/{symbol}
+  // Returns list of { date, open, high, low, close }
   fetchChart(symbol: string) {
-    this.http.get(`http://localhost:8080/api/market/chart/${symbol}`)
-      .subscribe({
-        next: (res: any) => {
-
-          if (res.s !== 'ok') {
-            console.error('Chart error:', res);
-            return;
-          }
-
-          this.renderChart(res);
-        },
-        error: (err) => {
-          console.error('Chart fetch error:', err);
-        }
-      });
+    this.http.get<any[]>(`http://localhost:8080/api/market/history/${symbol}`).subscribe({
+      next: (res) => this.renderChart(res),
+      error: (err) => console.error('Chart fetch error:', err),
+    });
   }
 
-  // 🔥 RENDER / UPDATE CHART
-  renderChart(data: any) {
+  // Render or update the Chart.js line chart
+  renderChart(data: any[]) {
+    if (!this.chartRef?.nativeElement || !data.length) return;
 
-    if (!this.chartRef?.nativeElement) return;
+    const labels = data.map((s) => s.date.split('T')[0]);
+    const prices = data.map((s) => s.close);
+    const isGreen = prices[prices.length - 1] >= prices[0];
+    const color = isGreen ? 'green' : 'red';
+    const bgColor = isGreen ? 'rgba(0,200,0,0.1)' : 'rgba(255,0,0,0.1)';
 
-    const labels = data.t.map((ts: number) =>
-      new Date(ts).toLocaleTimeString()
-    );
-
-    const isGreen = data.c[data.c.length - 1] >= data.c[0];
-
-    // 🔥 UPDATE EXISTING CHART
+    // Update existing chart instead of recreating it
     if (this.chart) {
       this.chart.data.labels = labels;
-      this.chart.data.datasets[0].data = data.c;
+      this.chart.data.datasets[0].data = prices;
+      this.chart.data.datasets[0].borderColor = color;
+      this.chart.data.datasets[0].backgroundColor = bgColor;
       this.chart.update();
       return;
     }
 
-    const ctx = this.chartRef.nativeElement;
-
-    // 🔥 CREATE CHART FIRST TIME
-    this.chart = new Chart(ctx, {
+    // Create chart for the first time
+    this.chart = new Chart(this.chartRef.nativeElement, {
       type: 'line',
       data: {
-        labels: labels,
-        datasets: [{
-          data: data.c,
-          borderColor: isGreen ? 'green' : 'red',
-          backgroundColor: isGreen
-            ? 'rgba(0,200,0,0.1)'
-            : 'rgba(255,0,0,0.1)',
-          fill: true,
-          tension: 0.3,
-          pointRadius: 0
-        }]
+        labels,
+        datasets: [
+          {
+            data: prices,
+            borderColor: color,
+            backgroundColor: bgColor,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 0,
+          },
+        ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false }
-        },
+        plugins: { legend: { display: false } },
         scales: {
-          x: {
-            ticks: {
-              maxTicksLimit: 6
-            }
-          },
-          y: {
-            display: false
-          }
-        }
-      }
+          x: { ticks: { maxTicksLimit: 6 } },
+          y: { display: false },
+        },
+      },
     });
   }
 }
