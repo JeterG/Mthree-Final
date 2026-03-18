@@ -1,5 +1,5 @@
 <div class="market-container">
-  <!-- Tabs -->
+  <!-- Symbol tabs -->
   <div class="tabs">
     <button (click)="selectSymbol('AAPL')">AAPL</button>
     <button (click)="selectSymbol('NVDA')">NVDA</button>
@@ -11,10 +11,7 @@
   <div class="card">
     <div class="header">
       <h2>{{ selectedSymbol }}</h2>
-
       <p class="price">${{ data?.currentPrice || '--' }}</p>
-
-      <!-- Calculate change from open price -->
       <p [ngClass]="data?.currentPrice - data?.openPrice >= 0 ? 'green' : 'red'">
         {{
           data?.openPrice
@@ -22,6 +19,13 @@
             : '--'
         }}%
       </p>
+    </div>
+
+    <!-- Range buttons -->
+    <div class="range-tabs">
+      <button *ngFor="let r of ranges" [class.active]="activeRange === r" (click)="selectRange(r)">
+        {{ r }}
+      </button>
     </div>
 
     <!-- Chart -->
