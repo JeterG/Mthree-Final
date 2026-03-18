@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.sakib_jeter.backend.dto.Stock;
 import com.sakib_jeter.backend.entity.StockHistoryCache;
 import com.sakib_jeter.backend.repository.StockHistoryCacheRepository;
@@ -36,7 +37,8 @@ public class YahooFinanceService {
 
     private final StockHistoryCacheRepository repo;
     private final RestTemplate rest = new RestTemplate();
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule());
 
     public YahooFinanceService(StockHistoryCacheRepository repo) {
         this.repo = repo;
