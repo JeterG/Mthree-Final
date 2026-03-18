@@ -13,19 +13,20 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @Configuration
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
-            .cors(cors -> {}) //cors enabled with empty argument
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll() //allows both signup + login
-                .anyRequest().authenticated()
-            )
-            .httpBasic(httpBasic -> {});
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(csrf -> csrf.disable())
+        .cors(cors -> {})
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/api/market/**").permitAll() // ✅ ADD THIS
+            .anyRequest().authenticated()
+        )
+        .httpBasic(httpBasic -> httpBasic.disable());
 
-        return http.build();
-    }
+    return http.build();
+}
 
     //CORS CONFIGURATION (important)
     @Bean

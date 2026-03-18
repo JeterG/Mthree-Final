@@ -1,0 +1,32 @@
+<div class="market-container">
+
+  <!-- 🔹 Tabs -->
+<div class="tabs">
+  <button (click)="selectSymbol('AAPL')">AAPL</button>
+  <button (click)="selectSymbol('NVDA')">NVDA</button>
+  <button (click)="selectSymbol('MSFT')">MSFT</button>
+  <button (click)="selectSymbol('TSLA')">TSLA</button>
+</div>
+
+  <!-- 🔹 Card -->
+<div class="card">
+    <div class="header">
+      <h2>{{ selectedSymbol }}</h2>
+
+<p class="price">
+  ${{ data?.c || '--' }}
+</p>
+
+<p [ngClass]="data?.dp >= 0 ? 'green' : 'red'">
+  {{ data?.dp ?? '--' }}%
+</p>
+    </div>
+
+    <!-- 🔥 Chart container (IMPORTANT for size control) -->
+    <div class="chart-wrapper">
+      <canvas #chartCanvas></canvas>
+    </div>
+
+  </div>
+
+</div>

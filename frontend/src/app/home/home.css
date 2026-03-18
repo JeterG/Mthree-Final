@@ -1,0 +1,70 @@
+.market-container {
+  padding: 20px;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 8px 16px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+button.active {
+  background: black;
+  color: white;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  width: 600px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.header {
+  margin-bottom: 10px;
+}
+
+.price {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+canvas {
+  width: 100% !important;
+  height: 300px !important;
+}
+
+.market-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.card {
+  width: 500px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #f8f9fa;
+}
+
+.chart-wrapper {
+  height: 250px;
+  width: 100%;
+}
