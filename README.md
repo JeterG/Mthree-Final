@@ -117,3 +117,18 @@ Final Capstone Project for Sakib and Jeter
       - first_name : VARCHAR(255), not null
       - last_name : VARCHAR(255), not null
       - cash_balance : DECIMAL(10,2), not null, default 10000.00
+    - Stock Cache
+      - symbol       : VARCHAR(10), primary key, not null
+      - current_price : DECIMAL(10,2)
+      - open_price    : DECIMAL(10,2)
+      - high_price    : DECIMAL(10,2)
+      - low_price     : DECIMAL(10,2)
+      - updated_at    : DATETIME
+
+    - Stock History Cache
+      - id            : BIGINT, auto generated, primary key, not null
+      - symbol        : VARCHAR(10), not null
+      - time_interval : VARCHAR(20), not null
+      - history_json  : LONGTEXT, not null
+      - cached_at     : DATETIME, not null
+      - expires_at    : DATETIME, not null
