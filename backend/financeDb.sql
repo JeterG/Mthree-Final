@@ -25,3 +25,14 @@ CREATE TABLE
         PRIMARY KEY (id),
         FOREIGN KEY (user_id) REFERENCES users (id)
     );
+
+CREATE TABLE
+    IF NOT EXISTS accounts (
+        id BIGINT NOT NULL AUTO_INCREMENT,
+        user_id BIGINT NOT NULL UNIQUE,
+        first_name VARCHAR(255) NOT NULL,
+        last_name VARCHAR(255) NOT NULL,
+        cash_balance DECIMAL(10, 2) NOT NULL DEFAULT 10000.00,
+        PRIMARY KEY (id),
+        FOREIGN KEY (user_id) REFERENCES users (id)
+    );

@@ -111,3 +111,9 @@ Final Capstone Project for Sakib and Jeter
       - type : ENUM(BUY, SELL), not null
       - user_id : BIGINT, foreign key references users(id), not null
       - created_at : DATETIME, not null persistent
+    - Accounts
+      - id : BIGINT, auto generated, primary key, not null
+      - user_id : BIGINT, foreign key references users(id), not null
+      - first_name : VARCHAR(255), not null
+      - last_name : VARCHAR(255), not null
+      - cash_balance : DECIMAL(10,2), not null, default 10000.00
