@@ -24,13 +24,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
-    // Handle email already exists
+    //Handle email already exists
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<String> handleEmailExists(EmailAlreadyExistsException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
-    // Catch-all (optional but good)
+    //Catch-all (optional but it's ok)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneric(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
