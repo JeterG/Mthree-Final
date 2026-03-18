@@ -15,7 +15,7 @@ import com.sakib_jeter.backend.entity.Account;
 import com.sakib_jeter.backend.service.AccountService;
 
 @RestController
-@RequestMapping("/account")
+@RequestMapping("/api/account")
 public class AccountController {
 
     private final AccountService accountService;

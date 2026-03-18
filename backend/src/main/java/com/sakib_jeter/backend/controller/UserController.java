@@ -15,7 +15,7 @@ import com.sakib_jeter.backend.entity.User;
 import com.sakib_jeter.backend.service.UserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
