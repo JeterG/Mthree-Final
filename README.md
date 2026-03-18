@@ -2,6 +2,8 @@
 
 Final Capstone Project for Sakib and Jeter
 
+### To launch `./startup.sh`
+
 ## Rubric
 
 <!-- ![Rubric](Rubric.png) -->
