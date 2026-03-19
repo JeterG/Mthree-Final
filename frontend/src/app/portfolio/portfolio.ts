@@ -84,6 +84,7 @@ export class Portfolio implements OnInit {
               const gainLoss = currentValue - costBasis;
               totalValue += currentValue;
               totalGain += gainLoss;
+
               enriched[index] = { ...h, currentPrice, currentValue, gainLoss };
               completed++;
 
