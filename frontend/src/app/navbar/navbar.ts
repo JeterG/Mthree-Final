@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,4 +10,12 @@ import { CommonModule } from '@angular/common';
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css']
 })
-export class Navbar {}
+export class Navbar {
+
+  constructor(private router: Router) {}
+
+  logout() {
+    // later you can clear auth token here
+    this.router.navigate(['/login']);
+  }
+}
