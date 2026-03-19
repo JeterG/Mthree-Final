@@ -15,10 +15,13 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class StockCache {
-    
 
     @Id
     private String symbol;
+
+    // 🔥 NEW FIELD (company name like "Apple Inc.")
+    @Column(name = "company_name")
+    private String companyName;
 
     @Column(name = "current_price", precision = 10, scale = 2)
     private BigDecimal currentPrice;
@@ -35,6 +38,7 @@ public class StockCache {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    // Required for JPA
     public StockCache() {
     }
 }

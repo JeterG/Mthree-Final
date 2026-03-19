@@ -9,11 +9,8 @@ import com.sakib_jeter.backend.service.JwtService;
 import com.sakib_jeter.backend.dto.SignupRequest;
 import com.sakib_jeter.backend.service.SignupService;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-@Tag(name = "Auth Controller", description = "Authentication APIs")
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -27,14 +24,14 @@ public class AuthController {
         this.jwtService = jwtService;
     }
 
-    @Operation(summary = "Register a new user")
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@Valid @RequestBody SignupRequest request) {
+
         service.register(request.getEmail(), request.getPassword());
+
         return ResponseEntity.ok("User registered successfully");
     }
 
-    @Operation(summary = "Login user")
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody SignupRequest request) {
 
