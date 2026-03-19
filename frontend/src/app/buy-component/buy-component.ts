@@ -22,6 +22,7 @@ export class BuyComponent implements OnChanges {
   @Input() symbol = '';
   @Input() userId!: number;
   @Output() buyComplete = new EventEmitter<void>();
+  @Output() watchlistComplete = new EventEmitter<void>();
 
   currentPrice: number | null = null;
   action: 'buy' | 'watchlist' = 'buy';
@@ -92,9 +93,27 @@ export class BuyComponent implements OnChanges {
           },
         });
     } else {
-      this.successMessage = `${this.symbol} added to watchlist (coming soon)`;
-      this.submitting = false;
-      this.cdr.detectChanges();
+      this.http
+        .post<any>('http://localhost:8080/api/watchlist', {
+          userId: this.userId,
+          stockSymbol: this.symbol,
+        })
+        .subscribe({
+          next: () => {
+            this.successMessage = `${this.symbol} added to watchlist`;
+            this.submitting = false;
+            this.watchlistComplete.emit();
+            this.cdr.detectChanges();
+          },
+          error: (err) => {
+            this.errorMessage =
+              err.status === 400
+                ? `${this.symbol} is already in your watchlist`
+                : 'Failed to add to watchlist';
+            this.submitting = false;
+            this.cdr.detectChanges();
+          },
+        });
     }
   }
 
