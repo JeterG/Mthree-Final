@@ -1,0 +1,32 @@
+<div class="market-container">
+
+  <h2>Market Overview</h2>
+<div class="range-tabs">
+  <button
+    *ngFor="let r of ranges"
+    [class.active]="activeRange === r"
+    (click)="selectRange(r)">
+    {{ r }}
+  </button>
+</div>
+  <!-- 🔹 Tabs -->
+  <div class="tabs">
+    <button 
+      *ngFor="let index of indexes"
+      (click)="selectIndex(index.symbol)">
+      {{ index.name }}
+    </button>
+  </div>
+
+  <!-- 🔹 Chart -->
+  <div class="card">
+    <h3>
+  {{ indexes.find(i => i.symbol === selectedSymbol)?.name }}
+</h3>
+
+    <div class="chart-wrapper">
+      <canvas id="mainChart"></canvas>
+    </div>
+  </div>
+
+</div>
