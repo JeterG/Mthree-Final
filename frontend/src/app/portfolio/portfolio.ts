@@ -2,13 +2,20 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { BuyComponent } from '../buy-component/buy-component';
+import { PortfolioChartComponent } from '../portfolio-chart-component/portfolio-chart-component';
 import { StockChartComponent } from '../stock-chart.component/stock-chart.component';
 import { StockSearchComponent } from '../stock-search-component/stock-search-component';
 
 @Component({
   selector: 'app-portfolio',
   standalone: true,
-  imports: [CommonModule, StockSearchComponent, StockChartComponent, BuyComponent],
+  imports: [
+    CommonModule,
+    StockSearchComponent,
+    StockChartComponent,
+    BuyComponent,
+    PortfolioChartComponent,
+  ],
   templateUrl: './portfolio.html',
   styleUrl: './portfolio.css',
 })
@@ -23,6 +30,7 @@ export class Portfolio implements OnInit {
   totalGainLoss = 0;
   holdingsCount = 0;
   holdings: any[] = [];
+  transactions: any[] = [];
 
   constructor(
     private http: HttpClient,
@@ -32,7 +40,9 @@ export class Portfolio implements OnInit {
 
   ngOnInit(): void {
     this.loadPortfolio();
-    setTimeout(() => this.loadPortfolio(), 2000);
+    this.loadTransactions();
+    setTimeout(() => this.loadPortfolio(), 1000);
+    setTimeout(() => this.loadTransactions(), 1000);
   }
 
   onSymbolSelected(symbol: string): void {
@@ -125,6 +135,17 @@ export class Portfolio implements OnInit {
       error: (err) => console.error('Holdings load error:', err),
     });
   }
+  loadTransactions(): void {
+    this.http.get<any[]>(`http://localhost:8080/api/transactions/${this.userId}`).subscribe({
+      next: (transactions) => {
+        this.ngZone.run(() => {
+          this.transactions = transactions;
+          this.cdr.detectChanges();
+        });
+      },
+      error: (err) => console.error('Transactions load error:', err),
+    });
+  }
 
   sell(holding: any): void {
     this.http
@@ -137,6 +158,7 @@ export class Portfolio implements OnInit {
         next: () => {
           this.ngZone.run(() => {
             this.loadPortfolio();
+            this.loadTransactions();
             this.cdr.detectChanges();
           });
         },
