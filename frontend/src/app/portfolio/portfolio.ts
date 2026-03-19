@@ -191,7 +191,7 @@ export class Portfolio implements OnInit {
     });
   }
 
-  removeFromWatchlist(id: number): void {
+  removeFromWatchlistBtn(id: number): void {
     this.http.delete(`http://localhost:8080/api/watchlist/${id}`).subscribe({
       next: () => {
         this.ngZone.run(() => {
