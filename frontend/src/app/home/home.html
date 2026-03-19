@@ -1,36 +1,19 @@
-<div class="market-container">
-  <!-- Symbol tabs -->
-  <div class="tabs">
-    <button (click)="selectSymbol('AAPL')">AAPL</button>
-    <button (click)="selectSymbol('NVDA')">NVDA</button>
-    <button (click)="selectSymbol('MSFT')">MSFT</button>
-    <button (click)="selectSymbol('TSLA')">TSLA</button>
-  </div>
-
-  <!-- Card -->
-  <div class="card">
-    <div class="header">
-      <h2>{{ selectedSymbol }}</h2>
-      <p class="price">${{ data?.currentPrice || '--' }}</p>
-      <p [ngClass]="data?.currentPrice - data?.openPrice >= 0 ? 'green' : 'red'">
-        {{
-          data?.openPrice
-            ? (((data.currentPrice - data.openPrice) / data.openPrice) * 100).toFixed(2)
-            : '--'
-        }}%
-      </p>
-    </div>
-
-    <!-- Range buttons -->
-    <div class="range-tabs">
-      <button *ngFor="let r of ranges" [class.active]="activeRange === r" (click)="selectRange(r)">
-        {{ r }}
+<div class="container py-4">
+  <div class="chart-container">
+    <!-- Symbol tabs -->
+    <div class="d-flex gap-2 mb-3">
+      <button
+        *ngFor="let s of symbols"
+        type="button"
+        class="btn"
+        [ngClass]="selectedSymbol === s ? 'btn-secondary' : 'btn-light'"
+        (click)="selectSymbol(s)"
+      >
+        {{ s }}
       </button>
     </div>
 
-    <!-- Chart -->
-    <div class="chart-wrapper">
-      <canvas #chartCanvas></canvas>
-    </div>
+    <!-- Stock chart -->
+    <app-stock-chart [symbol]="selectedSymbol"></app-stock-chart>
   </div>
 </div>
