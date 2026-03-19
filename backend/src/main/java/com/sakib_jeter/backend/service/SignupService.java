@@ -42,17 +42,16 @@ public class SignupService {
         accountRepository.save(account);
     }
 
-    public Long login(String email, String password) {
-        User user = repo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+public Long login(String email, String password) {
 
-        if (!encoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
-        }
+    User user = repo.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
 
-        user.setLastLogin(LocalDateTime.now());
-        repo.save(user);
-
-        return user.getId();
+    // ✅ IMPORTANT: use bcrypt match
+    if (!encoder.matches(password, user.getPassword())) {
+        throw new RuntimeException("Invalid credentials");
     }
+
+    return user.getId();
+}
 }
