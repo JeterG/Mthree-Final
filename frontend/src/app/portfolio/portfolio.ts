@@ -56,7 +56,8 @@ export class Portfolio implements OnInit {
   loadHoldings(): void {
     this.http.get<any[]>(`http://localhost:8080/api/holdings/${this.userId}`).subscribe({
       next: (holdings) => {
-        this.holdingsCount = holdings.length;
+        // Total shares across all holdings
+        this.holdingsCount = holdings.reduce((sum, h) => sum + +h.quantity, 0);
 
         if (holdings.length === 0) {
           this.holdingsValue = 0;
@@ -73,9 +74,9 @@ export class Portfolio implements OnInit {
         holdings.forEach((h) => {
           this.http.get<any>(`http://localhost:8080/api/market/quote/${h.stockSymbol}`).subscribe({
             next: (stock) => {
-              const currentPrice = stock.currentPrice;
-              const currentValue = currentPrice * h.quantity;
-              const costBasis = h.avgBuyPrice * h.quantity;
+              const currentPrice = +stock.currentPrice;
+              const currentValue = currentPrice * +h.quantity;
+              const costBasis = +h.avgBuyPrice * +h.quantity;
               totalValue += currentValue;
               totalGain += currentValue - costBasis;
               completed++;
