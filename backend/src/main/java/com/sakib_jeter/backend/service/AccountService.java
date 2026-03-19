@@ -5,15 +5,19 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.sakib_jeter.backend.entity.Account;
+import com.sakib_jeter.backend.entity.User;
 import com.sakib_jeter.backend.repository.AccountRepository;
+import com.sakib_jeter.backend.repository.UserRepository;
 
 @Service
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
 
-    public AccountService(AccountRepository accountRepository) {
+    public AccountService(AccountRepository accountRepository, UserRepository userRepository) {
         this.accountRepository = accountRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Account> getAllAccounts() {
@@ -22,6 +26,15 @@ public class AccountService {
 
     public Account getAccountByUserId(Long userId) {
         return accountRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+    }
+
+    // 🔥 NEW METHOD (JWT-based)
+    public Account getAccountByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return accountRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new RuntimeException("Account not found"));
     }
 

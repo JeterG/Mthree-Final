@@ -17,7 +17,6 @@ export class Portfolio implements OnInit {
   Math = Math;
   selectedSymbol = '';
   activeTab: 'holdings' | 'transactions' | 'watchlist' = 'holdings';
-  userId: number = parseInt(localStorage.getItem('userId') || '0');
 
   cashBalance = 0;
   holdingsValue = 0;
@@ -38,6 +37,7 @@ export class Portfolio implements OnInit {
     this.loadPortfolio();
     this.loadTransactions();
     this.loadWatchlist();
+
     setTimeout(() => this.loadPortfolio(), 1000);
     setTimeout(() => this.loadTransactions(), 1000);
     setTimeout(() => this.loadWatchlist(), 1000);
@@ -51,8 +51,9 @@ export class Portfolio implements OnInit {
     this.loadAccount();
   }
 
+  // ✅ JWT-based account
   loadAccount(): void {
-    this.http.get<any>(`http://localhost:8080/api/account/${this.userId}`).subscribe({
+    this.http.get<any>(`http://localhost:8080/api/account/me`).subscribe({
       next: (account) => {
         this.ngZone.run(() => {
           this.cashBalance = account.cashBalance;
@@ -64,8 +65,9 @@ export class Portfolio implements OnInit {
     });
   }
 
+  // ✅ JWT-based holdings
   loadHoldings(): void {
-    this.http.get<any[]>(`http://localhost:8080/api/holdings/${this.userId}`).subscribe({
+    this.http.get<any[]>(`http://localhost:8080/api/holdings/me`).subscribe({
       next: (holdings) => {
         if (holdings.length === 0) {
           this.ngZone.run(() => {
@@ -91,6 +93,7 @@ export class Portfolio implements OnInit {
               const currentValue = currentPrice * +h.quantity;
               const costBasis = +h.avgBuyPrice * +h.quantity;
               const gainLoss = currentValue - costBasis;
+
               totalValue += currentValue;
               totalGain += gainLoss;
 
@@ -116,6 +119,7 @@ export class Portfolio implements OnInit {
                 gainLoss: 0,
               };
               completed++;
+
               if (completed === holdings.length) {
                 this.ngZone.run(() => {
                   this.holdings = [...enriched];
@@ -134,8 +138,9 @@ export class Portfolio implements OnInit {
     });
   }
 
+  // ✅ JWT-based transactions
   loadTransactions(): void {
-    this.http.get<any[]>(`http://localhost:8080/api/transactions/${this.userId}`).subscribe({
+    this.http.get<any[]>(`http://localhost:8080/api/transactions/me`).subscribe({
       next: (transactions) => {
         this.ngZone.run(() => {
           this.transactions = transactions.sort(
@@ -148,8 +153,9 @@ export class Portfolio implements OnInit {
     });
   }
 
+  // ✅ JWT-based watchlist
   loadWatchlist(): void {
-    this.http.get<any[]>(`http://localhost:8080/api/watchlist/${this.userId}`).subscribe({
+    this.http.get<any[]>(`http://localhost:8080/api/watchlist/me`).subscribe({
       next: (watchlist) => {
         if (watchlist.length === 0) {
           this.ngZone.run(() => {
@@ -167,6 +173,7 @@ export class Portfolio implements OnInit {
             next: (stock) => {
               enriched[index] = { ...w, currentPrice: stock.currentPrice };
               completed++;
+
               if (completed === watchlist.length) {
                 this.ngZone.run(() => {
                   this.watchlist = [...enriched];
@@ -177,6 +184,7 @@ export class Portfolio implements OnInit {
             error: () => {
               enriched[index] = { ...w, currentPrice: null };
               completed++;
+
               if (completed === watchlist.length) {
                 this.ngZone.run(() => {
                   this.watchlist = [...enriched];
@@ -203,21 +211,22 @@ export class Portfolio implements OnInit {
     });
   }
 
-  // Format transactions for the stock chart data mode
-  // Sorted oldest first, cumulative running balance as close price
   get transactionsForChart(): any[] {
     const sorted = [...this.transactions].sort(
       (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
 
     let runningBalance = 0;
+
     return sorted.map((t) => {
       const amount = +t.totalAmount;
+
       if (t.type === 'BUY') {
         runningBalance += amount;
       } else {
         runningBalance -= amount;
       }
+
       return {
         date: t.createdAt,
         close: +runningBalance.toFixed(2),
@@ -228,13 +237,13 @@ export class Portfolio implements OnInit {
     });
   }
 
+  // ✅ FIXED SELL (no userId)
   sell(holding: any): void {
     const quantity = holding.sellQuantity || holding.quantity;
     if (!quantity || quantity <= 0) return;
 
     this.http
       .post<any>('http://localhost:8080/api/holdings/sell', {
-        userId: this.userId,
         stockSymbol: holding.stockSymbol,
         quantity: quantity,
       })

@@ -29,10 +29,13 @@ public class AccountController {
     }
 
     @Operation(summary = "Get all accounts")
-    @GetMapping
-    public List<Account> getAllAccounts() {
-        return accountService.getAllAccounts();
-    }
+@GetMapping("/me")
+public Account getMyAccount(org.springframework.security.core.Authentication authentication) {
+
+    String email = (String) authentication.getPrincipal();
+
+    return accountService.getAccountByEmail(email);
+}
 
     @Operation(summary = "Get account by user ID")
     @GetMapping("/{userId}")
