@@ -16,11 +16,10 @@ import com.sakib_jeter.backend.entity.Holding;
 import com.sakib_jeter.backend.entity.Transaction;
 import com.sakib_jeter.backend.service.HoldingService;
 
-// REST controller for holding operations
-// Endpoints:
-//   GET  /api/holdings/{userId}  — get all holdings for a user
-//   POST /api/holdings/buy       — buy a stock
-//   POST /api/holdings/sell      — sell a stock
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Holding Controller", description = "Manage stock holdings")
 @RestController
 @RequestMapping("/api/holdings")
 public class HoldingController {
@@ -31,16 +30,13 @@ public class HoldingController {
         this.holdingService = holdingService;
     }
 
-    // Returns all current holdings for a user
-    // Used by the portfolio page to show positions, quantities, and gain/loss
+    @Operation(summary = "Get user holdings")
     @GetMapping("/{userId}")
     public List<Holding> getHoldings(@PathVariable Long userId) {
         return holdingService.getHoldingsByUser(userId);
     }
 
-    // Buy a stock
-    // Request body: { userId, stockSymbol, quantity }
-    // Price is pulled from stock_cache — no live API call at buy time
+    @Operation(summary = "Buy stock")
     @PostMapping("/buy")
     public ResponseEntity<Holding> buy(@RequestBody Map<String, Object> body) {
         Long userId = Long.valueOf(body.get("userId").toString());
@@ -49,9 +45,7 @@ public class HoldingController {
         return ResponseEntity.ok(holdingService.buyStock(userId, symbol, quantity));
     }
 
-    // Sell a stock
-    // Request body: { userId, stockSymbol, quantity }
-    // Price is fetched live from Finnhub at exact moment of sale
+    @Operation(summary = "Sell stock")
     @PostMapping("/sell")
     public ResponseEntity<Transaction> sell(@RequestBody Map<String, Object> body) {
         Long userId = Long.valueOf(body.get("userId").toString());

@@ -18,6 +18,10 @@ import com.sakib_jeter.backend.external.StockDataSeeder;
 import com.sakib_jeter.backend.external.YahooFinanceService;
 import com.sakib_jeter.backend.service.MarketService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Market Controller", description = "Market data APIs")
 @RestController
 @RequestMapping("/api/market")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -38,45 +42,45 @@ public class MarketController {
         this.stockDataSeeder = stockDataSeeder;
     }
 
-    // Ticker marquee — reads from cache only
+    @Operation(summary = "Get ticker data")
     @GetMapping("/ticker")
     public List<Map<String, Object>> getTicker() {
         return marketService.getMostActiveStocks();
     }
 
-    // Symbol search via Finnhub
+    @Operation(summary = "Search stocks")
     @GetMapping("/search")
     public List<Map<String, Object>> search(@RequestParam String q) {
         return finnhubService.searchSymbol(q);
     }
 
-    // Historical candle data via Yahoo Finance
+    @Operation(summary = "Get stock history")
     @GetMapping("/history/{symbol}")
     public List<Stock> getHistory(@PathVariable String symbol) {
         return yahooService.getHistory(symbol.toUpperCase());
     }
 
-    // Seed live prices for all stocks via Finnhub
+    @Operation(summary = "Seed stock prices")
     @GetMapping("/seed")
     public String seed() {
         new Thread(() -> stockDataSeeder.seedAll()).start();
         return "Price seeding started in background";
     }
 
-    // Seed yearly history for all stocks via Yahoo Finance
+    @Operation(summary = "Seed stock history")
     @GetMapping("/seed/history")
     public String seedHistory() {
         stockDataSeeder.seedHistory();
         return "History seeding started in background";
     }
 
-    // Returns all cached stocks — used by buy stock component
+    @Operation(summary = "Get cached stocks")
     @GetMapping("/cached")
     public List<StockCache> getCachedStocks() {
         return marketService.getAllCachedStocks();
     }
 
-    // Get single stock price from cache — MUST be last mapping
+    @Operation(summary = "Get stock quote")
     @GetMapping("/quote/{symbol}")
     public ResponseEntity<StockCache> getStock(@PathVariable String symbol) {
         StockCache stock = marketService.getOrFetch(symbol.toUpperCase());
