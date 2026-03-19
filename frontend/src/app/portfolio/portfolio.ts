@@ -84,7 +84,10 @@ export class Portfolio implements OnInit {
               if (completed === holdings.length) {
                 this.holdingsValue = totalValue;
                 this.totalGainLoss = totalGain;
-                this.totalPortfolioValue = this.cashBalance + totalValue;
+                this.totalPortfolioValue = totalValue;
+                console.log('cashBalance:', this.cashBalance);
+                console.log('holdingsValue:', this.holdingsValue);
+                console.log('totalPortfolioValue:', this.totalPortfolioValue);
                 this.cdr.detectChanges();
               }
             },
