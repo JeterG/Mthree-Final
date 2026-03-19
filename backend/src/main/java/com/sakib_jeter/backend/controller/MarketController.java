@@ -84,4 +84,5 @@ public class MarketController {
                 ? ResponseEntity.ok(stock)
                 : ResponseEntity.notFound().build();
     }
+    
 }

@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.sakib_jeter.backend.entity.StockCache;
 import com.sakib_jeter.backend.repository.StockCacheRepository;
+import jakarta.annotation.PostConstruct;
 
 // Seeds stock_cache and stock_history_cache tables
 // stock_cache         — live prices via Finnhub API (docs: https://finnhub.io/docs/api/quote)
@@ -26,7 +27,12 @@ public class StockDataSeeder {
     private final StockCacheRepository stockCacheRepository;
     private final YahooFinanceService yahooFinanceService;
     private final RestTemplate restTemplate = new RestTemplate();
-
+    @PostConstruct
+public void init() {
+    System.out.println("Seeding stock data...");
+    seedAll();
+    seedHistory(); // optional
+}
     // All symbols seeded into both tables
     private static final String[] SYMBOLS = {
             "AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "META", "TSLA", "ORCL",
@@ -101,33 +107,45 @@ public class StockDataSeeder {
     // Fetch a single quote from Finnhub
     // Finnhub returns 0 for current price (c) when market is closed
     // so we fall back to previous close (pc) in that case
-    public StockCache fetchQuote(String symbol) {
-        try {
-            String url = finnhubUrl + "/quote?symbol=" + symbol + "&token=" + finnhubKey;
-            Map<String, Object> r = restTemplate.getForObject(url, Map.class);
-            if (r == null)
-                return null;
-
-            BigDecimal current = toBD(r.get("c"));
-            BigDecimal prevClose = toBD(r.get("pc"));
-
-            // Fall back to previous close if market is closed
-            if (current.compareTo(BigDecimal.ZERO) == 0)
-                current = prevClose;
-            if (current.compareTo(BigDecimal.ZERO) == 0)
-                return null;
-
-            BigDecimal open = toBD(r.get("o"));
-            if (open.compareTo(BigDecimal.ZERO) == 0)
-                open = prevClose;
-
-            return new StockCache(symbol, current, open, toBD(r.get("h")), toBD(r.get("l")), LocalDateTime.now());
-
-        } catch (Exception e) {
-            System.err.println("Finnhub seed failed for " + symbol + ": " + e.getMessage());
+public StockCache fetchQuote(String symbol) {
+    try {
+        String url = finnhubUrl + "/quote?symbol=" + symbol + "&token=" + finnhubKey;
+        Map<String, Object> r = restTemplate.getForObject(url, Map.class);
+        if (r == null)
             return null;
-        }
+
+        BigDecimal current = toBD(r.get("c"));
+        BigDecimal prevClose = toBD(r.get("pc"));
+
+        // Fall back to previous close if market is closed
+        if (current.compareTo(BigDecimal.ZERO) == 0)
+            current = prevClose;
+        if (current.compareTo(BigDecimal.ZERO) == 0)
+            return null;
+
+        BigDecimal open = toBD(r.get("o"));
+        if (open.compareTo(BigDecimal.ZERO) == 0)
+            open = prevClose;
+
+        // 🔥 GET COMPANY NAME FIRST
+        String companyName = getCompanyName(symbol);
+
+        // 🔥 USE NEW CONSTRUCTOR (MATCHES StockCache)
+        return new StockCache(
+                symbol,
+                companyName,
+                current,
+                open,
+                toBD(r.get("h")),
+                toBD(r.get("l")),
+                LocalDateTime.now()
+        );
+
+    } catch (Exception e) {
+        System.err.println("Finnhub seed failed for " + symbol + ": " + e.getMessage());
+        return null;
     }
+}
 
     // Safely convert Finnhub response value to BigDecimal
     // Finnhub returns numbers as Double — BigDecimal is needed for financial
@@ -141,4 +159,20 @@ public class StockDataSeeder {
             return BigDecimal.ZERO;
         }
     }
+    private String getCompanyName(String symbol) {
+    try {
+        String url = finnhubUrl + "/stock/profile2?symbol=" + symbol + "&token=" + finnhubKey;
+
+        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+
+        if (response != null && response.get("name") != null) {
+            return response.get("name").toString();
+        }
+
+    } catch (Exception e) {
+        System.out.println("Failed to fetch name for " + symbol);
+    }
+
+    return symbol; // fallback if API fails
+}
 }

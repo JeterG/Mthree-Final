@@ -3,10 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-// Reusable stock search dropdown component
-// Loads all symbols from stock_cache on init
-// Emits the selected symbol to the parent component
-// Example: <app-stock-search (symbolSelected)="onSymbolSelected($event)"></app-stock-search>
 @Component({
   selector: 'app-stock-search',
   standalone: true,
@@ -15,7 +11,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['stock-search-component.css'],
 })
 export class StockSearchComponent implements OnInit {
-  // Emits the selected symbol string to the parent
+
   @Output() symbolSelected = new EventEmitter<string>();
 
   searchQuery = '';
@@ -30,7 +26,7 @@ export class StockSearchComponent implements OnInit {
     this.loadStocks();
   }
 
-  // Load all cached stocks from stock_cache table
+  // Load all cached stocks (now includes companyName)
   loadStocks(): void {
     this.http.get<any[]>('http://localhost:8080/api/market/cached').subscribe({
       next: (stocks) => {
@@ -40,27 +36,34 @@ export class StockSearchComponent implements OnInit {
     });
   }
 
-  // Filter stocks by symbol as user types
+  // 🔥 UPDATED SEARCH (symbol + company name)
   onSearch(): void {
-    const query = this.searchQuery.toUpperCase().trim();
+    const query = this.searchQuery.toLowerCase().trim();
+
     if (!query) {
       this.filteredStocks = [];
       this.showDropdown = false;
       return;
     }
-    this.filteredStocks = this.allStocks.filter((s) => s.symbol.includes(query)).slice(0, 8);
+
+    this.filteredStocks = this.allStocks
+      .filter((s) =>
+        s.symbol.toLowerCase().includes(query) ||
+        (s.companyName && s.companyName.toLowerCase().includes(query))
+      )
+      .slice(0, 8);
+
     this.showDropdown = this.filteredStocks.length > 0;
   }
 
-  // Select a stock from the dropdown
+  // Select a stock
   selectStock(stock: any): void {
     this.selectedStock = stock;
-    this.searchQuery = stock.symbol;
+    this.searchQuery = `${stock.companyName} (${stock.symbol})`; // 🔥 nicer UX
     this.showDropdown = false;
     this.symbolSelected.emit(stock.symbol);
   }
 
-  // Close dropdown when input loses focus
   onBlur(): void {
     setTimeout(() => (this.showDropdown = false), 200);
   }
