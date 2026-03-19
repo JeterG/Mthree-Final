@@ -26,6 +26,7 @@ export class Portfolio implements OnInit {
   holdingsCount = 0;
   holdings: any[] = [];
   transactions: any[] = [];
+  watchlist: any[] = [];
 
   constructor(
     private http: HttpClient,
@@ -36,8 +37,10 @@ export class Portfolio implements OnInit {
   ngOnInit(): void {
     this.loadPortfolio();
     this.loadTransactions();
+    this.loadWatchlist();
     setTimeout(() => this.loadPortfolio(), 1000);
     setTimeout(() => this.loadTransactions(), 1000);
+    setTimeout(() => this.loadWatchlist(), 1000);
   }
 
   onSymbolSelected(symbol: string): void {
@@ -135,7 +138,6 @@ export class Portfolio implements OnInit {
     this.http.get<any[]>(`http://localhost:8080/api/transactions/${this.userId}`).subscribe({
       next: (transactions) => {
         this.ngZone.run(() => {
-          // Table shows newest first
           this.transactions = transactions.sort(
             (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           );
@@ -143,6 +145,61 @@ export class Portfolio implements OnInit {
         });
       },
       error: (err) => console.error('Transactions load error:', err),
+    });
+  }
+
+  loadWatchlist(): void {
+    this.http.get<any[]>(`http://localhost:8080/api/watchlist/${this.userId}`).subscribe({
+      next: (watchlist) => {
+        if (watchlist.length === 0) {
+          this.ngZone.run(() => {
+            this.watchlist = [];
+            this.cdr.detectChanges();
+          });
+          return;
+        }
+
+        const enriched: any[] = new Array(watchlist.length);
+        let completed = 0;
+
+        watchlist.forEach((w, index) => {
+          this.http.get<any>(`http://localhost:8080/api/market/quote/${w.stockSymbol}`).subscribe({
+            next: (stock) => {
+              enriched[index] = { ...w, currentPrice: stock.currentPrice };
+              completed++;
+              if (completed === watchlist.length) {
+                this.ngZone.run(() => {
+                  this.watchlist = [...enriched];
+                  this.cdr.detectChanges();
+                });
+              }
+            },
+            error: () => {
+              enriched[index] = { ...w, currentPrice: null };
+              completed++;
+              if (completed === watchlist.length) {
+                this.ngZone.run(() => {
+                  this.watchlist = [...enriched];
+                  this.cdr.detectChanges();
+                });
+              }
+            },
+          });
+        });
+      },
+      error: (err) => console.error('Watchlist load error:', err),
+    });
+  }
+
+  removeFromWatchlist(id: number): void {
+    this.http.delete(`http://localhost:8080/api/watchlist/${id}`).subscribe({
+      next: () => {
+        this.ngZone.run(() => {
+          this.loadWatchlist();
+          this.cdr.detectChanges();
+        });
+      },
+      error: (err) => console.error('Remove watchlist error:', err),
     });
   }
 
