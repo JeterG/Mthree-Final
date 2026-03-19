@@ -32,6 +32,7 @@ export class Portfolio implements OnInit {
 
   ngOnInit(): void {
     this.loadPortfolio();
+    setTimeout(() => this.loadPortfolio(), 2000);
   }
 
   onSymbolSelected(symbol: string): void {

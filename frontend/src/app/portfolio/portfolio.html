@@ -111,6 +111,7 @@
                   <th>Current Price</th>
                   <th>Current Value</th>
                   <th>Gain / Loss</th>
+                  <th>Total</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -133,6 +134,7 @@
                   >
                     {{ isPositive(h.gainLoss) ? '+' : '' }}${{ h.gainLoss | number: '1.2-2' }}
                   </td>
+                  <td class="fw-semibold">${{ h.currentValue | number: '1.2-2' }}</td>
                   <td>
                     <button
                       class="btn btn-sm btn-outline-danger"
@@ -143,7 +145,7 @@
                   </td>
                 </tr>
                 <tr *ngIf="holdings.length === 0">
-                  <td colspan="7" class="text-center text-muted py-4">No holdings yet</td>
+                  <td colspan="8" class="text-center text-muted py-4">No holdings yet</td>
                 </tr>
               </tbody>
             </table>
