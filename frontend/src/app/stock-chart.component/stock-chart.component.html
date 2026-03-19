@@ -1,0 +1,29 @@
+<div class="card border-0 shadow-sm p-3">
+  <div class="d-flex align-items-center gap-3 mb-2">
+    <h5 class="mb-0 fw-bold">{{ symbol }}</h5>
+    <span class="fs-5 fw-semibold">${{ data?.currentPrice || '--' }}</span>
+    <span [ngClass]="data?.currentPrice - data?.openPrice >= 0 ? 'text-success' : 'text-danger'">
+      {{
+        data?.openPrice
+          ? (((data.currentPrice - data.openPrice) / data.openPrice) * 100).toFixed(2)
+          : '--'
+      }}%
+    </span>
+  </div>
+
+  <div class="btn-group mb-3" role="group">
+    <button
+      *ngFor="let r of ranges"
+      type="button"
+      class="btn btn-sm"
+      [ngClass]="activeRange === r ? 'btn-dark' : 'btn-outline-secondary'"
+      (click)="selectRange(r)"
+    >
+      {{ r }}
+    </button>
+  </div>
+
+  <div style="height: 250px; position: relative">
+    <canvas #chartCanvas></canvas>
+  </div>
+</div>
