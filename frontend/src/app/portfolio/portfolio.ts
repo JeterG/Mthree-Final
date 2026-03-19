@@ -139,7 +139,9 @@ export class Portfolio implements OnInit {
     this.http.get<any[]>(`http://localhost:8080/api/transactions/${this.userId}`).subscribe({
       next: (transactions) => {
         this.ngZone.run(() => {
-          this.transactions = transactions;
+          this.transactions = transactions.sort(
+            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          );
           this.cdr.detectChanges();
         });
       },

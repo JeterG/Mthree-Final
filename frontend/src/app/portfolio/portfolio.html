@@ -63,7 +63,7 @@
       <app-buy
         [symbol]="selectedSymbol"
         [userId]="userId"
-        (buyComplete)="loadPortfolio()"
+        (buyComplete)="loadPortfolio(); loadTransactions()"
       ></app-buy>
     </div>
   </div>
