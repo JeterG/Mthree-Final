@@ -42,21 +42,26 @@ export class StockSearchComponent implements OnInit {
 
   // Filter stocks by symbol as user types
   onSearch(): void {
-    const query = this.searchQuery.toUpperCase().trim();
+    const query = this.searchQuery.toLowerCase().trim();
     if (!query) {
       this.filteredStocks = [];
       this.showDropdown = false;
       return;
     }
-    this.filteredStocks = this.allStocks.filter((s) => s.symbol.includes(query)).slice(0, 8);
+    this.filteredStocks = this.allStocks
+      .filter(
+        (s) =>
+          s.symbol.toLowerCase().includes(query) ||
+          (s.companyName && s.companyName.toLowerCase().includes(query)),
+      )
+      .slice(0, 8);
     this.showDropdown = this.filteredStocks.length > 0;
   }
 
   // Select a stock from the dropdown
   selectStock(stock: any): void {
     this.selectedStock = stock;
-    this.searchQuery = stock.symbol;
-    this.showDropdown = false;
+    this.searchQuery = `${stock.companyName} (${stock.symbol})`; // 🔥 nicer UX    this.showDropdown = false;
     this.symbolSelected.emit(stock.symbol);
   }
 

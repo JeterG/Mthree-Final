@@ -26,7 +26,11 @@ public class StockDataSeeder {
     private final StockCacheRepository stockCacheRepository;
     private final YahooFinanceService yahooFinanceService;
     private final RestTemplate restTemplate = new RestTemplate();
-
+    // public void init() {
+    // System.out.println("Seeding stock data...");
+    // seedAll();
+    // seedHistory(); // optional
+    // }
     // All symbols seeded into both tables
     private static final String[] SYMBOLS = {
             "AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "META", "TSLA", "ORCL",
@@ -121,7 +125,18 @@ public class StockDataSeeder {
             if (open.compareTo(BigDecimal.ZERO) == 0)
                 open = prevClose;
 
-            return new StockCache(symbol, current, open, toBD(r.get("h")), toBD(r.get("l")), LocalDateTime.now());
+            // 🔥 GET COMPANY NAME FIRST
+            String companyName = getCompanyName(symbol);
+
+            // 🔥 USE NEW CONSTRUCTOR (MATCHES StockCache)
+            return new StockCache(
+                    symbol,
+                    companyName,
+                    current,
+                    open,
+                    toBD(r.get("h")),
+                    toBD(r.get("l")),
+                    LocalDateTime.now());
 
         } catch (Exception e) {
             System.err.println("Finnhub seed failed for " + symbol + ": " + e.getMessage());
@@ -140,5 +155,22 @@ public class StockDataSeeder {
         } catch (Exception e) {
             return BigDecimal.ZERO;
         }
+    }
+
+    private String getCompanyName(String symbol) {
+        try {
+            String url = finnhubUrl + "/stock/profile2?symbol=" + symbol + "&token=" + finnhubKey;
+
+            Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+
+            if (response != null && response.get("name") != null) {
+                return response.get("name").toString();
+            }
+
+        } catch (Exception e) {
+            System.out.println("Failed to fetch name for " + symbol);
+        }
+
+        return symbol; // fallback if API fails
     }
 }
