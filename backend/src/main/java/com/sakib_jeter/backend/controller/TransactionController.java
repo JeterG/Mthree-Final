@@ -13,7 +13,7 @@ import com.sakib_jeter.backend.entity.Transaction;
 import com.sakib_jeter.backend.service.TransactionService;
 
 @RestController
-@RequestMapping("api//transactions")
+@RequestMapping("api/transactions")
 public class TransactionController {
 
     private final TransactionService transactionService;

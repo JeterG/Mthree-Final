@@ -1,0 +1,12 @@
+<!-- Portfolio Value Over Time Chart -->
+<!-- Usage: <app-portfolio-chart [transactions]="transactions" [startingBalance]="10000"></app-portfolio-chart> -->
+
+<div>
+  <p class="text-muted small mb-2">Portfolio Value Over Time</p>
+  <div *ngIf="transactions.length === 0" class="text-muted small">
+    No transactions yet — make a purchase to see your portfolio value over time
+  </div>
+  <div style="height: 250px; position: relative" *ngIf="transactions.length > 0">
+    <canvas #portfolioCanvas></canvas>
+  </div>
+</div>
