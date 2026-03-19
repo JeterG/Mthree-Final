@@ -1,0 +1,13 @@
+<div class="search-page">
+
+  <!-- 🔥 MARKET FIRST -->
+  <app-market-index></app-market-index>
+
+  <!-- 🔍 SEARCH BELOW -->
+  <h2>Search Stocks</h2>
+
+  <app-stock-search
+    (symbolSelected)="onSymbolSelected($event)">
+  </app-stock-search>
+
+</div>
