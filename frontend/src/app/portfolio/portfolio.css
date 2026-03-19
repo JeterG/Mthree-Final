@@ -10,3 +10,8 @@
 .nav-tabs .nav-link:hover {
   color: #000;
 }
+
+.table-hover tbody tr:hover td {
+  background-color: #495057 !important;
+  color: white !important;
+}

@@ -3,9 +3,6 @@
 
 <div class="card border-0 shadow-sm p-3">
   <!-- No symbol selected -->
-  <p class="small text-muted">
-    debug: symbol="{{ symbol }}" price="{{ currentPrice }}" loading="{{ loading }}"
-  </p>
   <div *ngIf="!symbol" class="text-muted small">Select a stock to buy or add to watchlist</div>
 
   <!-- Symbol selected -->
