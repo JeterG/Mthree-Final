@@ -3,21 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BuyComponent } from '../buy-component/buy-component';
-import { PortfolioChartComponent } from '../portfolio-chart-component/portfolio-chart-component';
 import { StockChartComponent } from '../stock-chart.component/stock-chart.component';
 import { StockSearchComponent } from '../stock-search-component/stock-search-component';
 
 @Component({
   selector: 'app-portfolio',
   standalone: true,
-  imports: [
-    CommonModule,
-    StockSearchComponent,
-    StockChartComponent,
-    BuyComponent,
-    PortfolioChartComponent,
-    FormsModule,
-  ],
+  imports: [CommonModule, StockSearchComponent, StockChartComponent, BuyComponent, FormsModule],
   templateUrl: './portfolio.html',
   styleUrl: './portfolio.css',
 })
@@ -138,10 +130,12 @@ export class Portfolio implements OnInit {
       error: (err) => console.error('Holdings load error:', err),
     });
   }
+
   loadTransactions(): void {
     this.http.get<any[]>(`http://localhost:8080/api/transactions/${this.userId}`).subscribe({
       next: (transactions) => {
         this.ngZone.run(() => {
+          // Table shows newest first
           this.transactions = transactions.sort(
             (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           );
@@ -149,6 +143,31 @@ export class Portfolio implements OnInit {
         });
       },
       error: (err) => console.error('Transactions load error:', err),
+    });
+  }
+
+  // Format transactions for the stock chart data mode
+  // Sorted oldest first, cumulative running balance as close price
+  get transactionsForChart(): any[] {
+    const sorted = [...this.transactions].sort(
+      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    );
+
+    let runningBalance = 0;
+    return sorted.map((t) => {
+      const amount = +t.totalAmount;
+      if (t.type === 'BUY') {
+        runningBalance += amount;
+      } else {
+        runningBalance -= amount;
+      }
+      return {
+        date: t.createdAt,
+        close: +runningBalance.toFixed(2),
+        open: +runningBalance.toFixed(2),
+        high: +runningBalance.toFixed(2),
+        low: +runningBalance.toFixed(2),
+      };
     });
   }
 

@@ -16,8 +16,10 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 // Reusable stock chart component
-// Pass a symbol as input and it will fetch and display the price history
-// Example: <app-stock-chart [symbol]="'AAPL'"></app-stock-chart>
+// Mode 1: Pass a symbol — fetches price history from backend
+// Mode 2: Pass raw data array — renders directly without any HTTP calls
+// Example symbol mode: <app-stock-chart [symbol]="'AAPL'"></app-stock-chart>
+// Example data mode:   <app-stock-chart [data]="transactionsForChart"></app-stock-chart>
 @Component({
   selector: 'app-stock-chart',
   standalone: true,
@@ -26,12 +28,15 @@ Chart.register(...registerables);
   styleUrls: ['./stock-chart.component.css'],
 })
 export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit {
-  // Symbol to display — passed in from parent component
-  @Input() symbol: string = 'AAPL';
+  // Symbol mode — fetches data from backend
+  @Input() symbol: string = '';
+
+  // Data mode — renders raw data directly, skips all HTTP calls
+  @Input() data: any[] = [];
 
   @ViewChild('chartCanvas', { static: false }) chartRef!: ElementRef<HTMLCanvasElement>;
 
-  data: any;
+  quoteData: any;
   activeRange: string = '1Y';
   allHistory: any[] = [];
   chart: any;
@@ -43,8 +48,15 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
     private http: HttpClient,
     private cdr: ChangeDetectorRef,
   ) {}
+
   ngAfterViewInit(): void {
     setTimeout(() => {
+      if (this.data.length > 0) {
+        // Data mode — render directly
+        this.allHistory = this.data;
+        this.renderChart(this.data);
+        return;
+      }
       if (this.symbol && this.symbol.trim() !== '') {
         this.loadData(this.symbol);
       }
@@ -52,10 +64,18 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    // Data mode — re-render when data input changes
+    if (changes['data'] && this.data.length > 0) {
+      this.allHistory = this.data;
+      setTimeout(() => this.renderChart(this.data), 100);
+      return;
+    }
+    // Symbol mode — reload when symbol changes
     if (changes['symbol'] && !changes['symbol'].firstChange && this.symbol) {
       this.loadData(this.symbol);
     }
   }
+
   ngOnDestroy(): void {
     if (this.intervalId) clearInterval(this.intervalId);
     if (this.chart) this.chart.destroy();
@@ -84,7 +104,7 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
   fetchQuote(symbol: string) {
     this.http.get(`http://localhost:8080/api/market/quote/${symbol}`).subscribe({
       next: (res: any) => {
-        this.data = res;
+        this.quoteData = res;
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Quote error:', err),
@@ -137,7 +157,6 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
         const now = new Date().toISOString();
         const price = stock.currentPrice;
 
-        // Append to allHistory so range filter includes it
         this.allHistory.push({ date: now, close: price, open: price, high: price, low: price });
 
         this.chart.data.labels.push(new Date().toLocaleDateString());

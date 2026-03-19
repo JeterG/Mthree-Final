@@ -1,16 +1,23 @@
 <div class="card border-0 shadow-sm p-3">
-  <div class="d-flex align-items-center gap-3 mb-2">
+  <div class="d-flex align-items-center gap-3 mb-2" *ngIf="symbol">
     <h5 class="mb-0 fw-bold">{{ symbol }}</h5>
-    <span class="fs-5 fw-semibold">${{ data?.currentPrice || '--' }}</span>
-    <span [ngClass]="data?.currentPrice - data?.openPrice >= 0 ? 'text-success' : 'text-danger'">
+    <span class="fs-5 fw-semibold">${{ quoteData?.currentPrice || '--' }}</span>
+    <span
+      [ngClass]="
+        quoteData?.currentPrice - quoteData?.openPrice >= 0 ? 'text-success' : 'text-danger'
+      "
+    >
       {{
-        data?.openPrice
-          ? (((data.currentPrice - data.openPrice) / data.openPrice) * 100).toFixed(2)
+        quoteData?.openPrice
+          ? (((quoteData.currentPrice - quoteData.openPrice) / quoteData.openPrice) * 100).toFixed(
+              2
+            )
           : '--'
       }}%
     </span>
   </div>
 
+  <!-- Range buttons — works for both symbol and data mode -->
   <div class="btn-group mb-3" role="group">
     <button
       *ngFor="let r of ranges"
@@ -22,7 +29,6 @@
       {{ r }}
     </button>
   </div>
-
   <div style="height: 250px; position: relative">
     <canvas #chartCanvas></canvas>
   </div>
