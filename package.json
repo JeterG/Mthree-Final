@@ -3,5 +3,8 @@
     "@popperjs/core": "^2.11.8",
     "boostrap": "^2.0.0",
     "bootstrap": "^5.3.8"
+  },
+  "devDependencies": {
+    "@types/swagger-ui-dist": "^3.30.6"
   }
 }

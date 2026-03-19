@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sakib_jeter.backend.entity.Account;
 import com.sakib_jeter.backend.service.AccountService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Account Controller", description = "Manage user accounts")
 @RestController
 @RequestMapping("/api/account")
 public class AccountController {
@@ -24,27 +28,32 @@ public class AccountController {
         this.accountService = accountService;
     }
 
+    @Operation(summary = "Get all accounts")
     @GetMapping
     public List<Account> getAllAccounts() {
         return accountService.getAllAccounts();
     }
 
-    @GetMapping("/{userId}") // user userId instead of account id to not expose account id
+    @Operation(summary = "Get account by user ID")
+    @GetMapping("/{userId}")
     public Account getAccount(@PathVariable Long userId) {
         return accountService.getAccountByUserId(userId);
     }
 
+    @Operation(summary = "Create new account")
     @PostMapping
     public Account createAccount(@RequestBody Account account) {
         return accountService.createAccount(account);
     }
 
-    @PutMapping("/{userId}") // user userId instead of account id to not expose account id
+    @Operation(summary = "Update account by user ID")
+    @PutMapping("/{userId}")
     public Account updateAccount(@PathVariable Long userId, @RequestBody Account updatedAccount) {
         return accountService.updateAccount(userId, updatedAccount);
     }
 
-    @DeleteMapping("/{userId}") // user userId instead of account id to not expose account id
+    @Operation(summary = "Delete account by user ID")
+    @DeleteMapping("/{userId}")
     public void deleteAccount(@PathVariable Long userId) {
         accountService.deleteAccount(userId);
     }

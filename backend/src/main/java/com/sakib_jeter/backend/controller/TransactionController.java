@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sakib_jeter.backend.entity.Transaction;
 import com.sakib_jeter.backend.service.TransactionService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Transaction Controller", description = "Manage transactions")
 @RestController
 @RequestMapping("api/transactions")
 public class TransactionController {
@@ -22,14 +26,15 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
+    @Operation(summary = "Get user transactions")
     @GetMapping("/{userId}")
     public List<Transaction> getTransactions(@PathVariable Long userId) {
         return transactionService.getTransactionsByUser(userId);
     }
 
+    @Operation(summary = "Create transaction")
     @PostMapping
     public Transaction saveTransaction(@RequestBody Transaction transaction) {
         return transactionService.saveTransaction(transaction);
     }
-
 }

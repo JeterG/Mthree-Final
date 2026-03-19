@@ -3,6 +3,7 @@ import { HomeComponent } from './home/home';
 import { LoginComponent } from './login/login';
 import { Portfolio } from './portfolio/portfolio';
 import { SignupComponent } from './signup/signup';
+import { SwaggerComponent } from './swagger/swagger';
 import { Search } from './search/search'; // ✅ ADD THIS
 
 export const routes: Routes = [
@@ -12,4 +13,5 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'search', component: Search }, // ✅ FIXED
   { path: 'portfolio', component: Portfolio },
+  { path: 'docs', component: SwaggerComponent }, // ✅
 ];
