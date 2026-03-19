@@ -30,10 +30,28 @@
   <!-- Charts Row -->
   <div class="row g-4 mb-4">
     <div class="col-12 col-lg-6">
-      <div class="card border-0 shadow-sm h-100 p-3">Stock Chart</div>
+      <div class="card border-0 shadow-sm h-100 p-3">
+        <p class="text-muted small mb-2" *ngIf="!selectedSymbol">
+          Search a stock below to view its chart
+        </p>
+        <app-stock-chart [symbol]="selectedSymbol"></app-stock-chart>
+      </div>
     </div>
     <div class="col-12 col-lg-6">
       <div class="card border-0 shadow-sm h-100 p-3">Portfolio Value Over Time</div>
+    </div>
+  </div>
+
+  <!-- Stock Search Row -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-lg-6">
+      <div class="card border-0 shadow-sm p-3">
+        <p class="text-muted small mb-2">Search a stock to view its chart</p>
+        <app-stock-search (symbolSelected)="onSymbolSelected($event)"></app-stock-search>
+        <p class="mt-2 text-muted small" *ngIf="selectedSymbol">
+          Selected: <strong>{{ selectedSymbol }}</strong>
+        </p>
+      </div>
     </div>
   </div>
 

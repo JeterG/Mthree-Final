@@ -1,0 +1,27 @@
+<!-- Stock Search Component -->
+<!-- Usage: <app-stock-search (symbolSelected)="onSymbolSelected($event)"></app-stock-search> -->
+
+<div class="position-relative">
+  <!-- Search input -->
+  <input
+    type="text"
+    class="form-control"
+    placeholder="Search symbol e.g. AAPL"
+    [(ngModel)]="searchQuery"
+    (input)="onSearch()"
+    (blur)="onBlur()"
+  />
+
+  <!-- Dropdown results -->
+  <div class="dropdown-menu show w-100 shadow-sm" *ngIf="showDropdown">
+    <button
+      *ngFor="let stock of filteredStocks"
+      type="button"
+      class="dropdown-item d-flex justify-content-between align-items-center"
+      (mousedown)="selectStock(stock)"
+    >
+      <strong>{{ stock.symbol }}</strong>
+      <span class="text-muted small">${{ stock.currentPrice | number: '1.2-2' }}</span>
+    </button>
+  </div>
+</div>
