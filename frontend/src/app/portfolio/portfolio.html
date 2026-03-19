@@ -42,23 +42,69 @@
     </div>
   </div>
 
-  <!-- Stock Search Row -->
+  <!-- Stock Search + Buy Row -->
   <div class="row g-4 mb-4">
     <div class="col-12 col-lg-6">
       <div class="card border-0 shadow-sm p-3">
-        <p class="text-muted small mb-2">Search a stock to view its chart</p>
+        <p class="text-muted small mb-2">Search a stock</p>
         <app-stock-search (symbolSelected)="onSymbolSelected($event)"></app-stock-search>
-        <p class="mt-2 text-muted small" *ngIf="selectedSymbol">
-          Selected: <strong>{{ selectedSymbol }}</strong>
-        </p>
       </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <app-buy [symbol]="selectedSymbol" [userId]="userId"></app-buy>
     </div>
   </div>
 
-  <!-- Table Row -->
+  <!-- Tabs -->
   <div class="row g-4">
     <div class="col-12">
-      <div class="card border-0 shadow-sm p-3">Holdings / Transactions / Watchlist Table</div>
+      <div class="card border-0 shadow-sm">
+        <!-- Tab headers -->
+        <div class="card-header bg-white border-0 p-0">
+          <ul class="nav nav-tabs px-3 pt-2 border-0">
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                [class.active]="activeTab === 'holdings'"
+                (click)="activeTab = 'holdings'"
+              >
+                Holdings
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                [class.active]="activeTab === 'transactions'"
+                (click)="activeTab = 'transactions'"
+              >
+                Transactions
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                [class.active]="activeTab === 'watchlist'"
+                (click)="activeTab = 'watchlist'"
+              >
+                Watchlist
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Tab content -->
+        <div class="card-body p-4">
+          <div *ngIf="activeTab === 'holdings'">
+            <p class="text-muted">Holdings table coming soon</p>
+          </div>
+          <div *ngIf="activeTab === 'transactions'">
+            <p class="text-muted">Transactions table coming soon</p>
+          </div>
+          <div *ngIf="activeTab === 'watchlist'">
+            <p class="text-muted">Watchlist coming soon</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

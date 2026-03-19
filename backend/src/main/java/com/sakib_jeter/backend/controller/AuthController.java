@@ -1,7 +1,13 @@
 package com.sakib_jeter.backend.controller;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.sakib_jeter.backend.dto.SignupRequest;
 import com.sakib_jeter.backend.service.SignupService;
@@ -25,10 +31,11 @@ public class AuthController {
         service.register(request.getEmail(), request.getPassword());
 
         return ResponseEntity.ok("User registered successfully");
-    } 
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody SignupRequest request) {
-        service.login(request.getEmail(), request.getPassword());
-        return ResponseEntity.ok("Login successful");
+    public ResponseEntity<Map<String, Object>> login(@RequestBody SignupRequest request) {
+        Long userId = service.login(request.getEmail(), request.getPassword());
+        return ResponseEntity.ok(Map.of("userId", userId, "email", request.getEmail()));
     }
 }

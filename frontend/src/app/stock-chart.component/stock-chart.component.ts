@@ -44,7 +44,11 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
     private cdr: ChangeDetectorRef,
   ) {}
   ngAfterViewInit(): void {
-    setTimeout(() => this.loadData(this.symbol), 100);
+    setTimeout(() => {
+      if (this.symbol && this.symbol.trim() !== '') {
+        this.loadData(this.symbol);
+      }
+    }, 100);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -130,10 +134,15 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
 
     this.http.get<any>(`http://localhost:8080/api/market/quote/${symbol}`).subscribe({
       next: (stock) => {
-        this.chart.data.labels.push(new Date().toLocaleDateString());
-        this.chart.data.datasets[0].data.push(stock.currentPrice);
+        const now = new Date().toISOString();
+        const price = stock.currentPrice;
 
-        // Keep max 365 points
+        // Append to allHistory so range filter includes it
+        this.allHistory.push({ date: now, close: price, open: price, high: price, low: price });
+
+        this.chart.data.labels.push(new Date().toLocaleDateString());
+        this.chart.data.datasets[0].data.push(price);
+
         if (this.chart.data.labels.length > 365) {
           this.chart.data.labels.shift();
           this.chart.data.datasets[0].data.shift();

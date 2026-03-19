@@ -1,0 +1,73 @@
+<!-- Buy / Watchlist Component -->
+<!-- Usage: <app-buy [symbol]="selectedSymbol" [userId]="userId"></app-buy> -->
+
+<div class="card border-0 shadow-sm p-3">
+  <!-- No symbol selected -->
+  <p class="small text-muted">
+    debug: symbol="{{ symbol }}" price="{{ currentPrice }}" loading="{{ loading }}"
+  </p>
+  <div *ngIf="!symbol" class="text-muted small">Select a stock to buy or add to watchlist</div>
+
+  <!-- Symbol selected -->
+  <div *ngIf="symbol">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h6 class="fw-bold mb-0">{{ symbol }}</h6>
+      <span *ngIf="loading" class="text-muted small">Loading...</span>
+      <span *ngIf="!loading && currentPrice !== null" class="fw-semibold">
+        ${{ currentPrice | number: '1.2-2' }}
+      </span>
+    </div>
+
+    <!-- Action radio buttons -->
+    <div class="d-flex gap-3 mb-3">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          id="buyRadio"
+          [(ngModel)]="action"
+          value="buy"
+        />
+        <label class="form-check-label" for="buyRadio">Buy</label>
+      </div>
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          id="watchlistRadio"
+          [(ngModel)]="action"
+          value="watchlist"
+        />
+        <label class="form-check-label" for="watchlistRadio">Add to Watchlist</label>
+      </div>
+    </div>
+
+    <!-- Quantity input — only for buy -->
+    <div *ngIf="action === 'buy'" class="mb-3">
+      <label class="form-label small text-muted">Quantity</label>
+      <input type="number" class="form-control" [(ngModel)]="quantity" min="1" step="1" />
+      <div class="mt-2 small text-muted" *ngIf="currentPrice !== null">
+        Total: <strong>${{ totalCost | number: '1.2-2' }}</strong>
+      </div>
+    </div>
+
+    <!-- Success / error messages -->
+    <div class="alert alert-success py-2 small mb-3" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+    <div class="alert alert-danger py-2 small mb-3" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Submit button -->
+    <button
+      class="btn btn-dark w-100"
+      (click)="submit()"
+      [disabled]="submitting || loading || currentPrice === null"
+    >
+      <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2"></span>
+      {{ action === 'buy' ? 'Buy' : 'Add to Watchlist' }}
+    </button>
+  </div>
+</div>
