@@ -1,0 +1,163 @@
+<div class="container-fluid py-4 px-4">
+  <!-- Summary Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm h-100 p-3">
+        <p class="text-muted small mb-1">Portfolio Value</p>
+        <h4 class="fw-bold mb-0">${{ totalPortfolioValue | number: '1.2-2' }}</h4>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm h-100 p-3">
+        <p class="text-muted small mb-1">Cash Balance</p>
+        <h4 class="fw-bold mb-0">${{ cashBalance | number: '1.2-2' }}</h4>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm h-100 p-3">
+        <p class="text-muted small mb-1">Total Gain / Loss</p>
+        <h4
+          class="fw-bold mb-0"
+          [class.text-success]="isPositive(totalGainLoss)"
+          [class.text-danger]="!isPositive(totalGainLoss)"
+        >
+          {{ isPositive(totalGainLoss) ? '+' : '' }}${{ totalGainLoss | number: '1.2-2' }}
+        </h4>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm h-100 p-3">
+        <p class="text-muted small mb-1">Holdings</p>
+        <h4 class="fw-bold mb-0">{{ holdingsCount | number: '1.0-2' }} shares</h4>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-lg-6">
+      <div class="card border-0 shadow-sm h-100 p-3">
+        <p class="text-muted small mb-2" *ngIf="!selectedSymbol">
+          Search a stock below to view its chart
+        </p>
+        <app-stock-chart *ngIf="selectedSymbol" [symbol]="selectedSymbol"></app-stock-chart>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <div class="card border-0 shadow-sm h-100 p-3">Portfolio Value Over Time</div>
+    </div>
+  </div>
+
+  <!-- Stock Search + Buy Row -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-lg-6">
+      <div class="card border-0 shadow-sm p-3">
+        <p class="text-muted small mb-2">Search a stock</p>
+        <app-stock-search (symbolSelected)="onSymbolSelected($event)"></app-stock-search>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <app-buy
+        [symbol]="selectedSymbol"
+        [userId]="userId"
+        (buyComplete)="loadPortfolio()"
+      ></app-buy>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="row g-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 p-0">
+          <ul class="nav nav-tabs px-3 pt-2 border-0">
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                [class.active]="activeTab === 'holdings'"
+                (click)="activeTab = 'holdings'"
+              >
+                Holdings
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                [class.active]="activeTab === 'transactions'"
+                (click)="activeTab = 'transactions'"
+              >
+                Transactions
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                [class.active]="activeTab === 'watchlist'"
+                (click)="activeTab = 'watchlist'"
+              >
+                Watchlist
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body p-4">
+          <div *ngIf="activeTab === 'holdings'">
+            <table class="table-striped table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Symbol</th>
+                  <th>Quantity</th>
+                  <th>Avg Buy Price</th>
+                  <th>Current Price</th>
+                  <th>Current Value</th>
+                  <th>Gain / Loss</th>
+                  <th>Total</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let h of holdings"
+                  (click)="onSymbolSelected(h.stockSymbol)"
+                  style="cursor: pointer"
+                >
+                  <td>
+                    <strong>{{ h.stockSymbol }}</strong>
+                  </td>
+                  <td>{{ h.quantity }}</td>
+                  <td>${{ h.avgBuyPrice | number: '1.2-2' }}</td>
+                  <td>${{ h.currentPrice | number: '1.2-2' }}</td>
+                  <td>${{ h.currentValue | number: '1.2-2' }}</td>
+                  <td
+                    [class.text-success]="isPositive(h.gainLoss)"
+                    [class.text-danger]="!isPositive(h.gainLoss)"
+                  >
+                    {{ isPositive(h.gainLoss) ? '+' : '' }}${{ h.gainLoss | number: '1.2-2' }}
+                  </td>
+                  <td class="fw-semibold">${{ h.currentValue | number: '1.2-2' }}</td>
+                  <td>
+                    <button
+                      class="btn btn-sm btn-outline-danger"
+                      (click)="$event.stopPropagation(); sell(h)"
+                    >
+                      Sell
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="holdings.length === 0">
+                  <td colspan="8" class="text-center text-muted py-4">No holdings yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div *ngIf="activeTab === 'transactions'">
+            <p class="text-muted">Transactions table coming soon</p>
+          </div>
+          <div *ngIf="activeTab === 'watchlist'">
+            <p class="text-muted">Watchlist coming soon</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

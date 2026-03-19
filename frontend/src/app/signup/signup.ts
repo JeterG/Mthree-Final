@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-signup',
@@ -12,7 +12,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   styleUrl: './signup.css',
 })
 export class SignupComponent {
-
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
@@ -20,7 +19,10 @@ export class SignupComponent {
   errorMessage: string = '';
   successMessage: string = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
 
   signup() {
     this.errorMessage = '';
@@ -32,36 +34,38 @@ export class SignupComponent {
       return;
     }
 
-    this.http.post(
-      'http://localhost:8080/api/auth/signup',
-      {
-        email: this.email,
-        password: this.password,
-      },
-      {
-        responseType: 'text' // ✅ FIX: prevents Angular JSON parse error
-      }
-    ).subscribe({
-      next: (res: string) => {
-        console.log('SUCCESS HIT');
-        console.log(res);
+    this.http
+      .post(
+        'http://localhost:8080/api/auth/signup',
+        {
+          email: this.email,
+          password: this.password,
+        },
+        {
+          responseType: 'text', // ✅ FIX: prevents Angular JSON parse error
+        },
+      )
+      .subscribe({
+        next: (res: string) => {
+          console.log('SUCCESS HIT');
+          console.log(res);
 
-        this.successMessage = 'Signup successful! Redirecting...';
+          this.successMessage = 'Signup successful! Redirecting...';
 
-        // ✅ redirect to login
-        this.router.navigate(['/login']).then(success => {
-          console.log('NAV RESULT:', success);
-        });
-      },
+          // ✅ redirect to login
+          this.router.navigate(['/login']).then((success) => {
+            console.log('NAV RESULT:', success);
+          });
+        },
 
-      error: (err) => {
-        console.log(err);
+        error: (err) => {
+          console.log(err);
 
-        this.errorMessage =
-          typeof err.error === 'string'
-            ? err.error
-            : 'Signup failed (maybe email already exists)';
-      }
-    });
+          this.errorMessage =
+            typeof err.error === 'string'
+              ? err.error
+              : 'Signup failed (maybe email already exists)';
+        },
+      });
   }
 }
