@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BuyComponent } from '../buy-component/buy-component';
 import { PortfolioChartComponent } from '../portfolio-chart-component/portfolio-chart-component';
 import { StockChartComponent } from '../stock-chart.component/stock-chart.component';
@@ -15,11 +16,13 @@ import { StockSearchComponent } from '../stock-search-component/stock-search-com
     StockChartComponent,
     BuyComponent,
     PortfolioChartComponent,
+    FormsModule,
   ],
   templateUrl: './portfolio.html',
   styleUrl: './portfolio.css',
 })
 export class Portfolio implements OnInit {
+  Math = Math;
   selectedSymbol = '';
   activeTab: 'holdings' | 'transactions' | 'watchlist' = 'holdings';
   userId: number = parseInt(localStorage.getItem('userId') || '0');
@@ -150,11 +153,14 @@ export class Portfolio implements OnInit {
   }
 
   sell(holding: any): void {
+    const quantity = holding.sellQuantity || holding.quantity;
+    if (!quantity || quantity <= 0) return;
+
     this.http
       .post<any>('http://localhost:8080/api/holdings/sell', {
         userId: this.userId,
         stockSymbol: holding.stockSymbol,
-        quantity: holding.quantity,
+        quantity: quantity,
       })
       .subscribe({
         next: () => {

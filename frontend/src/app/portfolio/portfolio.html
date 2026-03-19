@@ -138,13 +138,21 @@
                     {{ isPositive(h.gainLoss) ? '+' : '' }}${{ h.gainLoss | number: '1.2-2' }}
                   </td>
                   <td class="fw-semibold">${{ h.currentValue | number: '1.2-2' }}</td>
-                  <td>
-                    <button
-                      class="btn btn-sm btn-outline-danger"
-                      (click)="$event.stopPropagation(); sell(h)"
-                    >
-                      Sell
-                    </button>
+                  <td (click)="$event.stopPropagation()">
+                    <div class="d-flex gap-2 align-items-center">
+                      <input
+                        type="number"
+                        class="form-control form-control-sm"
+                        style="width: 80px"
+                        [(ngModel)]="h.sellQuantity"
+                        [max]="h.quantity"
+                        [min]="1"
+                        step="1"
+                        placeholder="Qty"
+                        (ngModelChange)="h.sellQuantity = Math.min(h.sellQuantity, h.quantity)"
+                      />
+                      <button class="btn btn-sm btn-outline-danger" (click)="sell(h)">Sell</button>
+                    </div>
                   </td>
                 </tr>
                 <tr *ngIf="holdings.length === 0">
