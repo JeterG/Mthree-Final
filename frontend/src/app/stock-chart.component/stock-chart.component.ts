@@ -52,7 +52,6 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
   ngAfterViewInit(): void {
     setTimeout(() => {
       if (this.data.length > 0) {
-        // Data mode — render directly
         this.allHistory = this.data;
         this.renderChart(this.data);
         return;
@@ -64,13 +63,11 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // Data mode — re-render when data input changes
     if (changes['data'] && this.data.length > 0) {
       this.allHistory = this.data;
       setTimeout(() => this.renderChart(this.data), 100);
       return;
     }
-    // Symbol mode — reload when symbol changes
     if (changes['symbol'] && !changes['symbol'].firstChange && this.symbol) {
       this.loadData(this.symbol);
     }
@@ -204,13 +201,30 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
             fill: true,
             tension: 0.3,
             pointRadius: 0,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: color,
           },
         ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            enabled: true,
+            callbacks: {
+              label: (ctx) => {
+                const value = ctx.parsed?.y ?? 0;
+                return `$${value.toFixed(2)}`;
+              },
+            },
+          },
+        },
         scales: {
           x: { ticks: { maxTicksLimit: 6 } },
           y: { display: false },
