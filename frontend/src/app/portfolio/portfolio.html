@@ -4,25 +4,31 @@
     <div class="col-6 col-md-3">
       <div class="card border-0 shadow-sm h-100 p-3">
         <p class="text-muted small mb-1">Portfolio Value</p>
-        <h4 class="fw-bold mb-0">$0.00</h4>
+        <h4 class="fw-bold mb-0">${{ totalPortfolioValue | number: '1.2-2' }}</h4>
       </div>
     </div>
     <div class="col-6 col-md-3">
       <div class="card border-0 shadow-sm h-100 p-3">
         <p class="text-muted small mb-1">Cash Balance</p>
-        <h4 class="fw-bold mb-0">$0.00</h4>
+        <h4 class="fw-bold mb-0">${{ cashBalance | number: '1.2-2' }}</h4>
       </div>
     </div>
     <div class="col-6 col-md-3">
       <div class="card border-0 shadow-sm h-100 p-3">
         <p class="text-muted small mb-1">Total Gain / Loss</p>
-        <h4 class="fw-bold mb-0">$0.00</h4>
+        <h4
+          class="fw-bold mb-0"
+          [class.text-success]="isPositive(totalGainLoss)"
+          [class.text-danger]="!isPositive(totalGainLoss)"
+        >
+          {{ isPositive(totalGainLoss) ? '+' : '' }}${{ totalGainLoss | number: '1.2-2' }}
+        </h4>
       </div>
     </div>
     <div class="col-6 col-md-3">
       <div class="card border-0 shadow-sm h-100 p-3">
         <p class="text-muted small mb-1">Holdings</p>
-        <h4 class="fw-bold mb-0">0 stocks</h4>
+        <h4 class="fw-bold mb-0">{{ holdingsCount }} stocks</h4>
       </div>
     </div>
   </div>
@@ -51,7 +57,11 @@
       </div>
     </div>
     <div class="col-12 col-lg-6">
-      <app-buy [symbol]="selectedSymbol" [userId]="userId"></app-buy>
+      <app-buy
+        [symbol]="selectedSymbol"
+        [userId]="userId"
+        (buyComplete)="loadPortfolio()"
+      ></app-buy>
     </div>
   </div>
 
@@ -59,7 +69,6 @@
   <div class="row g-4">
     <div class="col-12">
       <div class="card border-0 shadow-sm">
-        <!-- Tab headers -->
         <div class="card-header bg-white border-0 p-0">
           <ul class="nav nav-tabs px-3 pt-2 border-0">
             <li class="nav-item">
@@ -91,8 +100,6 @@
             </li>
           </ul>
         </div>
-
-        <!-- Tab content -->
         <div class="card-body p-4">
           <div *ngIf="activeTab === 'holdings'">
             <p class="text-muted">Holdings table coming soon</p>
