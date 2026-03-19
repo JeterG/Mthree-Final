@@ -1,0 +1,19 @@
+.market-index-container {
+  padding: 20px;
+}
+
+.index-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.index-card {
+  background: #111;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.chart-wrapper {
+  height: 200px;
+}
