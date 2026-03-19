@@ -30,11 +30,18 @@ export class LoginComponent {
         password: this.password,
       })
       .subscribe({
-        next: (res) => {
-          localStorage.setItem('userId', res.userId.toString());
-          localStorage.setItem('email', res.email);
-          this.router.navigate(['/home']);
-        },
+next: (res) => {
+  // 🔐 SAVE JWT TOKEN (MOST IMPORTANT)
+  localStorage.setItem('token', res.token);
+
+  // existing data
+  localStorage.setItem('userId', res.userId.toString());
+  localStorage.setItem('email', res.email);
+
+  console.log("TOKEN:", res.token); // optional debug
+
+  this.router.navigate(['/home']);
+},
         error: (err) => {
           this.errorMessage = typeof err.error === 'string' ? err.error : 'Login failed';
         },
