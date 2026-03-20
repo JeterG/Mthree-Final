@@ -4,19 +4,17 @@ import { LoginComponent } from './login/login';
 import { Portfolio } from './portfolio/portfolio';
 import { SignupComponent } from './signup/signup';
 import { SwaggerComponent } from './swagger/swagger';
-import { Search } from './search/search'; // ✅ ADD THIS
+import { Search } from './search/search'; 
+import { SettingsComponent } from './settings/settings';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'search', component: Search }, // ✅ FIXED
+  { path: 'search', component: Search }, // 
   { path: 'portfolio', component: Portfolio },
   { path: 'docs', component: SwaggerComponent }, // ✅
-  {
-  path: 'stock/:symbol',
-  loadComponent: () =>
-    import('./stock-page/stock-page').then(m => m.StockPageComponent)
-}
+  {path: 'stock/:symbol', loadComponent: () => import('./stock-page/stock-page').then(m => m.StockPageComponent)},
+  {path: 'settings', component: SettingsComponent}
 ];

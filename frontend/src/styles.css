@@ -1,4 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+/* Base layout */
 html,
 body {
   margin: 0;
@@ -8,3 +8,169 @@ body {
 }
 
 @import '~swagger-ui-dist/swagger-ui.css';
+
+
+/* =========================
+   🌞 LIGHT MODE
+========================= */
+body {
+  background-color: #f5f5f5;
+  color: #111;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+
+/* =========================
+   🌙 DARK MODE BASE
+========================= */
+.dark-mode,
+.dark-mode body {
+  background-color: #0e0e0e !important;
+  color: #ffffff;
+}
+
+
+/* =========================
+   🌙 CORE COMPONENTS
+========================= */
+
+/* Navbar */
+.dark-mode .navbar {
+  background-color: #121212;
+}
+
+/* Cards */
+.dark-mode .card,
+.dark-mode .card-body,
+.dark-mode .card-header.bg-white {
+  background-color: #1c1c1c !important;
+  color: white;
+}
+
+/* Text */
+.dark-mode .text-muted {
+  color: #aaaaaa !important;
+}
+
+/* Inputs */
+.dark-mode input,
+.dark-mode select {
+  background-color: #2a2a2a;
+  color: white;
+  border: 1px solid #444;
+}
+
+.dark-mode input::placeholder {
+  color: #bbbbbb !important;
+  opacity: 1;
+}
+
+/* Buttons */
+.dark-mode .btn {
+  background-color: #333;
+  color: white;
+}
+
+
+/* =========================
+   🌙 TABLES
+========================= */
+
+/* Table base */
+.dark-mode .table {
+  background-color: #1c1c1c;
+  color: white;
+}
+
+.dark-mode .table th,
+.dark-mode .table td {
+  border-color: #333;
+}
+
+/* Table header */
+.dark-mode .table-light,
+.dark-mode .table-light th,
+.dark-mode thead.table-light {
+  background-color: #2a2a2a !important;
+  color: white !important;
+}
+
+/* Table rows */
+.dark-mode .table-striped > tbody > tr > td {
+  background-color: #2a2a2a !important;
+  color: white !important;
+}
+
+/* Hover */
+.dark-mode .table-hover tbody tr:hover td {
+  background-color: #333 !important;
+}
+
+
+/* =========================
+   🌙 TABS
+========================= */
+
+.dark-mode .nav-tabs {
+  border-bottom: 1px solid #333;
+}
+
+.dark-mode .nav-tabs .nav-link {
+  background-color: #1c1c1c;
+  color: #aaa !important;
+  border: none;
+}
+
+.dark-mode .nav-tabs .nav-link.active {
+  background-color: #2a2a2a;
+  color: white !important;
+  border-bottom: 2px solid orange;
+}
+
+.dark-mode .tab-content {
+  background-color: #1c1c1c;
+  color: white;
+  padding: 1rem;
+}
+
+
+/* =========================
+   🌙 BOOTSTRAP OVERRIDES
+========================= */
+
+.dark-mode .bg-light {
+  background-color: #1c1c1c !important;
+}
+
+.dark-mode .container,
+.dark-mode .container-fluid {
+  background-color: transparent;
+}
+
+
+/* =========================
+   🌙 SWAGGER UI
+========================= */
+
+.dark-mode .swagger-ui {
+  background-color: #0e0e0e !important;
+  color: white !important;
+}
+
+.dark-mode .swagger-ui h1,
+.dark-mode .swagger-ui h2,
+.dark-mode .swagger-ui h3,
+.dark-mode .swagger-ui h4,
+.dark-mode .swagger-ui span,
+.dark-mode .swagger-ui p,
+.dark-mode .swagger-ui .title {
+  color: white !important;
+}
+
+.dark-mode .swagger-ui .opblock-summary-description {
+  color: #cccccc !important;
+}
+
+.dark-mode .swagger-ui .wrapper .title {
+  color: #ffffff !important;
+}

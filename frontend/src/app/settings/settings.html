@@ -1,0 +1,36 @@
+<div class="container-fluid py-4 px-4">
+  <div class="card p-4 shadow-sm border-0">
+
+    <h2 class="fw-bold mb-3">Settings</h2>
+
+    <!-- Dark Mode -->
+    <div class="d-flex justify-content-between align-items-center">
+      <span>Dark Mode</span>
+
+      <label class="switch">
+        <input
+          type="checkbox"
+          [(ngModel)]="isDarkMode"
+          (change)="toggleTheme()"
+        >
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <!-- 🔥 Timezone (ADD THIS) -->
+    <div class="d-flex justify-content-between align-items-center mt-4">
+      <span>Timezone</span>
+
+<select
+  class="form-select w-auto px-3"
+  [(ngModel)]="selectedTimezone"
+  (change)="onTimezoneChange()"
+>
+        <option *ngFor="let tz of timezones" [value]="tz.value">
+          {{ tz.label }}
+        </option>
+      </select>
+    </div>
+
+  </div>
+</div>
