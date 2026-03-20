@@ -88,4 +88,8 @@ public class MarketController {
                 ? ResponseEntity.ok(stock)
                 : ResponseEntity.notFound().build();
     }
+    @GetMapping("/stocks/{symbol}/details")
+public ResponseEntity<?> getStockDetails(@PathVariable String symbol) {
+    return ResponseEntity.ok(marketService.getStockDetails(symbol));
+}
 }

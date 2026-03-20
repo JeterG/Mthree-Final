@@ -2,9 +2,12 @@ import { HttpInterceptorFn } from '@angular/common/http';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
-  const token = localStorage.getItem('token');
+  // 🔥 SKIP market endpoints
+  if (req.url.includes('/api/market')) {
+    return next(req);
+  }
 
-  console.log("INTERCEPTOR RUNNING:", token); // 👈 ADD THIS
+  const token = localStorage.getItem('token');
 
   if (token) {
     const cloned = req.clone({
