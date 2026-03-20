@@ -123,6 +123,9 @@
                             <artifactId>lombok</artifactId>
                         </path>
                     </annotationProcessorPaths>
+                    <compilerArgs>
+                        <arg>-Xlint:-unchecked</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
