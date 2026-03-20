@@ -7,3 +7,8 @@
 select option {
   color: #111;
 }
+
+
+.timezone-select {
+  width: 160px !important;
+}

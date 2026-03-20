@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TimezoneService } from '../home/timezone.service'; // 🔥 IMPORT
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule], // 👈 ADD CommonModule
+  imports: [CommonModule, FormsModule],
   templateUrl: './settings.html',
 })
 export class SettingsComponent implements OnInit {
+
+  constructor(private timezoneService: TimezoneService) {} // 🔥 INJECT
 
   isDarkMode = false;
 
@@ -30,17 +33,11 @@ export class SettingsComponent implements OnInit {
     this.isDarkMode = savedTheme === 'dark';
     this.applyTheme();
 
-    // 🔥 Load timezone
-    const savedTz = localStorage.getItem('timezone');
-    if (savedTz) {
-      this.selectedTimezone = savedTz;
-    }
+    // 🔥 Load timezone from service (not just localStorage)
+    this.selectedTimezone = this.timezoneService.getTimezone();
   }
 
   toggleTheme() {
-    // ❌ REMOVE manual toggle (ngModel already handles it)
-    // this.isDarkMode = !this.isDarkMode;
-
     localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
     this.applyTheme();
   }
@@ -53,8 +50,8 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  // 🔥 Save timezone
+  // 🔥 FIXED: now uses service (reactive)
   onTimezoneChange() {
-    localStorage.setItem('timezone', this.selectedTimezone);
+    this.timezoneService.setTimezone(this.selectedTimezone);
   }
 }

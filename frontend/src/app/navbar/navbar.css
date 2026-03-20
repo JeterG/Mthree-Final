@@ -2,10 +2,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  height: 60px; 
   padding: 12px 24px;
   background-color: #111;
   border-bottom: 1px solid #222;
+  overflow: hidden; 
 }
 
 .logo {
@@ -47,4 +48,11 @@
 .logout-btn:hover {
   background-color: #ff9800;
   color: black;
+}
+
+.logo-img {
+  height: 50px;             /* bigger than navbar */
+  transform: scale(1.5);     /* optional boost */
+  transform-origin: left center;
+  pointer-events: none;      /* optional */
 }
