@@ -59,11 +59,14 @@ export class StockSearchComponent implements OnInit {
   }
 
   // Select a stock from the dropdown
-  selectStock(stock: any): void {
-    this.selectedStock = stock;
-    this.searchQuery = `${stock.companyName} (${stock.symbol})`; // 🔥 nicer UX    this.showDropdown = false;
-    this.symbolSelected.emit(stock.symbol);
-  }
+selectStock(stock: any) {
+  this.selectedStock = stock;
+  this.searchQuery = stock.symbol;
+  this.showDropdown = false;
+
+  // 🔥 Emit only
+  this.symbolSelected.emit(stock.symbol);
+}
 
   // Close dropdown when input loses focus
   onBlur(): void {

@@ -81,4 +81,5 @@ public class WatchlistController {
         watchlistRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+    
 }

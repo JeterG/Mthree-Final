@@ -14,4 +14,9 @@ export const routes: Routes = [
   { path: 'search', component: Search }, // ✅ FIXED
   { path: 'portfolio', component: Portfolio },
   { path: 'docs', component: SwaggerComponent }, // ✅
+  {
+  path: 'stock/:symbol',
+  loadComponent: () =>
+    import('./stock-page/stock-page').then(m => m.StockPageComponent)
+}
 ];

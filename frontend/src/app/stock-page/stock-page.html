@@ -1,0 +1,33 @@
+<div *ngIf="data === null">
+  Loading stock data...
+</div>
+
+<div *ngIf="data !== null">
+
+  <h2>{{ symbol }} Details</h2>
+
+  <h3>Company Info</h3>
+  <p>Name: {{ data?.profile?.name }}</p>
+  <p>Industry: {{ data?.profile?.finnhubIndustry }}</p>
+  <p>IPO: {{ data?.profile?.ipo }}</p>
+  <p>Market Cap: {{ data?.profile?.marketCapitalization }}</p>
+
+  <hr>
+
+  <h3>Key Statistics</h3>
+  <p>P/E Ratio: {{ data?.metrics?.peNormalizedAnnual }}</p>
+  <p>Dividend Yield: {{ data?.metrics?.dividendYieldIndicatedAnnual }}</p>
+  <p>52 Week High: {{ data?.metrics?.['52WeekHigh'] }}</p>
+  <p>52 Week Low: {{ data?.metrics?.['52WeekLow'] }}</p>
+  <p>Avg Volume: {{ data?.metrics?.['10DayAverageTradingVolume'] }}</p>
+
+  <hr>
+
+  <h3>Daily Stats</h3>
+  <p>Current Price: {{ data?.quote?.c }}</p>
+  <p>High Today: {{ data?.quote?.h }}</p>
+  <p>Low Today: {{ data?.quote?.l }}</p>
+  <p>Open: {{ data?.quote?.o }}</p>
+  <p>Previous Close: {{ data?.quote?.pc }}</p>
+
+</div>

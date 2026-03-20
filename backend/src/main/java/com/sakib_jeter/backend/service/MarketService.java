@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 
 import com.sakib_jeter.backend.entity.StockCache;
 import com.sakib_jeter.backend.repository.StockCacheRepository;
-
+import org.springframework.web.client.RestTemplate;
 @Service
 public class MarketService {
 
     private final StockCacheRepository stockCacheRepository;
-
+    private final String FINNHUB_KEY = "d6tbgghr01qhkb43ge2gd6tbgghr01qhkb43ge30";
     // Stocks shown in the ticker
     private static final String[] TICKER_SYMBOLS = {
             "AAPL", "AMZN", "GOOGL", "JPM", "META", "MSFT", "NVDA", "TSLA", "V", "WMT"
@@ -66,4 +66,32 @@ public class MarketService {
         ticker.put("changesPercentage", pct);
         return ticker;
     }
+    public Map<String, Object> getStockDetails(String symbol) {
+    RestTemplate restTemplate = new RestTemplate();
+
+    // 🔹 QUOTE (daily stats)
+    String quoteUrl = "https://finnhub.io/api/v1/quote?symbol=" + symbol + "&token=" + FINNHUB_KEY;
+    Map<String, Object> quote = restTemplate.getForObject(quoteUrl, Map.class);
+
+    // 🔹 METRICS (key stats)
+    String metricUrl = "https://finnhub.io/api/v1/stock/metric?symbol=" + symbol + "&metric=all&token=" + FINNHUB_KEY;
+    Map<String, Object> metricResponse = restTemplate.getForObject(metricUrl, Map.class);
+
+    // 🔹 PROFILE (basic info)
+    String profileUrl = "https://finnhub.io/api/v1/stock/profile2?symbol=" + symbol + "&token=" + FINNHUB_KEY;
+    Map<String, Object> profile = restTemplate.getForObject(profileUrl, Map.class);
+
+    Map<String, Object> result = new HashMap<>();
+    result.put("quote", quote);
+Map<String, Object> metrics = null;
+if (metricResponse != null && metricResponse.get("metric") != null) {
+    metrics = (Map<String, Object>) metricResponse.get("metric");
+}
+
+result.put("metrics", metrics);    result.put("profile", profile);
+
+    return result;
+}
+
+    
 }
