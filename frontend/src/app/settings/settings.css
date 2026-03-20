@@ -1,0 +1,9 @@
+/* Fix dropdown options visibility */
+.dark-mode select option {
+  background-color: #1c1c1c;
+  color: white;
+}
+
+select option {
+  color: #111;
+}
