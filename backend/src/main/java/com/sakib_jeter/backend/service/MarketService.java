@@ -20,6 +20,11 @@ public class MarketService {
 
     @Value("${finnhub.api.key}")
     private String finnhubKey;
+    @Value("${fmp.api.key}")
+    private String fmpApiKey;
+
+    @Value("${fmp.base.url}")
+    private String fmpBaseUrl;
     // Stocks shown in the ticker
     private static final String[] TICKER_SYMBOLS = {
             "AAPL", "AMZN", "GOOGL", "JPM", "META", "MSFT", "NVDA", "TSLA", "V", "WMT"
@@ -68,7 +73,7 @@ public class MarketService {
         ticker.put("changesPercentage", pct);
         return ticker;
     }
-    public Map<String, Object> getStockDetails(String symbol) {
+public Map<String, Object> getStockDetails(String symbol) {
     RestTemplate restTemplate = new RestTemplate();
 
     // 🔹 QUOTE (daily stats)
@@ -83,17 +88,46 @@ public class MarketService {
     String profileUrl = "https://finnhub.io/api/v1/stock/profile2?symbol=" + symbol + "&token=" + finnhubKey;
     Map<String, Object> profile = restTemplate.getForObject(profileUrl, Map.class);
 
+    // 🔹 FMP PROFILE (CEO, description, etc.)
+
+
+Map<String, Object> fmpProfile = null;
+
+
+
+try {
+    String fmpUrl = fmpBaseUrl + "/profile?symbol=" + symbol + "&apikey=" + fmpApiKey;
+
+    Object response = restTemplate.getForObject(fmpUrl, Object.class);
+
+    if (response instanceof List<?>) {
+        List<?> list = (List<?>) response;
+
+        if (!list.isEmpty() && list.get(0) instanceof Map) {
+            fmpProfile = (Map<String, Object>) list.get(0);
+        }
+    }
+
+} catch (Exception e) {
+    System.out.println("FMP API FAILED: " + e.getMessage());
+}
+    // 🔹 Extract metrics safely
+    Map<String, Object> metrics = null;
+    if (metricResponse != null && metricResponse.get("metric") != null) {
+        metrics = (Map<String, Object>) metricResponse.get("metric");
+    }
+
+    // 🔹 Final response
     Map<String, Object> result = new HashMap<>();
     result.put("quote", quote);
-Map<String, Object> metrics = null;
-if (metricResponse != null && metricResponse.get("metric") != null) {
-    metrics = (Map<String, Object>) metricResponse.get("metric");
-}
-
-result.put("metrics", metrics);    result.put("profile", profile);
+    result.put("metrics", metrics);
+    result.put("profile", profile);
+    result.put("fmpProfile", fmpProfile); // ✅ NEW
 
     return result;
 }
+
+
 
     
 }
