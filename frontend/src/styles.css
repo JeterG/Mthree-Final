@@ -7,18 +7,16 @@ body {
   height: 100%;
 }
 
-@import '~swagger-ui-dist/swagger-ui.css';
-
-
 /* =========================
    🌞 LIGHT MODE
 ========================= */
 body {
   background-color: #f5f5f5;
   color: #111;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
-
 
 /* =========================
    🌙 DARK MODE BASE
@@ -28,7 +26,6 @@ body {
   background-color: #0e0e0e !important;
   color: #ffffff;
 }
-
 
 /* =========================
    🌙 CORE COMPONENTS
@@ -71,7 +68,6 @@ body {
   color: white;
 }
 
-
 /* =========================
    🌙 TABLES
 ========================= */
@@ -106,7 +102,6 @@ body {
   background-color: #333 !important;
 }
 
-
 /* =========================
    🌙 TABS
 ========================= */
@@ -133,7 +128,6 @@ body {
   padding: 1rem;
 }
 
-
 /* =========================
    🌙 BOOTSTRAP OVERRIDES
 ========================= */
@@ -146,7 +140,6 @@ body {
 .dark-mode .container-fluid {
   background-color: transparent;
 }
-
 
 /* =========================
    🌙 SWAGGER UI

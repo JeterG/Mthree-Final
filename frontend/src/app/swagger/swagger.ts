@@ -12,7 +12,6 @@ import { SwaggerUIBundle, SwaggerUIStandalonePreset } from 'swagger-ui-dist';
   styles: [
     `
       /* 1. Standard Swagger UI Styles */
-      @import 'swagger-ui-dist/swagger-ui.css';
 
       /* --- Centering the Entire Content --- */
       /* This makes the User Controller and blocks center with the title */
