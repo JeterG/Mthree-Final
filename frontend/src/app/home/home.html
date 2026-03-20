@@ -1,4 +1,26 @@
 <div class="container py-4">
+
+  <!-- 🔥 MARKET TIMER -->
+  <div class="card border-0 shadow-sm p-3 mb-4 text-center">
+
+    <!-- OPEN / CLOSED -->
+    <h5
+      class="fw-bold mb-1"
+      [ngClass]="isMarketOpen ? 'text-success' : 'text-danger'"
+    >
+      {{ isMarketOpen ? 'Market is OPEN' : 'Market is CLOSED' }}
+    </h5>
+
+    <!-- COUNTDOWN -->
+    <h4 class="text-primary mb-1">{{ countdown }}</h4>
+
+    <!-- 🔥 LOCAL MARKET TIME -->
+    <p class="text-muted mb-0">
+      {{ isMarketOpen ? 'Closes at' : 'Opens at' }} {{ marketTimeDisplay }}
+    </p>
+
+  </div>
+
   <div class="chart-container">
     <!-- Symbol tabs -->
     <div class="d-flex gap-2 mb-3">

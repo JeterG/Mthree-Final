@@ -17,15 +17,15 @@
       </label>
     </div>
 
-    <!-- 🔥 Timezone (ADD THIS) -->
-    <div class="d-flex justify-content-between align-items-center mt-4">
-      <span>Timezone</span>
+    <!-- 🔥 Timezone (UPDATED LAYOUT) -->
+    <div class="mt-4">
+      <label class="mb-2 fw-semibold">Timezone</label>
 
-<select
-  class="form-select w-auto px-3"
-  [(ngModel)]="selectedTimezone"
-  (change)="onTimezoneChange()"
->
+      <select
+        class="form-select timezone-select"
+        [(ngModel)]="selectedTimezone"
+        (change)="onTimezoneChange()"
+      >
         <option *ngFor="let tz of timezones" [value]="tz.value">
           {{ tz.label }}
         </option>
