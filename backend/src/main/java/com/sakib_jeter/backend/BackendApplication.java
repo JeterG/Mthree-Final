@@ -18,6 +18,7 @@ public class BackendApplication {
 	@Bean
 	CommandLineRunner init(StockDataSeeder seeder, StockCacheRepository repository) {
 		return args -> {
+			// Only seed if the database is empty
 			if (repository.count() == 0) {
 				System.out.println("Database is empty. Starting seeding...");
 				seeder.seedAll();
