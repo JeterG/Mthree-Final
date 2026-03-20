@@ -62,7 +62,6 @@
     <div class="col-12 col-lg-6">
       <app-buy
         [symbol]="selectedSymbol"
-        [userId]="userId"
         (buyComplete)="loadPortfolio(); loadTransactions(); loadWatchlist()"
         (watchlistComplete)="loadWatchlist()"
       >

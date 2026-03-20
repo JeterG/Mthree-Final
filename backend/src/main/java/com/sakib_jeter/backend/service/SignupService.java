@@ -45,9 +45,9 @@ public class SignupService {
 public Long login(String email, String password) {
 
     User user = repo.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+        .orElseThrow(() -> new RuntimeException("User not found"));
 
-    // ✅ IMPORTANT: use bcrypt match
+    // ✅ IMPORTANT: use BCrypt match
     if (!encoder.matches(password, user.getPassword())) {
         throw new RuntimeException("Invalid credentials");
     }
