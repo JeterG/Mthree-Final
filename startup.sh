@@ -30,7 +30,7 @@ cd "$BACKEND_DIR"
 
 echo "Installing frontend dependencies..."
 cd "../$FRONTEND_DIR"
-npm install
+npm install --no-fund --no-audit
 
 echo "Starting Spring Boot backend..."
 cd "../$BACKEND_DIR"
