@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-
+import org.springframework.beans.factory.annotation.Value;
 import com.sakib_jeter.backend.entity.StockCache;
 import com.sakib_jeter.backend.repository.StockCacheRepository;
 import org.springframework.web.client.RestTemplate;
@@ -17,7 +17,9 @@ import org.springframework.web.client.RestTemplate;
 public class MarketService {
 
     private final StockCacheRepository stockCacheRepository;
-    private final String FINNHUB_KEY = "d6tbgghr01qhkb43ge2gd6tbgghr01qhkb43ge30";
+
+    @Value("${finnhub.api.key}")
+    private String finnhubKey;
     // Stocks shown in the ticker
     private static final String[] TICKER_SYMBOLS = {
             "AAPL", "AMZN", "GOOGL", "JPM", "META", "MSFT", "NVDA", "TSLA", "V", "WMT"
@@ -70,15 +72,15 @@ public class MarketService {
     RestTemplate restTemplate = new RestTemplate();
 
     // 🔹 QUOTE (daily stats)
-    String quoteUrl = "https://finnhub.io/api/v1/quote?symbol=" + symbol + "&token=" + FINNHUB_KEY;
+    String quoteUrl = "https://finnhub.io/api/v1/quote?symbol=" + symbol + "&token=" + finnhubKey;
     Map<String, Object> quote = restTemplate.getForObject(quoteUrl, Map.class);
 
     // 🔹 METRICS (key stats)
-    String metricUrl = "https://finnhub.io/api/v1/stock/metric?symbol=" + symbol + "&metric=all&token=" + FINNHUB_KEY;
+    String metricUrl = "https://finnhub.io/api/v1/stock/metric?symbol=" + symbol + "&metric=all&token=" + finnhubKey;
     Map<String, Object> metricResponse = restTemplate.getForObject(metricUrl, Map.class);
 
     // 🔹 PROFILE (basic info)
-    String profileUrl = "https://finnhub.io/api/v1/stock/profile2?symbol=" + symbol + "&token=" + FINNHUB_KEY;
+    String profileUrl = "https://finnhub.io/api/v1/stock/profile2?symbol=" + symbol + "&token=" + finnhubKey;
     Map<String, Object> profile = restTemplate.getForObject(profileUrl, Map.class);
 
     Map<String, Object> result = new HashMap<>();
