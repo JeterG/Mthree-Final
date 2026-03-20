@@ -20,7 +20,6 @@ import { FormsModule } from '@angular/forms';
 })
 export class BuyComponent implements OnChanges {
   @Input() symbol = '';
-  @Input() userId!: number;
   @Output() buyComplete = new EventEmitter<void>();
   @Output() watchlistComplete = new EventEmitter<void>();
 
@@ -47,6 +46,7 @@ export class BuyComponent implements OnChanges {
   loadPrice(symbol: string): void {
     this.loading = true;
     this.currentPrice = null;
+
     this.http.get<any>(`http://localhost:8080/api/market/quote/${symbol}`).subscribe({
       next: (stock) => {
         this.currentPrice = stock.currentPrice;
@@ -67,15 +67,14 @@ export class BuyComponent implements OnChanges {
 
   submit(): void {
     if (!this.symbol || !this.symbol.trim()) return;
-    if (!this.userId || this.userId <= 0) return;
     if (this.action === 'buy' && this.quantity <= 0) return;
+
     this.submitting = true;
     this.resetMessages();
 
     if (this.action === 'buy') {
       this.http
         .post<any>('http://localhost:8080/api/holdings/buy', {
-          userId: this.userId,
           stockSymbol: this.symbol,
           quantity: this.quantity,
         })
@@ -95,7 +94,6 @@ export class BuyComponent implements OnChanges {
     } else {
       this.http
         .post<any>('http://localhost:8080/api/watchlist', {
-          userId: this.userId,
           stockSymbol: this.symbol,
         })
         .subscribe({
