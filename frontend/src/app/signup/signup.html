@@ -1,77 +1,100 @@
 <div class="login-container">
 
-  <form #signupForm="ngForm" (ngSubmit)="signup()" class="login-card">
+  <div class="login-card">
 
-    <h2>Sign Up</h2>
-
-    <!-- EMAIL -->
-    <input
-      type="email"
-      placeholder="Email"
-      name="email"
-      [(ngModel)]="email"
-      required
-      email
-      #emailInput="ngModel"
-    />
-
-    <div class="error" *ngIf="emailInput.invalid && emailInput.touched">
-      Valid email is required
+    <!-- LOGO -->
+    <div class="logo-wrapper">
+      <img src="assets/logo.png" class="logo-img" alt="Logo" />
     </div>
 
-    <!-- PASSWORD -->
-    <input
-      type="password"
-      placeholder="Password"
-      name="password"
-      [(ngModel)]="password"
-      required
-      minlength="6"
-      pattern="^(?=.*[A-Z])(?=.*[0-9]).{6,}$"
-      #passwordInput="ngModel"
-    />
+    <!-- TITLE -->
+    <h2>Create Account</h2>
+    <p class="subtitle">Start paper trading today! 😀</p>
 
-    <div class="error" *ngIf="passwordInput.touched && passwordInput.invalid">
-      <div *ngIf="passwordInput.errors?.['required']">
-        Password is required
+    <form #signupForm="ngForm" (ngSubmit)="signup()">
+
+      <!-- EMAIL -->
+      <div class="form-group">
+        <input
+          type="email"
+          placeholder="Email"
+          name="email"
+          [(ngModel)]="email"
+          required
+          email
+          #emailInput="ngModel"
+        />
+        <div class="error">
+          <span *ngIf="emailInput.invalid && emailInput.touched">
+            Valid email is required
+          </span>
+        </div>
       </div>
-      <div *ngIf="passwordInput.errors?.['minlength']">
-        Must be at least 6 characters
+
+      <!-- PASSWORD -->
+      <div class="form-group">
+        <input
+          type="password"
+          placeholder="Password"
+          name="password"
+          [(ngModel)]="password"
+          required
+          minlength="6"
+          pattern="^(?=.*[A-Z])(?=.*[0-9]).{6,}$"
+          #passwordInput="ngModel"
+        />
+        <div class="error">
+          <span *ngIf="passwordInput.touched && passwordInput.invalid">
+            <span *ngIf="passwordInput.errors?.['required']">Password is required</span>
+            <span *ngIf="passwordInput.errors?.['minlength']">Must be at least 6 characters</span>
+            <span *ngIf="passwordInput.errors?.['pattern']">Must contain 1 uppercase letter and 1 number</span>
+          </span>
+        </div>
       </div>
-      <div *ngIf="passwordInput.errors?.['pattern']">
-        Must contain 1 uppercase letter and 1 number
+
+      <!-- CONFIRM PASSWORD -->
+      <div class="form-group">
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          required
+          #confirmPasswordInput="ngModel"
+        />
+        <div class="error">
+          <span *ngIf="confirmPasswordInput.touched && password !== confirmPassword">
+            Passwords do not match
+          </span>
+        </div>
       </div>
-    </div>
 
-    <!-- CONFIRM PASSWORD -->
-    <input
-      type="password"
-      placeholder="Confirm Password"
-      name="confirmPassword"
-      [(ngModel)]="confirmPassword"
-      required
-      #confirmPasswordInput="ngModel"
-    />
+      <!-- BACKEND ERROR -->
+<div class="message-area">
+  <div class="error" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
 
-    <div class="error" *ngIf="confirmPasswordInput.touched && password !== confirmPassword">
-      Passwords do not match
-    </div>
+  <div class="success" *ngIf="successMessage">
+    {{ successMessage }}
+  </div>
+</div>
 
-    <!-- BACKEND ERROR -->
-    <div class="error" *ngIf="errorMessage">
-      {{ errorMessage }}
-    </div>
+      <!-- 🔥 BUTTON (NOW RIGHT UNDER INPUTS) -->
+      <button type="submit" [disabled]="signupForm.invalid">
+        Sign Up
+      </button>
 
-    <!-- SUCCESS -->
-    <div class="success" *ngIf="successMessage">
-      {{ successMessage }}
-    </div>
+      <!-- LOGIN LINK -->
+      <p class="signup-link">
+        Already have an account?
+        <a routerLink="/login">Login</a>
+      </p>
 
-    <!-- SUBMIT -->
-    <button type="submit" [disabled]="signupForm.invalid">
-      Sign Up
-    </button>
+    </form>
 
-  </form>
+    <!-- FOOTER -->
+    <p class="footer">Paper trading. Zero risk. Real experience.</p>
 
+  </div>
 </div>

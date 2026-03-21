@@ -1,3 +1,17 @@
+/* 🔥 LOGO STYLING */
+.logo-wrapper-home {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
+.logo-home {
+  height: 130px;   /* 🔥 controls top-to-bottom size */
+  width: auto;     /* prevents distortion */
+
+  /* optional glow for polish */
+  filter: drop-shadow(0 0 8px rgba(255, 165, 0, 0.3));
+}
 .chart-container {
   max-width: 600px;
   margin: 0 auto;
@@ -69,7 +83,15 @@ h5, h6 {
 .row.text-center p {
   font-size: 1rem;      /* bigger description */
 }
+.row.text-center .col-md-4 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 
+  min-height: 120px; /* 🔥 THIS fixes the uneven alignment */
+}
 /* 🔥 Make emojis bigger */
 .row.text-center h6::first-letter {
   font-size: 1.4rem;
@@ -120,11 +142,22 @@ h5, h6 {
 }
 
 .orange-card {
-  border: 2px solid transparent; /* 👈 invisible by default */
+  border: 1px solid rgba(0, 0, 0, 0.08); /* 🔥 light black border */
   border-radius: 12px;
+
   transition: border 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .orange-card:hover {
-  border: 2px solid rgba(255, 165, 0, 0.5); /* 👈 light orange on hover */
+  border: 1px solid rgba(255, 165, 0, 0.5); /* orange on hover */
+}
+
+.custom-card {
+  border: 1px solid rgba(0, 0, 0, 0.06); /* 🔥 same subtle black line */
+  border-radius: 12px;
+}
+
+.market-wrapper {
+  max-width: 300px;          /* 🔥 controls width */
+  margin: 0 auto 30px auto;  /* center + spacing */
 }

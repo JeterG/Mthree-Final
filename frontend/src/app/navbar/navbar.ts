@@ -39,17 +39,16 @@ export class Navbar implements OnInit {
     }, 0);
   }
 
-  logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('email');
-    localStorage.removeItem('userId');
+logout(): void {
+  localStorage.removeItem('token');
+  localStorage.removeItem('email');
+  localStorage.removeItem('userId');
 
-    this.isDropdownOpen = false;
+  this.isDropdownOpen = false;
 
-    setTimeout(() => {
-      this.router.navigate(['/login']);
-    }, 0);
-  }
+  // 🔥 CRITICAL: replace history so back button can't return
+  this.router.navigateByUrl('/login', { replaceUrl: true });
+}
 
   @HostListener('document:click', ['$event'])
   handleClick(event: Event): void {
