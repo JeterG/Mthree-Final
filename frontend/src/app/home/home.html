@@ -2,8 +2,6 @@
 
   <!-- 🔥 MARKET TIMER -->
   <div class="card border-0 shadow-sm p-3 mb-4 text-center">
-
-    <!-- OPEN / CLOSED -->
     <h5
       class="fw-bold mb-1"
       [ngClass]="isMarketOpen ? 'text-success' : 'text-danger'"
@@ -11,18 +9,15 @@
       {{ isMarketOpen ? 'Market is OPEN' : 'Market is CLOSED' }}
     </h5>
 
-    <!-- COUNTDOWN -->
     <h4 class="text-primary mb-1">{{ countdown }}</h4>
 
-    <!-- 🔥 LOCAL MARKET TIME -->
     <p class="text-muted mb-0">
       {{ isMarketOpen ? 'Closes at' : 'Opens at' }} {{ marketTimeDisplay }}
     </p>
-
   </div>
 
+  <!-- 📊 CHART -->
   <div class="chart-container">
-    <!-- Symbol tabs -->
     <div class="d-flex gap-2 mb-3">
       <button
         *ngFor="let s of symbols"
@@ -35,7 +30,83 @@
       </button>
     </div>
 
-    <!-- Stock chart -->
     <app-stock-chart [symbol]="selectedSymbol"></app-stock-chart>
   </div>
+
+  <!-- ⚡ QUICK START -->
+  <div class="card border-0 shadow-sm p-4 mt-4">
+    <h5 class="fw-bold mb-3">Get Started</h5>
+    <ol class="text-muted mb-0">
+      <li>Search for a stock</li>
+      <li>Analyze its performance</li>
+      <li>Buy shares using virtual money</li>
+      <li>Track your portfolio growth</li>
+    </ol>
+  </div>
+
+  <!-- 💡 FEATURES -->
+  <div class="row mt-4 text-center">
+    <div class="col-md-4">
+      <h6 class="fw-bold">📈 Practice Investing</h6>
+      <p class="text-muted small">Trade stocks with real data using virtual money.</p>
+    </div>
+
+    <div class="col-md-4">
+      <h6 class="fw-bold">🧠 Learn the Market</h6>
+      <p class="text-muted small">Understand trends, charts, and strategies.</p>
+    </div>
+
+    <div class="col-md-4">
+      <h6 class="fw-bold">💰 No Risk</h6>
+      <p class="text-muted small">Build confidence without losing real money.</p>
+    </div>
+  </div>
+
+<!-- 🧠 BEGINNER TIPS -->
+<div class="card border-0 shadow-sm p-4 mt-4">
+  <h5 class="fw-bold mb-3">Beginner Tips</h5>
+
+  <ul class="text-muted mb-0 ps-3">
+    <li class="mb-2">
+      Start with well-known companies and focus on long-term growth rather than short-term price changes.
+    </li>
+
+    <li class="mb-2">
+      Don’t invest all your money in one stock, diversifying helps reduce risk.
+    </li>
+
+    <li class="mb-2">
+      Avoid making decisions based on hype or news alone, always look at the data and trends.
+    </li>
+
+    <li class="mb-2">
+      Be patient because successful investing is about consistency over time, not quick wins.
+    </li>
+
+    <li class="mb-0">
+      Use this platform to experiment and learn from mistakes without any financial risk.
+    </li>
+  </ul>
+</div>
+
+  <!-- 📘 ABOUT US -->
+  <div class="card border-0 shadow-sm p-4 mt-4">
+    <h4 class="fw-bold mb-3">About StockQuik</h4>
+
+    <p class="text-muted mb-3">
+      StockQuik is a paper trading platform built for beginners who want to learn how the stock market works without risking real money.
+      Investing can feel overwhelming at first, so we provide a simple and intuitive environment where users can practice with real market data.
+    </p>
+
+    <p class="text-muted mb-3">
+      With StockQuik, you can simulate buying and selling stocks, track your portfolio, and explore different strategies, all in a completely risk-free setting.
+      Whether you're just starting out or testing new ideas, our goal is to help you build confidence and develop smart investing habits.
+    </p>
+
+    <p class="text-muted mb-0">
+      By learning through experience, users can better understand market behavior and make more informed financial decisions in the future.
+      Let's use this application as practice before we actually hit the market and stock up quick with StockQuik!
+    </p>
+  </div>
+
 </div>
