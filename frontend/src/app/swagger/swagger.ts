@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
 import { SwaggerUIBundle, SwaggerUIStandalonePreset } from 'swagger-ui-dist';
-
+import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-swagger',
   standalone: true,
@@ -68,7 +68,7 @@ import { SwaggerUIBundle, SwaggerUIStandalonePreset } from 'swagger-ui-dist';
 export class SwaggerComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     SwaggerUIBundle({
-      url: 'http://localhost:8080/v3/api-docs',
+      url: `${environment.apiUrl}/v3/api-docs`,
       dom_id: '#swagger-ui',
       deepLinking: true,
       presets: [(SwaggerUIBundle as any).presets.apis, SwaggerUIStandalonePreset],

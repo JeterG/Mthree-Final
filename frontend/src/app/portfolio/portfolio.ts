@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BuyComponent } from '../buy-component/buy-component';
+import { ApiService } from '../services/api.services';
 import { StockChartComponent } from '../stock-chart.component/stock-chart.component';
 import { StockSearchComponent } from '../stock-search-component/stock-search-component';
 
@@ -28,7 +28,7 @@ export class Portfolio implements OnInit {
   watchlist: any[] = [];
 
   constructor(
-    private http: HttpClient,
+    private api: ApiService,
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone,
   ) {}
@@ -53,7 +53,7 @@ export class Portfolio implements OnInit {
 
   // ✅ JWT-based account
   loadAccount(): void {
-    this.http.get<any>(`http://localhost:8080/api/account/me`).subscribe({
+    this.api.get<any>(`/api/account/me`).subscribe({
       next: (account) => {
         this.ngZone.run(() => {
           this.cashBalance = account.cashBalance;
@@ -67,7 +67,7 @@ export class Portfolio implements OnInit {
 
   // ✅ JWT-based holdings
   loadHoldings(): void {
-    this.http.get<any[]>(`http://localhost:8080/api/holdings/me`).subscribe({
+    this.api.get<any[]>(`/api/holdings/me`).subscribe({
       next: (holdings) => {
         if (holdings.length === 0) {
           this.ngZone.run(() => {
@@ -87,7 +87,7 @@ export class Portfolio implements OnInit {
         let totalGain = 0;
 
         holdings.forEach((h, index) => {
-          this.http.get<any>(`http://localhost:8080/api/market/quote/${h.stockSymbol}`).subscribe({
+          this.api.get<any>(`/api/market/quote/${h.stockSymbol}`).subscribe({
             next: (stock) => {
               const currentPrice = +stock.currentPrice;
               const currentValue = currentPrice * +h.quantity;
@@ -140,7 +140,7 @@ export class Portfolio implements OnInit {
 
   // ✅ JWT-based transactions
   loadTransactions(): void {
-    this.http.get<any[]>(`http://localhost:8080/api/transactions/me`).subscribe({
+    this.api.get<any[]>(`/api/transactions/me`).subscribe({
       next: (transactions) => {
         this.ngZone.run(() => {
           this.transactions = transactions.sort(
@@ -155,7 +155,7 @@ export class Portfolio implements OnInit {
 
   // ✅ JWT-based watchlist
   loadWatchlist(): void {
-    this.http.get<any[]>(`http://localhost:8080/api/watchlist/me`).subscribe({
+    this.api.get<any[]>(`/api/watchlist/me`).subscribe({
       next: (watchlist) => {
         if (watchlist.length === 0) {
           this.ngZone.run(() => {
@@ -169,7 +169,7 @@ export class Portfolio implements OnInit {
         let completed = 0;
 
         watchlist.forEach((w, index) => {
-          this.http.get<any>(`http://localhost:8080/api/market/quote/${w.stockSymbol}`).subscribe({
+          this.api.get<any>(`/api/market/quote/${w.stockSymbol}`).subscribe({
             next: (stock) => {
               enriched[index] = { ...w, currentPrice: stock.currentPrice };
               completed++;
@@ -200,7 +200,7 @@ export class Portfolio implements OnInit {
   }
 
   removeFromWatchlistBtn(id: number): void {
-    this.http.delete(`http://localhost:8080/api/watchlist/${id}`).subscribe({
+    this.api.delete(`/api/watchlist/${id}`).subscribe({
       next: () => {
         this.ngZone.run(() => {
           this.loadWatchlist();
@@ -242,8 +242,8 @@ export class Portfolio implements OnInit {
     const quantity = holding.sellQuantity || holding.quantity;
     if (!quantity || quantity <= 0) return;
 
-    this.http
-      .post<any>('http://localhost:8080/api/holdings/sell', {
+    this.api
+      .post<any>('/api/holdings/sell', {
         stockSymbol: holding.stockSymbol,
         quantity: quantity,
       })

@@ -31,6 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
-
-#if need to share info, contact the other partner for api keys and such for this
-src/main/resources/application.properties
+.env

@@ -5,11 +5,14 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -26,64 +29,53 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // ❌ Disable CSRF for APIs
                 .csrf(csrf -> csrf.disable())
-
-                // ✅ Enable CORS
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
-                // 🔒 Authorization rules
                 .authorizeHttpRequests(auth -> auth
-
-                        // ✅ Public AUTH endpoints
                         .requestMatchers("/api/auth/**").permitAll()
-
-                        // ✅ Public market data (optional)
                         .requestMatchers("/api/market/**").permitAll()
-
-                        // ✅ Swagger
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html")
                         .permitAll()
-
-                        // ✅ Angular docs
                         .requestMatchers("/docs/**").permitAll()
-
-                        // ✅ Preflight (VERY IMPORTANT)
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                        // 🔐 EVERYTHING ELSE REQUIRES JWT
-                        .anyRequest().authenticated()
-                )
-
-                // ❌ Disable basic auth popup
+                        .anyRequest().authenticated())
                 .httpBasic(httpBasic -> httpBasic.disable())
-
-                // ❗ Fix Swagger + H2 console issues
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.disable()))
-
-                // 🔥 ADD JWT FILTER HERE
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
     @Bean
+    public UserDetailsService userDetailsService() {
+        // JWT handles authentication — this bean just suppresses the
+        // auto-configured InMemoryUserDetailsManager and its warning
+        return username -> {
+            throw new UsernameNotFoundException("Use JWT");
+        };
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-
         CorsConfiguration config = new CorsConfiguration();
-
-        config.setAllowedOrigins(List.of("http://localhost:4200"));
+        config.setAllowedOrigins(List.of(
+                "http://localhost:4200",
+                "https://unflecked-rhamnaceous-lynne.ngrok-free.dev"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-
         return source;
     }
 

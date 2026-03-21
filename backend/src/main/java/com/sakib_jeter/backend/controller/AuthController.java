@@ -3,17 +3,19 @@ package com.sakib_jeter.backend.controller;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.sakib_jeter.backend.service.JwtService;
 import com.sakib_jeter.backend.dto.SignupRequest;
+import com.sakib_jeter.backend.service.JwtService;
 import com.sakib_jeter.backend.service.SignupService;
 
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 
     private final SignupService service;
@@ -45,7 +47,6 @@ public class AuthController {
         return ResponseEntity.ok(Map.of(
                 "token", token,
                 "userId", userId,
-                "email", request.getEmail()
-        ));
+                "email", request.getEmail()));
     }
 }

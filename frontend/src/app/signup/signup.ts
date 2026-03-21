@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-
+import { Router } from '@angular/router';
+import { ApiService } from '../services/api.services';
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [FormsModule, RouterLink, CommonModule, HttpClientModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './signup.html',
   styleUrl: './signup.css',
 })
@@ -20,7 +19,7 @@ export class SignupComponent {
   successMessage: string = '';
 
   constructor(
-    private http: HttpClient,
+    private api: ApiService,
     private router: Router,
   ) {}
 
@@ -34,9 +33,10 @@ export class SignupComponent {
       return;
     }
 
-    this.http
+    this.api
       .post(
-        'http://localhost:8080/api/auth/signup',
+        '/api/auth/signup',
+
         {
           email: this.email,
           password: this.password,
@@ -46,7 +46,7 @@ export class SignupComponent {
         },
       )
       .subscribe({
-        next: (res: string) => {
+        next: (res: any) => {
           console.log('SUCCESS HIT');
           console.log(res);
 

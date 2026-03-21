@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { ApiService } from '../services/api.services';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, HttpClientModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -17,31 +17,31 @@ export class LoginComponent {
   errorMessage: string = '';
 
   constructor(
-    private http: HttpClient,
+    private api: ApiService,
     private router: Router,
   ) {}
 
   login() {
     this.errorMessage = '';
 
-    this.http
-      .post<any>('http://localhost:8080/api/auth/login', {
+    this.api
+      .post<any>('/api/auth/login', {
         email: this.email,
         password: this.password,
       })
       .subscribe({
-next: (res) => {
-  // 🔐 SAVE JWT TOKEN (MOST IMPORTANT)
-  localStorage.setItem('token', res.token);
+        next: (res: any) => {
+          // 🔐 SAVE JWT TOKEN (MOST IMPORTANT)
+          localStorage.setItem('token', res.token);
 
-  // existing data
-  localStorage.setItem('userId', res.userId.toString());
-  localStorage.setItem('email', res.email);
+          // existing data
+          localStorage.setItem('userId', res.userId.toString());
+          localStorage.setItem('email', res.email);
 
-  console.log("TOKEN:", res.token); // optional debug
+          console.log('TOKEN:', res.token); // optional debug
 
-  this.router.navigate(['/home']);
-},
+          this.router.navigate(['/home']);
+        },
         error: (err) => {
           this.errorMessage = typeof err.error === 'string' ? err.error : 'Login failed';
         },
