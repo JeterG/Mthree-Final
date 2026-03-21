@@ -1,4 +1,75 @@
 .chart-container {
   max-width: 600px;
   margin: 0 auto;
+  margin-bottom: 40px; /* space below chart */
+}
+
+/* 🔥 Add breathing room between ALL sections */
+.card {
+  margin-top: 30px;
+}
+
+/* Increase spacing for main container */
+.container {
+  padding-top: 30px;
+  padding-bottom: 40px;
+}
+
+/* 💡 Features row spacing fix */
+.row {
+  margin-top: 50px !important;
+  margin-bottom: 10px;
+}
+
+/* Add spacing inside each feature */
+.row .col-md-4 {
+  padding: 15px;
+}
+
+/* Add subtle separation feel */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ✨ Hover effect (makes it feel like a real app) */
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* 🧠 Make Beginner + About feel slightly distinct */
+.card:nth-of-type(4),
+.card:nth-of-type(5) {
+  background-color: #f8f9fa;
+}
+
+/* Optional: better list spacing */
+ul li {
+  line-height: 1.6;
+}
+
+/* Optional: tighten headings slightly */
+h5, h6 {
+  margin-bottom: 10px;
+}
+
+/* 🎯 Target ONLY the features section */
+.row.text-center {
+  margin-top: 70px !important;
+  margin-bottom: 70px !important;
+}
+
+/* 🎯 Features section text + emoji sizing */
+.row.text-center h6 {
+  font-size: 1.25rem;   /* bigger title */
+  margin-bottom: 8px;
+}
+
+.row.text-center p {
+  font-size: 1rem;      /* bigger description */
+}
+
+/* 🔥 Make emojis bigger */
+.row.text-center h6::first-letter {
+  font-size: 1.4rem;
 }
