@@ -1,6 +1,6 @@
 <nav class="navbar">
   <div class="logo">
-    <img src="assets/logo.png" alt="Logo" class="logo-img">
+    <img src="assets/logo.png" alt="Logo" class="logo-img" />
   </div>
 
   <div class="nav-links">
@@ -9,21 +9,16 @@
     <a routerLink="/search" routerLinkActive="active">Search</a>
     <a routerLink="/settings" routerLinkActive="active">Settings</a>
     <a routerLink="/docs">API Docs</a>
+    <a routerLink="/diagrams" routerLinkActive="active">Diagrams</a>
 
     <div class="user-wrapper" *ngIf="isLoggedIn()">
-      <div
-        class="user-section"
-        [class.open]="isDropdownOpen"
-        (click)="toggleDropdown($event)"
-      >
+      <div class="user-section" [class.open]="isDropdownOpen" (click)="toggleDropdown($event)">
         <span class="user-email">{{ email }}</span>
         <span class="dropdown-arrow">▼</span>
       </div>
 
       <div *ngIf="isDropdownOpen" class="user-dropdown">
-        <button type="button" class="user-dropdown-item" (click)="logout()">
-          Logout
-        </button>
+        <button type="button" class="user-dropdown-item" (click)="logout()">Logout</button>
       </div>
     </div>
   </div>
