@@ -1,50 +1,153 @@
 .login-container {
   min-height: 100vh;
-  background-color: #cfe8ff;
+  background: radial-gradient(circle at top, #1a1a1a, #000000);
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* CARD */
 .login-card {
-  background: white;
-  padding: 40px;
-  border-radius: 8px;
-  width: 320px;
+  background: #121212;
+  padding: 40px 35px; /* 🔥 reduced vertical padding */
+  border-radius: 14px;
+
+  width: 420px;
+  max-width: 90%;
+
   display: flex;
   flex-direction: column;
-  box-shadow: 0px 5px 20px rgba(0,0,0,0.15);
+  align-items: stretch;
+  justify-content: flex-start; /* 🔥 FIX: removes vertical centering */
+
+  box-shadow:
+    0 0 40px rgba(255, 165, 0, 0.08),
+    0 10px 40px rgba(0, 0, 0, 0.8);
+
+  border: 1px solid #222;
 }
 
-.login-card input {
-  padding: 10px;
-  margin-bottom: 12px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+/* FORM */
+.login-card form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* 🔥 keeps everything stacked naturally */
 }
 
-.login-card button {
-  padding: 10px;
-  background-color: #1976d2;
+/* LOGO */
+.logo-wrapper {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.logo-img {
+  width: 150px;
+  height: 90px; /* forces vertical stretch */
+}
+
+/* TITLE */
+.login-card h2 {
   color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  margin-bottom: 5px;
+  text-align: center;
 }
 
+/* SUBTITLE */
+.subtitle {
+  color: #aaa;
+  font-size: 13px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* INPUTS */
+.login-card input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 4px; /* 🔥 slightly tighter */
+  border-radius: 6px;
+  border: 1px solid #333;
+  background-color: #0d0d0d;
+  color: white;
+  transition: 0.2s;
+  box-sizing: border-box;
+}
+
+.login-card input:focus {
+  outline: none;
+  border: 1px solid orange;
+  box-shadow: 0 0 8px rgba(255, 165, 0, 0.4);
+}
+
+/* BUTTON */
+.login-card button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px; /* 🔥 closer to inputs */
+  background: linear-gradient(90deg, orange, #ff9800);
+  color: black;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.login-card button:hover {
+  transform: scale(1.02);
+}
+
+/* LINKS */
 .signup-link {
   text-align: center;
-  margin-top: 15px;
+  margin-top: 14px;
+  color: #ccc;
+  font-size: 14px;
 }
 
 .signup-link a {
-  color: #1976d2;
+  color: orange;
   font-weight: bold;
   text-decoration: none;
-  cursor: pointer;
 }
 
 .signup-link a:hover {
   text-decoration: underline;
+}
+
+/* FOOTER */
+.footer {
+  margin-top: 16px;
+  font-size: 11px;
+  color: #666;
+  text-align: center;
+}
+
+/* ERRORS */
+.error {
+  color: #ff6b6b;
+  font-size: 12px;
+  min-height: 14px; /* 🔥 slightly smaller reserved space */
+  margin-bottom: 2px;
+}
+
+/* SUCCESS */
+.success {
+  color: #4caf50;
+  font-size: 12px;
+  min-height: 14px;
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* FORM GROUP */
+.form-group {
+  margin-bottom: 6px; /* 🔥 tighter spacing between inputs */
+}
+
+.message-area {
+  min-height: 0; /* 🔥 no forced empty space */
+  margin-bottom: 6px;
 }
