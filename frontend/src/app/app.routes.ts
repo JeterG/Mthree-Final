@@ -6,6 +6,7 @@ import { SignupComponent } from './signup/signup';
 import { SwaggerComponent } from './swagger/swagger';
 import { Search } from './search/search'; 
 import { SettingsComponent } from './settings/settings';
+import { ProfileComponent } from './profile/profile';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'portfolio', component: Portfolio },
   { path: 'docs', component: SwaggerComponent }, // ✅
   {path: 'stock/:symbol', loadComponent: () => import('./stock-page/stock-page').then(m => m.StockPageComponent)},
-  {path: 'settings', component: SettingsComponent}
+  {path: 'settings', component: SettingsComponent}, 
+  {path: 'profile', component: ProfileComponent}
 ];

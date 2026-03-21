@@ -7,6 +7,7 @@
 /* 🔥 Add breathing room between ALL sections */
 .card {
   margin-top: 30px;
+  
 }
 
 /* Increase spacing for main container */
@@ -72,4 +73,58 @@ h5, h6 {
 /* 🔥 Make emojis bigger */
 .row.text-center h6::first-letter {
   font-size: 1.4rem;
+}
+
+.get-started {
+  background: #1c1c1c;
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+}
+
+.get-started h3 {
+  margin-bottom: 16px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: #2a2a2a;
+  padding: 12px;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.step:hover {
+  transform: translateY(-2px);
+  background: #333;
+}
+
+.step-number {
+  background: orange;
+  color: black;
+  font-weight: bold;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orange-card {
+  border: 2px solid transparent; /* 👈 invisible by default */
+  border-radius: 12px;
+  transition: border 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.orange-card:hover {
+  border: 2px solid rgba(255, 165, 0, 0.5); /* 👈 light orange on hover */
 }
