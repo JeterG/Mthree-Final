@@ -26,12 +26,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "bootstrap/dist/css/bootstrap.min.css",
-              "src/styles.css",
-
-              "swagger-ui-dist/swagger-ui.css"
-            ],
+            "styles": ["bootstrap/dist/css/bootstrap.min.css", "src/styles.css"],
             "scripts": ["bootstrap/dist/js/bootstrap.bundle.min.js"]
           },
           "configurations": {
@@ -60,6 +55,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "allowedHosts": ["unflecked-rhamnaceous-lynne.ngrok-free.dev"]
+          },
           "configurations": {
             "production": {
               "buildTarget": "frontend:build:production"

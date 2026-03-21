@@ -1,21 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js/auto';
+import { ApiService } from '../services/api.services';
 
 @Component({
   selector: 'app-market-index',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './market-index.html',
-  styleUrls: ['./market-index.css']
+  styleUrls: ['./market-index.css'],
 })
 export class MarketIndexComponent implements OnInit {
-
   indexes = [
     { name: 'S&P 500', symbol: '^GSPC' },
     { name: 'Nasdaq', symbol: '^IXIC' },
-    { name: 'Dow Jones', symbol: '^DJI' }
+    { name: 'Dow Jones', symbol: '^DJI' },
   ];
 
   selectedSymbol: string = '^GSPC';
@@ -28,7 +27,7 @@ export class MarketIndexComponent implements OnInit {
   // Store full history once
   allHistory: any[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private api: ApiService) {}
 
   ngOnInit(): void {
     this.loadChart(this.selectedSymbol);
@@ -43,14 +42,13 @@ export class MarketIndexComponent implements OnInit {
 
   // 🔹 Load history ONCE
   loadChart(symbol: string) {
-    this.http.get<any[]>(`http://localhost:8080/api/market/history/${symbol}`)
-      .subscribe({
-        next: (data) => {
-          this.allHistory = data;
-          this.renderChart(this.filterByRange(data, this.activeRange));
-        },
-        error: (err) => console.error('Error:', err)
-      });
+    this.api.get<any[]>(`/api/market/history/${symbol}`).subscribe({
+      next: (data) => {
+        this.allHistory = data;
+        this.renderChart(this.filterByRange(data, this.activeRange));
+      },
+      error: (err) => console.error('Error:', err),
+    });
   }
 
   // 🔹 Change range (NO API CALL)
@@ -90,8 +88,8 @@ export class MarketIndexComponent implements OnInit {
   renderChart(data: any[]) {
     if (!data || data.length === 0) return;
 
-    const labels = data.map(d => d.date.split('T')[0]);
-    const prices = data.map(d => d.close);
+    const labels = data.map((d) => d.date.split('T')[0]);
+    const prices = data.map((d) => d.close);
 
     const isGreen = prices[prices.length - 1] >= prices[0];
 
@@ -106,16 +104,16 @@ export class MarketIndexComponent implements OnInit {
       type: 'line',
       data: {
         labels,
-        datasets: [{
-          data: prices,
-          borderColor: isGreen ? 'green' : 'red',
-          backgroundColor: isGreen
-            ? 'rgba(0,200,0,0.1)'
-            : 'rgba(255,0,0,0.1)',
-          fill: true,
-          tension: 0.3,
-          pointRadius: 0
-        }]
+        datasets: [
+          {
+            data: prices,
+            borderColor: isGreen ? 'green' : 'red',
+            backgroundColor: isGreen ? 'rgba(0,200,0,0.1)' : 'rgba(255,0,0,0.1)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 0,
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -123,9 +121,9 @@ export class MarketIndexComponent implements OnInit {
         plugins: { legend: { display: false } },
         scales: {
           x: { ticks: { maxTicksLimit: 5 } },
-          y: { display: false }
-        }
-      }
+          y: { display: false },
+        },
+      },
     });
   }
 }

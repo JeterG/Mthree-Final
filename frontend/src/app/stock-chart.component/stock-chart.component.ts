@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -12,6 +11,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { ApiService } from '../services/api.services';
+ApiService;
 
 Chart.register(...registerables);
 
@@ -45,7 +46,7 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
   ranges = ['1D', '1W', '1M', '3M', '1Y'];
 
   constructor(
-    private http: HttpClient,
+    private api: ApiService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -99,7 +100,7 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
 
   // Fetch current price from stock_cache
   fetchQuote(symbol: string) {
-    this.http.get(`http://localhost:8080/api/market/quote/${symbol}`).subscribe({
+    this.api.get(`/api/market/quote/${symbol}`).subscribe({
       next: (res: any) => {
         this.quoteData = res;
         this.cdr.detectChanges();
@@ -110,7 +111,7 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
 
   // Fetch 1 year of daily history — store all, then filter by active range
   fetchChart(symbol: string) {
-    this.http.get<any[]>(`http://localhost:8080/api/market/history/${symbol}`).subscribe({
+    this.api.get<any[]>(`/api/market/history/${symbol}`).subscribe({
       next: (res) => {
         this.allHistory = res;
         this.renderChart(this.filterByRange(res, this.activeRange));
@@ -149,7 +150,7 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
   updateChartWithLatestPrice(symbol: string) {
     if (!this.chart) return;
 
-    this.http.get<any>(`http://localhost:8080/api/market/quote/${symbol}`).subscribe({
+    this.api.get<any>(`/api/market/quote/${symbol}`).subscribe({
       next: (stock) => {
         const now = new Date().toISOString();
         const price = stock.currentPrice;

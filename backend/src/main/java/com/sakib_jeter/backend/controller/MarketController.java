@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +23,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Market Controller", description = "Market data APIs")
 @RestController
 @RequestMapping("/api/market")
-@CrossOrigin(origins = "http://localhost:4200")
 public class MarketController {
 
     private final MarketService marketService;
@@ -88,8 +86,9 @@ public class MarketController {
                 ? ResponseEntity.ok(stock)
                 : ResponseEntity.notFound().build();
     }
+
     @GetMapping("/stocks/{symbol}/details")
-public ResponseEntity<?> getStockDetails(@PathVariable String symbol) {
-    return ResponseEntity.ok(marketService.getStockDetails(symbol));
-}
+    public ResponseEntity<?> getStockDetails(@PathVariable String symbol) {
+        return ResponseEntity.ok(marketService.getStockDetails(symbol));
+    }
 }

@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import {
   ChangeDetectorRef,
   Component,
@@ -10,6 +9,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ApiService } from '../services/api.services';
 
 @Component({
   selector: 'app-buy',
@@ -32,7 +32,7 @@ export class BuyComponent implements OnChanges {
   errorMessage = '';
 
   constructor(
-    private http: HttpClient,
+    private api: ApiService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -47,7 +47,7 @@ export class BuyComponent implements OnChanges {
     this.loading = true;
     this.currentPrice = null;
 
-    this.http.get<any>(`http://localhost:8080/api/market/quote/${symbol}`).subscribe({
+    this.api.get<any>(`/api/market/quote/${symbol}`).subscribe({
       next: (stock) => {
         this.currentPrice = stock.currentPrice;
         this.loading = false;
@@ -73,8 +73,8 @@ export class BuyComponent implements OnChanges {
     this.resetMessages();
 
     if (this.action === 'buy') {
-      this.http
-        .post<any>('http://localhost:8080/api/holdings/buy', {
+      this.api
+        .post<any>('/api/holdings/buy', {
           stockSymbol: this.symbol,
           quantity: this.quantity,
         })
@@ -92,8 +92,8 @@ export class BuyComponent implements OnChanges {
           },
         });
     } else {
-      this.http
-        .post<any>('http://localhost:8080/api/watchlist', {
+      this.api
+        .post<any>('/api/watchlist', {
           stockSymbol: this.symbol,
         })
         .subscribe({

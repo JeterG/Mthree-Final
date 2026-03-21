@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ApiService } from '../services/api.services';
 
 // Reusable stock search dropdown component
 // Loads all symbols from stock_cache on init
@@ -24,7 +24,7 @@ export class StockSearchComponent implements OnInit {
   showDropdown = false;
   selectedStock: any = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private api: ApiService) {}
 
   ngOnInit(): void {
     this.loadStocks();
@@ -32,8 +32,8 @@ export class StockSearchComponent implements OnInit {
 
   // Load all cached stocks from stock_cache table
   loadStocks(): void {
-    this.http.get<any[]>('http://localhost:8080/api/market/cached').subscribe({
-      next: (stocks) => {
+    this.api.get<any[]>('/api/market/cached').subscribe({
+      next: (stocks: any[]) => {
         this.allStocks = stocks;
       },
       error: (err) => console.error('Failed to load stocks:', err),
@@ -59,14 +59,14 @@ export class StockSearchComponent implements OnInit {
   }
 
   // Select a stock from the dropdown
-selectStock(stock: any) {
-  this.selectedStock = stock;
-  this.searchQuery = stock.symbol;
-  this.showDropdown = false;
+  selectStock(stock: any) {
+    this.selectedStock = stock;
+    this.searchQuery = stock.symbol;
+    this.showDropdown = false;
 
-  // 🔥 Emit only
-  this.symbolSelected.emit(stock.symbol);
-}
+    // 🔥 Emit only
+    this.symbolSelected.emit(stock.symbol);
+  }
 
   // Close dropdown when input loses focus
   onBlur(): void {
