@@ -60,4 +60,13 @@ public Account getMyAccount(org.springframework.security.core.Authentication aut
     public void deleteAccount(@PathVariable Long userId) {
         accountService.deleteAccount(userId);
     }
+    @PutMapping("/update-name")
+public Account updateName(
+    org.springframework.security.core.Authentication authentication,
+    @RequestBody com.sakib_jeter.backend.dto.UpdateNameRequest request
+) {
+    String email = (String) authentication.getPrincipal();
+
+    return accountService.updateNameByEmail(email, request.firstName, request.lastName);
+}
 }

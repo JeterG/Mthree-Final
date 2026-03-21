@@ -53,4 +53,20 @@ public class AccountService {
         Account account = getAccountByUserId(userId);
         accountRepository.delete(account);
     }
+    public Account updateNameByEmail(String email, String firstName, String lastName) {
+
+    // Step 1: find user
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    // Step 2: find account
+    Account account = accountRepository.findByUserId(user.getId())
+            .orElseThrow(() -> new RuntimeException("Account not found"));
+
+    // Step 3: update fields
+    account.setFirstName(firstName);
+    account.setLastName(lastName);
+
+    return accountRepository.save(account);
+}
 }

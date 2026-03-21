@@ -7,6 +7,7 @@ import { Search } from './search/search';
 import { SettingsComponent } from './settings/settings';
 import { SignupComponent } from './signup/signup';
 import { SwaggerComponent } from './swagger/swagger';
+import { ProfileComponent } from './profile/profile';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -15,11 +16,15 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'search', component: Search },
   { path: 'portfolio', component: Portfolio },
+
   { path: 'docs', component: SwaggerComponent },
-  { path: 'diagrams', component: DiagramsComponent },
+  { path: 'diagrams', component: DiagramsComponent }, // ✅ ADD THIS
+
   {
     path: 'stock/:symbol',
-    loadComponent: () => import('./stock-page/stock-page').then((m) => m.StockPageComponent),
+    loadComponent: () => import('./stock-page/stock-page').then(m => m.StockPageComponent),
   },
+
   { path: 'settings', component: SettingsComponent },
+  { path: 'profile', component: ProfileComponent } // ✅ ADD THIS
 ];

@@ -17,9 +17,15 @@
         <span class="dropdown-arrow">▼</span>
       </div>
 
-      <div *ngIf="isDropdownOpen" class="user-dropdown">
-        <button type="button" class="user-dropdown-item" (click)="logout()">Logout</button>
-      </div>
+<div *ngIf="isDropdownOpen" class="user-dropdown">
+  <button class="user-dropdown-item" (click)="goToProfile()">
+  Profile
+</button>
+
+  <div class="dropdown-divider"></div>
+
+  <button class="user-dropdown-item" (click)="logout()">Logout</button>
+</div>
     </div>
   </div>
 </nav>

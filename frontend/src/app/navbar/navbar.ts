@@ -29,12 +29,26 @@ export class Navbar implements OnInit {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
+  // 🔥 NEW: Navigate to profile properly
+  goToProfile(): void {
+    this.isDropdownOpen = false; // close dropdown FIRST
+
+    // small delay ensures UI updates before routing
+    setTimeout(() => {
+      this.router.navigate(['/profile']);
+    }, 0);
+  }
+
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('email');
     localStorage.removeItem('userId');
+
     this.isDropdownOpen = false;
-    this.router.navigate(['/login']);
+
+    setTimeout(() => {
+      this.router.navigate(['/login']);
+    }, 0);
   }
 
   @HostListener('document:click', ['$event'])
