@@ -1,0 +1,82 @@
+.diagrams-wrapper {
+  padding: 40px 24px;
+  background: #f4f4f4;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.diagrams-wrapper section {
+  margin-bottom: 60px;
+}
+
+.diagrams-wrapper section h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a2e;
+  border-left: 4px solid #3f51b5;
+  padding-left: 12px;
+  margin-bottom: 8px;
+}
+
+.diagrams-wrapper section p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+/* 🔥 FIX STARTS HERE */
+.diagrams-wrapper .diagram-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+
+  /* IMPORTANT */
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* FORCE SVG TO BE VISIBLE */
+.diagrams-wrapper svg {
+  display: block;
+
+  /* 🔑 critical fixes */
+  min-width: 900px; /* prevents collapsing */
+  height: auto;
+  max-width: none; /* allow horizontal scroll */
+}
+
+/* Optional: center when smaller */
+@media (max-width: 1000px) {
+  .diagrams-wrapper svg {
+    min-width: 1000px;
+  }
+}
+
+/* TEXT STYLES */
+.diagrams-wrapper .lb {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  fill: #222;
+}
+
+.diagrams-wrapper .ls {
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  fill: #555;
+}
+
+.diagrams-wrapper .lh {
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  fill: #1a1a2e;
+}
+
+.diagrams-wrapper .sec {
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  fill: #888;
+}
