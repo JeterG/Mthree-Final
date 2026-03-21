@@ -38,7 +38,7 @@ echo "Updated .env with: $BACKEND_URL"
 
 # Start ngrok for frontend in background
 echo "Starting ngrok tunnel for frontend..."
-ngrok http --domain=unflecked-rhamnaceous-lynne.ngrok-free.dev 4200 &
+ngrok http --url=unflecked-rhamnaceous-lynne.ngrok-free.dev 4200 &
 NGROK_PID=$!
 
 # Now run dockerStart.sh
