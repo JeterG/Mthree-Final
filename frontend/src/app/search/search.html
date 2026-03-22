@@ -1,10 +1,31 @@
-<div class="search-page">
+<div class="container py-4">
 
-  <!-- 🔥 MARKET FIRST -->
-  <app-market-index></app-market-index>
+  <!-- 📊 CHART -->
+  <div class="chart-container">
 
-  <!-- 🔍 SEARCH BELOW -->
-  <h2>Search Stocks</h2>
+    <!-- 🔥 TITLE -->
+    <h4 class="fw-bold mb-3 text-center">
+      Popular Stocks (AAPL, NVDA, MSFT)
+    </h4>
+
+    <div class="d-flex justify-content-start gap-2 mb-3 w-100">
+      <button
+        *ngFor="let s of symbols"
+        type="button"
+        class="btn"
+        [ngClass]="selectedSymbol === s ? 'btn-secondary' : 'btn-light'"
+        (click)="selectSymbol(s)"
+      >
+        {{ s }}
+      </button>
+    </div>
+
+    <app-stock-chart [symbol]="selectedSymbol"></app-stock-chart>
+
+  </div>
+
+  <!-- 🔍 SEARCH -->
+  <h2 class="mt-4">Search Stocks</h2>
 
   <app-stock-search
     (symbolSelected)="onSymbolSelected($event)">

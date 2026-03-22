@@ -1,19 +1,35 @@
-.market-index-container {
-  padding: 20px;
+/* 🔥 MATCH HOMEPAGE WIDTH */
+.chart-container {
+  max-width: 600px;
+  margin: 0 auto;
+  margin-bottom: 40px;
 }
 
-.index-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
+/* 🔥 SAME CARD STYLE */
+.custom-card {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
 }
 
-.index-card {
-  background: #111;
-  padding: 15px;
-  border-radius: 10px;
-}
-
+/* 🔥 CHART SIZE (matches homepage better) */
 .chart-wrapper {
-  height: 200px;
+  height: 300px;
+}
+
+/* 🔥 BUTTON CONSISTENCY */
+.btn {
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+/* 🔥 SMALL RANGE BUTTONS */
+.btn-sm {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
 }

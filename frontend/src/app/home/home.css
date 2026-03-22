@@ -158,6 +158,15 @@ h5, h6 {
 }
 
 .market-wrapper {
-  max-width: 300px;          /* 🔥 controls width */
+  max-width: 400px;          /* 🔥 controls width */
   margin: 0 auto 30px auto;  /* center + spacing */
+}
+
+.clickable-emoji {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.clickable-emoji:hover {
+  transform: scale(1.05);
 }
