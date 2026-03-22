@@ -170,3 +170,8 @@ h5, h6 {
 .clickable-emoji:hover {
   transform: scale(1.05);
 }
+
+.market-card {
+  background-color: #fff4e1; /* 🔥 light orange */
+  border: 1px solid rgba(255, 153, 0, 0.3); /* subtle orange border */
+}

@@ -29,6 +29,14 @@ body {
   color: #ffffff;
 }
 
+html.dark-mode .settings-header h2 {
+  color: #ffffff !important;
+}
+
+.dark-mode .user-info h2 {
+  color: #ffffff !important;
+}
+
 /* =========================
    🌙 CORE COMPONENTS
 ========================= */

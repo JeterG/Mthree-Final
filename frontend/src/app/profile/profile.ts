@@ -12,10 +12,53 @@ import { ApiService } from '../services/api.services';
 })
 export class ProfileComponent implements OnInit {
 
+  // 🔥 USER INFO
   firstName: string = '';
   lastName: string = '';
   email: string = '';
-  successMessage: string = '';
+
+  // 🔥 SEPARATE SUCCESS MESSAGES
+  nameSuccessMessage: string = '';
+  onboardingSuccessMessage: string = '';
+
+  // 🔥 MODAL STATE
+  showOnboardingModal: boolean = false;
+  currentStep: number = 0;
+
+  // 🔥 OPTIONS
+  experienceOptions: string[] = [
+    'Beginner (just getting started)',
+    'Intermediate (some experience)',
+    'Advanced (active trader)'
+  ];
+
+  tradingStyleOptions: string[] = [
+    'Long-term investor',
+    'Swing trader',
+    'Day trader',
+    'Just exploring'
+  ];
+
+  marketPreferenceOptions: string[] = [
+    'Real-time (fast refresh)',
+    'Balanced',
+    'Battery saver (slower updates)'
+  ];
+
+  goalOptions: string[] = [
+    'Learn how to invest',
+    'Practice trading strategies',
+    'Track the market',
+    'Explore and experiment'
+  ];
+
+  // 🔥 USER RESPONSES
+  onboardingData = {
+    experienceLevel: '',
+    tradingStyle: '',
+    marketPreference: '',
+    goal: ''
+  };
 
   constructor(
     private api: ApiService,
@@ -32,7 +75,6 @@ export class ProfileComponent implements OnInit {
         this.firstName = res.firstName;
         this.lastName = res.lastName;
 
-        // 🔥 Force Angular to update immediately
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -40,21 +82,19 @@ export class ProfileComponent implements OnInit {
       }
     });
 
-    // get email from localStorage
     this.email = localStorage.getItem('email') || '';
   }
 
+  // 🔥 UPDATE NAME
   updateName() {
-    this.successMessage = '';
+    this.nameSuccessMessage = '';
 
     this.api.put('/api/account/update-name', {
       firstName: this.firstName,
       lastName: this.lastName
     }).subscribe({
       next: () => {
-        this.successMessage = 'Name updated successfully';
-
-        // 🔥 Ensure UI updates instantly
+        this.nameSuccessMessage = 'Name updated successfully';
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -62,4 +102,43 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
+
+  // 🔥 OPEN MODAL
+  openOnboarding() {
+    this.onboardingSuccessMessage = ''; // clear old message
+    this.showOnboardingModal = true;
+    this.currentStep = 0;
+  }
+
+  // 🔥 CLOSE MODAL
+  closeOnboarding() {
+    this.showOnboardingModal = false;
+  }
+
+  // 🔥 NAVIGATION
+  nextStep() {
+    if (this.currentStep < 5) {
+      this.currentStep++;
+    }
+  }
+
+  prevStep() {
+    if (this.currentStep > 0) {
+      this.currentStep--;
+    }
+  }
+
+  // 🔥 FINISH ONBOARDING
+  finishOnboarding() {
+    console.log('Onboarding answers:', this.onboardingData);
+
+    this.showOnboardingModal = false;
+
+    this.onboardingSuccessMessage = 'Trading preferences saved successfully';
+    this.cdr.detectChanges();
+  }
+  clearMessages() {
+  this.nameSuccessMessage = '';
+  this.onboardingSuccessMessage = '';
+}
 }
