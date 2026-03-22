@@ -8,6 +8,7 @@ import { TimezoneService } from '../home/timezone.service'; // 🔥 IMPORT
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './settings.html',
+  styleUrls: ['./settings.css'] // 🔥 ADD THIS
 })
 export class SettingsComponent implements OnInit {
 
@@ -25,6 +26,11 @@ export class SettingsComponent implements OnInit {
     { label: 'Hawaii (HST)', value: 'Pacific/Honolulu' }
   ];
 
+  notifications = {
+  priceAlerts: true,
+  tradeConfirmations: true,
+  dailySummary: false
+};
   selectedTimezone = 'America/New_York';
 
   ngOnInit() {
@@ -35,7 +41,22 @@ export class SettingsComponent implements OnInit {
 
     // 🔥 Load timezone from service (not just localStorage)
     this.selectedTimezone = this.timezoneService.getTimezone();
+    const savedNotifications = localStorage.getItem('notifications');
+if (savedNotifications) {
+  this.notifications = JSON.parse(savedNotifications);
+}
   }
+saveNotifications() {
+  localStorage.setItem('notifications', JSON.stringify(this.notifications));
+
+  // 🔥 Fake "real app" feedback
+  console.log('Notification preferences updated');
+
+  // optional:
+  if (this.notifications.tradeConfirmations) {
+    console.log('Trade confirmations enabled');
+  }
+}
 
   toggleTheme() {
     localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
@@ -54,4 +75,6 @@ export class SettingsComponent implements OnInit {
   onTimezoneChange() {
     this.timezoneService.setTimezone(this.selectedTimezone);
   }
+
+  
 }

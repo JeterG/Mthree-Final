@@ -1,5 +1,4 @@
-<div class="profile-page">
-
+<div class="profile-page" (click)="clearMessages()">
   <!-- HEADER -->
   <div class="profile-header">
     <div class="avatar">
@@ -12,11 +11,10 @@
     </div>
   </div>
 
-  <!-- CARD -->
+  <!-- ACCOUNT DETAILS CARD -->
   <div class="profile-card">
 
     <h3>Account Details</h3>
-    
 
     <div class="form-group">
       <label>First Name</label>
@@ -30,10 +28,161 @@
 
     <button (click)="updateName()">Save Changes</button>
 
-    <p class="success" *ngIf="successMessage">
-      {{ successMessage }}
+<p class="success" *ngIf="nameSuccessMessage">
+  {{ nameSuccessMessage }}
+</p>
+
+  </div>
+
+  <!-- NEW PREFERENCES CARD -->
+  <div class="profile-card onboarding-card">
+    <h3>Trading Preferences</h3>
+    <p class="card-description">
+      Personalize your StockQuik experience with a quick onboarding form.
     </p>
 
+    <button class="open-onboarding-btn" (click)="openOnboarding()">
+      Open Onboarding Form
+    </button>
+    <p class="success" *ngIf="onboardingSuccessMessage">
+  {{ onboardingSuccessMessage }}
+</p>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" *ngIf="showOnboardingModal" (click)="closeOnboarding()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+
+      <!-- STEP 1 -->
+      <div *ngIf="currentStep === 0" class="modal-step">
+        <div class="step-icon">🚀</div>
+        <h2>Welcome to StockQuik</h2>
+        <p>Let’s personalize your trading experience.</p>
+
+        <div class="modal-actions single-action">
+          <button (click)="nextStep()">Get Started</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div *ngIf="currentStep === 1" class="modal-step">
+        <div class="step-icon">📊</div>
+        <h2>Experience Level</h2>
+        <p class="question-label">How experienced are you with investing?</p>
+
+        <div class="option-list">
+          <label class="option-item" *ngFor="let option of experienceOptions">
+            <input
+              type="radio"
+              name="experienceLevel"
+              [value]="option"
+              [(ngModel)]="onboardingData.experienceLevel"
+            />
+            <span>{{ option }}</span>
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button class="secondary-btn" (click)="prevStep()">Back</button>
+          <button [disabled]="!onboardingData.experienceLevel" (click)="nextStep()">Next</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div *ngIf="currentStep === 2" class="modal-step">
+        <div class="step-icon">📈</div>
+        <h2>Trading Style</h2>
+        <p class="question-label">What type of trader are you?</p>
+
+        <div class="option-list">
+          <label class="option-item" *ngFor="let option of tradingStyleOptions">
+            <input
+              type="radio"
+              name="tradingStyle"
+              [value]="option"
+              [(ngModel)]="onboardingData.tradingStyle"
+            />
+            <span>{{ option }}</span>
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button class="secondary-btn" (click)="prevStep()">Back</button>
+          <button [disabled]="!onboardingData.tradingStyle" (click)="nextStep()">Next</button>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div *ngIf="currentStep === 3" class="modal-step">
+        <div class="step-icon">⏰</div>
+        <h2>Market Preferences</h2>
+        <p class="question-label">How often should market data update?</p>
+
+        <div class="option-list">
+          <label class="option-item" *ngFor="let option of marketPreferenceOptions">
+            <input
+              type="radio"
+              name="marketPreference"
+              [value]="option"
+              [(ngModel)]="onboardingData.marketPreference"
+            />
+            <span>{{ option }}</span>
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button class="secondary-btn" (click)="prevStep()">Back</button>
+          <button [disabled]="!onboardingData.marketPreference" (click)="nextStep()">Next</button>
+        </div>
+      </div>
+
+      <!-- STEP 5 -->
+      <div *ngIf="currentStep === 4" class="modal-step">
+        <div class="step-icon">🎯</div>
+        <h2>Goals</h2>
+        <p class="question-label">What’s your goal with StockQuik?</p>
+
+        <div class="option-list">
+          <label class="option-item" *ngFor="let option of goalOptions">
+            <input
+              type="radio"
+              name="goal"
+              [value]="option"
+              [(ngModel)]="onboardingData.goal"
+            />
+            <span>{{ option }}</span>
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button class="secondary-btn" (click)="prevStep()">Back</button>
+          <button [disabled]="!onboardingData.goal" (click)="nextStep()">Next</button>
+        </div>
+      </div>
+
+      <!-- STEP 6 -->
+      <div *ngIf="currentStep === 5" class="modal-step">
+        <div class="step-icon">✅</div>
+        <h2>You’re all set</h2>
+        <p>Your paper trading account is ready.</p>
+
+        <div class="summary-box">
+          <p><strong>Experience:</strong> {{ onboardingData.experienceLevel }}</p>
+          <p><strong>Style:</strong> {{ onboardingData.tradingStyle }}</p>
+          <p><strong>Market Updates:</strong> {{ onboardingData.marketPreference }}</p>
+          <p><strong>Goal:</strong> {{ onboardingData.goal }}</p>
+        </div>
+
+        <div class="modal-actions">
+          <button class="secondary-btn" (click)="prevStep()">Back</button>
+          <button (click)="finishOnboarding(); $event.stopPropagation()">
+  Finish
+</button>
+        </div>
+      </div>
+
+      <button class="close-modal-btn" (click)="closeOnboarding()">×</button>
+    </div>
   </div>
 
 </div>

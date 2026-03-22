@@ -1,13 +1,19 @@
-<div class="container-fluid py-4 px-4">
-  <div class="card p-4 shadow-sm border-0">
+<div class="settings-page">
 
-    <h2 class="fw-bold mb-3">Settings</h2>
+  <!-- HEADER -->
+  <div class="settings-header">
+    <h2>Settings</h2>
+    <p>Customize your experience</p>
+  </div>
 
-    <!-- Dark Mode -->
-    <div class="d-flex justify-content-between align-items-center">
+  <!-- CARD -->
+  <div class="settings-card">
+
+    <!-- 🌙 DARK MODE -->
+    <div class="setting-row">
       <span>Dark Mode</span>
 
-      <label class="switch">
+      <label class="toggle">
         <input
           type="checkbox"
           [(ngModel)]="isDarkMode"
@@ -17,12 +23,10 @@
       </label>
     </div>
 
-    <!-- 🔥 Timezone (UPDATED LAYOUT) -->
-    <div class="mt-4">
-      <label class="mb-2 fw-semibold">Timezone</label>
-
+    <!-- ⏰ TIMEZONE -->
+    <div class="form-group">
+      <label>Timezone</label>
       <select
-        class="form-select timezone-select"
         [(ngModel)]="selectedTimezone"
         (change)="onTimezoneChange()"
       >
@@ -30,6 +34,45 @@
           {{ tz.label }}
         </option>
       </select>
+    </div>
+
+    <!-- 🔔 NOTIFICATIONS -->
+    <h3 class="section-title">Notifications</h3>
+
+    <div class="setting-row">
+      <span>Price Alerts</span>
+      <label class="toggle">
+        <input
+          type="checkbox"
+          [(ngModel)]="notifications.priceAlerts"
+          (change)="saveNotifications()"
+        >
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="setting-row">
+      <span>Trade Confirmations</span>
+      <label class="toggle">
+        <input
+          type="checkbox"
+          [(ngModel)]="notifications.tradeConfirmations"
+          (change)="saveNotifications()"
+        >
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="setting-row">
+      <span>Daily Summary</span>
+      <label class="toggle">
+        <input
+          type="checkbox"
+          [(ngModel)]="notifications.dailySummary"
+          (change)="saveNotifications()"
+        >
+        <span class="slider"></span>
+      </label>
     </div>
 
   </div>
