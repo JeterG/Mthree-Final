@@ -235,3 +235,15 @@ html.dark-mode .settings-header h2 {
   color: #ffffff !important;
   background-color: #1e1e1e !important;
 }
+
+.dark-mode .info-panel {
+  background: #1e1e1e !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.dark-mode .info-panel h4,
+.dark-mode .info-panel p,
+.dark-mode .info-panel li {
+  color: #ffffff !important;
+}

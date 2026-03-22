@@ -5,17 +5,27 @@
   margin-bottom: 40px;
 }
 
-/* 🔥 CLEAN LIGHT MODE CARD */
+/* =========================
+   📊 CARD (LIGHT MODE FIX)
+========================= */
 .custom-card {
-  background: #ffffff;              /* white background */
-  border: 1px solid #ddd;           /* subtle border */
+  background: #ffffff !important;      /* force white */
+  border: 1px solid #ddd;
   border-radius: 12px;
-  color: #111;                     /* readable text */
+
+  color: #111 !important;              /* force black text */
 }
 
-/* 🔥 TITLE FIX */
+/* 🔥 TITLE FIX (THIS WAS YOUR MAIN ISSUE) */
 .chart-title {
-  color: #111;
+  color: #111 !important;
+}
+
+/* 🔥 ALSO FORCE ALL TEXT INSIDE CARD */
+.custom-card h5,
+.custom-card p,
+.custom-card span {
+  color: #111 !important;
 }
 
 /* 🔥 CHART SIZE */
@@ -40,4 +50,78 @@
   display: flex;
   justify-content: flex-start;
   width: 100%;
+}
+
+/* =========================
+   🌙 DARK MODE (SCOPED FIX)
+========================= */
+
+/* ONLY apply dark mode styles when .dark-mode is active */
+.dark-mode .custom-card {
+  background: #1e1e1e !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dark-mode .chart-title {
+  color: #ffffff !important;
+}
+
+.dark-mode .custom-card h5,
+.dark-mode .custom-card p,
+.dark-mode .custom-card span {
+  color: #ffffff !important;
+}
+
+/* =========================
+   🔥 FORCE LIGHT MODE FOR MARKET PAGE
+========================= */
+
+/* Card stays white EVEN in dark mode */
+.dark-mode .market-page .custom-card,
+.dark-mode .market-page .card {
+  background: #ffffff !important;
+  color: #111 !important;
+  border: 1px solid #ddd !important;
+}
+
+/* Fix title */
+.dark-mode .market-page .chart-title {
+  color: #111 !important;
+}
+
+/* Fix all text inside */
+.dark-mode .market-page h5,
+.dark-mode .market-page p,
+.dark-mode .market-page span {
+  color: #111 !important;
+}
+
+.dark-mode .market-page .card {
+  background: white !important;
+  color: #111 !important;
+}
+
+/* =========================
+   🔥 HARD OVERRIDE (FINAL FIX)
+========================= */
+
+/* Beat global styles.css */
+html.dark-mode body .market-page.market-override .card,
+html.dark-mode body .market-page.market-override .custom-card {
+  background: #ffffff !important;
+  color: #111 !important;
+  border: 1px solid #ddd !important;
+}
+
+/* Fix title */
+html.dark-mode body .market-page.market-override .chart-title {
+  color: #111 !important;
+}
+
+/* Fix ALL text */
+html.dark-mode body .market-page.market-override h5,
+html.dark-mode body .market-page.market-override p,
+html.dark-mode body .market-page.market-override span {
+  color: #111 !important;
 }
