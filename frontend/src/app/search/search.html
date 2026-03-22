@@ -1,34 +1,73 @@
 <div class="container py-4">
 
-  <!-- 📊 CHART -->
-  <div class="chart-container">
+  <!-- 🔍 SEARCH -->
+  <h2 class="mt-4 text-center">Search Stocks</h2>
 
-    <!-- 🔥 TITLE -->
-    <h4 class="fw-bold mb-3 text-center">
-      Popular Stocks (AAPL, NVDA, MSFT)
-    </h4>
-
-    <div class="d-flex justify-content-start gap-2 mb-3 w-100">
-      <button
-        *ngFor="let s of symbols"
-        type="button"
-        class="btn"
-        [ngClass]="selectedSymbol === s ? 'btn-secondary' : 'btn-light'"
-        (click)="selectSymbol(s)"
-      >
-        {{ s }}
-      </button>
-    </div>
-
-    <app-stock-chart [symbol]="selectedSymbol"></app-stock-chart>
-
+  <!-- 🔥 WRAPPED SEARCH (controls width + spacing) -->
+  <div class="search-wrapper">
+    <app-stock-search
+      (symbolSelected)="onSymbolSelected($event)">
+    </app-stock-search>
   </div>
 
-  <!-- 🔍 SEARCH -->
-  <h2 class="mt-4">Search Stocks</h2>
+  <!-- 💡 SUGGESTED SEARCHES -->
+  <div class="suggestions">
+    <span>Try:</span>
 
-  <app-stock-search
-    (symbolSelected)="onSymbolSelected($event)">
-  </app-stock-search>
+    <button (click)="onSymbolSelected('AAPL')">AAPL</button>
+    <button (click)="onSymbolSelected('TSLA')">TSLA</button>
+    <button (click)="onSymbolSelected('NVDA')">NVDA</button>
+    <button (click)="onSymbolSelected('MSFT')">MSFT</button>
+  </div>
+
+  <!-- 🔥 SIDE-BY-SIDE SECTION -->
+  <div class="content-row">
+
+    <!-- 📘 INFO PANEL (LEFT) -->
+    <div class="info-panel">
+
+      <h4>How to Use Search</h4>
+
+      <p>This page helps you explore stocks easily.</p>
+
+      <ul>
+        <li>🔍 Search by company name or ticker (e.g. Apple or AAPL)</li>
+        <li>📈 View price trends and performance</li>
+        <li>⭐ Click popular stocks to quickly explore</li>
+        <li>📊 Use charts to understand stock movement</li>
+      </ul>
+
+      <p class="tip">
+        Tip: Start with popular stocks if you're new to investing.
+      </p>
+
+    </div>
+
+    <!-- 📈 POPULAR STOCKS (RIGHT) -->
+    <div class="chart-container">
+
+      <h5 class="fw-bold mb-3 text-center">
+        Popular Stocks (AAPL, NVDA, MSFT)
+      </h5>
+
+      <div class="d-flex justify-content-center gap-2 mb-3">
+        <button
+          *ngFor="let s of symbols"
+          type="button"
+          class="btn"
+          [ngClass]="selectedSymbol === s ? 'btn-secondary' : 'btn-light'"
+          (click)="selectSymbol(s)"
+        >
+          {{ s }}
+        </button>
+      </div>
+
+      <div class="card custom-card shadow-sm p-3">
+        <app-stock-chart [symbol]="selectedSymbol"></app-stock-chart>
+      </div>
+
+    </div>
+
+  </div>
 
 </div>

@@ -22,8 +22,17 @@ export class Search {
   symbols = ['AAPL', 'NVDA', 'MSFT', 'TSLA'];
   selectedSymbol: string = 'AAPL';
 
+  // ✅ ADD THESE
+  ranges: string[] = ['1D', '1W', '1M', '3M', '1Y'];
+  selectedRange: string = '1D';
+
   selectSymbol(symbol: string) {
     this.selectedSymbol = symbol;
+  }
+
+  // ✅ ADD THIS
+  selectRange(range: string) {
+    this.selectedRange = range;
   }
 
   onSymbolSelected(symbol: string): void {

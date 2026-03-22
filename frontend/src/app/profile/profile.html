@@ -1,4 +1,4 @@
-<div class="profile-page" (click)="clearMessages()">
+<div class="profile-page">
   <!-- HEADER -->
   <div class="profile-header">
     <div class="avatar">
@@ -6,7 +6,10 @@
     </div>
 
     <div class="user-info">
-      <h2>{{ firstName }} {{ lastName }}</h2>
+      <h2>
+  {{ firstName }} {{ lastName }}
+  <span class="profile-emoji">{{ selectedEmoji }}</span>
+</h2>
       <p>{{ email }}</p>
     </div>
   </div>
@@ -28,15 +31,14 @@
 
     <button (click)="updateName()">Save Changes</button>
 
-<p class="success" *ngIf="nameSuccessMessage">
-  {{ nameSuccessMessage }}
-</p>
-
+<div class="success-message" [class.show]="showNameSuccess">
+  {{ showNameSuccess ? 'Name updated successfully' : '' }}
+</div>
   </div>
 
   <!-- NEW PREFERENCES CARD -->
   <div class="profile-card onboarding-card">
-    <h3>Trading Preferences</h3>
+    <h3>Onboarding Form Survey</h3>
     <p class="card-description">
       Personalize your StockQuik experience with a quick onboarding form.
     </p>
@@ -44,11 +46,40 @@
     <button class="open-onboarding-btn" (click)="openOnboarding()">
       Open Onboarding Form
     </button>
-    <p class="success" *ngIf="onboardingSuccessMessage">
-  {{ onboardingSuccessMessage }}
+<p class="success-message" [class.show]="showOnboardingSuccess">
+  {{ showOnboardingSuccess ? 'Onboarding completed successfully' : '' }}
 </p>
   </div>
+<div class="profile-card">
 
+  <h3>Customize Emoji</h3>
+  <p class="card-description">
+    Choose an emoji to represent your profile.
+  </p>
+
+  <!-- Emoji Preview -->
+  <div class="emoji-preview">
+    {{ selectedEmoji }}
+  </div>
+
+  <!-- Emoji Picker -->
+  <div class="emoji-grid">
+    <span
+      *ngFor="let emoji of emojis"
+      (click)="selectEmoji(emoji)"
+      [class.active]="tempEmoji === emoji"
+    >
+      {{ emoji }}
+    </span>
+  </div>
+
+  <button (click)="saveEmoji()">Save Emoji</button>
+
+  <p class="success-message" [class.show]="showEmojiSuccess">
+    {{ showEmojiSuccess ? 'Emoji updated successfully' : '' }}
+  </p>
+
+</div>
   <!-- MODAL -->
   <div class="modal-overlay" *ngIf="showOnboardingModal" (click)="closeOnboarding()">
     <div class="modal-box" (click)="$event.stopPropagation()">

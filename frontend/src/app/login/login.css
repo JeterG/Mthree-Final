@@ -134,12 +134,17 @@
 }
 
 /* MESSAGE AREA */
-.message-area {
-  min-height: 0;
-  margin-bottom: 6px;
-}
+
 
 /* FORM GROUP */
 .form-group {
   margin-bottom: 6px;
+}
+
+.error-message {
+  color: #ff4d4f;
+  font-size: 14px;
+  margin-top: 12px;
+  margin-bottom: 10px;
+  text-align: left;
 }

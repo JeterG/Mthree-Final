@@ -5,13 +5,20 @@
   margin-bottom: 40px;
 }
 
-/* 🔥 SAME CARD STYLE */
+/* 🔥 CLEAN LIGHT MODE CARD */
 .custom-card {
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: #ffffff;              /* white background */
+  border: 1px solid #ddd;           /* subtle border */
   border-radius: 12px;
+  color: #111;                     /* readable text */
 }
 
-/* 🔥 CHART SIZE (matches homepage better) */
+/* 🔥 TITLE FIX */
+.chart-title {
+  color: #111;
+}
+
+/* 🔥 CHART SIZE */
 .chart-wrapper {
   height: 300px;
 }
@@ -28,6 +35,7 @@
   font-size: 12px;
 }
 
+/* 🔥 RANGE BUTTON GROUP */
 .btn-group {
   display: flex;
   justify-content: flex-start;
