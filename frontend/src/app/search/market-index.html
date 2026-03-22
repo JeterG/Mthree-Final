@@ -16,19 +16,19 @@
   <!-- 🔥 CARD -->
   <div class="card custom-card shadow-sm p-3">
 
-    <!-- 🔥 TITLE -->
-    <h5 class="fw-bold mb-2 text-center">
+    <!-- 🔥 TITLE (FIXED COLOR) -->
+    <h5 class="fw-bold mb-2 text-center chart-title">
       {{ indexes.find(i => i.symbol === selectedSymbol)?.name }}
     </h5>
 
-    <!-- 🔥 RANGE BUTTONS (FIXED ALIGNMENT) -->
+    <!-- 🔥 RANGE BUTTONS -->
     <div class="w-100 d-flex justify-content-start mb-3">
       <div class="btn-group" role="group">
         <button
           *ngFor="let r of ranges"
           type="button"
           class="btn btn-sm"
-          [ngClass]="activeRange === r ? 'btn-dark' : 'btn-outline-secondary'"
+          [ngClass]="activeRange === r ? 'btn-primary' : 'btn-outline-secondary'"
           (click)="selectRange(r)"
         >
           {{ r }}

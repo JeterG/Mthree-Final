@@ -1,7 +1,5 @@
 package com.sakib_jeter.backend.service;
 
-import java.time.LocalDateTime;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +15,18 @@ public class SignupService {
     private final UserRepository repo;
     private final BCryptPasswordEncoder encoder;
     private final AccountRepository accountRepository;
+    private final JwtService jwtService; // 🔥 NEW
 
-    public SignupService(UserRepository repo, BCryptPasswordEncoder encoder, AccountRepository accountRepository) {
+    public SignupService(
+        UserRepository repo,
+        BCryptPasswordEncoder encoder,
+        AccountRepository accountRepository,
+        JwtService jwtService // 🔥 NEW
+    ) {
         this.repo = repo;
         this.encoder = encoder;
         this.accountRepository = accountRepository;
+        this.jwtService = jwtService; // 🔥 NEW
     }
 
     public void register(String email, String password) {
@@ -34,7 +39,6 @@ public class SignupService {
         user.setPassword(encoder.encode(password));
         User savedUser = repo.save(user);
 
-        // Auto-create account with default $10,000 balance
         Account account = new Account();
         account.setUserId(savedUser.getId());
         account.setFirstName("");
@@ -42,16 +46,33 @@ public class SignupService {
         accountRepository.save(account);
     }
 
-public Long login(String email, String password) {
+    public Long login(String email, String password) {
 
-    User user = repo.findByEmail(email)
-        .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = repo.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
 
-    // ✅ IMPORTANT: use BCrypt match
-    if (!encoder.matches(password, user.getPassword())) {
-        throw new RuntimeException("Invalid credentials");
+        if (!encoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        return user.getId();
     }
 
-    return user.getId();
-}
+    // 🔥 NEW METHOD
+    public void changePassword(String token, String currentPassword, String newPassword) {
+
+        String email = jwtService.extractEmail(token.replace("Bearer ", ""));
+
+        User user = repo.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!encoder.matches(currentPassword, user.getPassword())) {
+            throw new RuntimeException("Current password is incorrect");
+        }
+
+        user.setPassword(encoder.encode(newPassword));
+        repo.save(user);
+
+        System.out.println("Password updated for: " + email);
+    }
 }

@@ -177,3 +177,61 @@ html.dark-mode .settings-header h2 {
 .dark-mode .swagger-ui .wrapper .title {
   color: #ffffff !important;
 }
+
+/* 🌙 DIAGRAMS PAGE */
+.dark-mode .diagram-container {
+  background-color: #1c1c1c !important;
+  color: white;
+}
+
+.dark-mode .diagram-box {
+  background-color: #2a2a2a;
+  border: 1px solid #333;
+}
+
+
+/* 🚫 DISABLE DARK MODE FOR AUTH PAGES */
+.dark-mode .auth-page {
+  background-color: #f5f5f5 !important;
+  color: #111 !important;
+}
+
+.dark-mode .auth-page input,
+.dark-mode .auth-page select {
+  background-color: white !important;
+  color: black !important;
+  border: 1px solid #ccc !important;
+}
+
+.dark-mode .auth-page .card,
+.dark-mode .auth-page .login-card {
+  background-color: white !important;
+  color: black !important;
+}
+
+.dark-mode .auth-page .btn {
+  background-color: #f0f0f0 !important;
+  color: black !important;
+}
+
+/* LIGHT MODE DROPDOWN */
+.settings-card select {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #ccc;
+}
+
+.settings-card select option {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* 🌙 DARK MODE DROPDOWN TEXT FIX */
+.dark-mode .settings-card select {
+  color: #ffffff !important;
+}
+
+.dark-mode .settings-card select option {
+  color: #ffffff !important;
+  background-color: #1e1e1e !important;
+}

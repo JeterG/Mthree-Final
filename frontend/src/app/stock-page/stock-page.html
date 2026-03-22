@@ -1,73 +1,106 @@
-<div *ngIf="data === null">
+<div *ngIf="data === null" class="loading">
   Loading stock data...
 </div>
 
-<div *ngIf="data !== null">
+<div *ngIf="data !== null" class="stock-page">
 
-  <!-- 🔥 HEADER / HERO -->
-  <div style="display:flex; align-items:center; gap:12px;">
+  <!-- 🔥 HEADER -->
+  <div class="stock-header">
+
     <img 
       *ngIf="data?.fmpProfile?.image"
       [src]="data?.fmpProfile?.image"
-      width="50"
-      height="50"
-      style="border-radius:8px;"
+      class="stock-logo"
     />
 
-    <div>
-      <h2 style="margin:0;">
-        {{ data?.fmpProfile?.companyName || data?.profile?.name }} ({{ symbol }})
-      </h2>
-      <p style="margin:0; color:gray;">
-        {{ data?.fmpProfile?.sector }} • {{ data?.profile?.finnhubIndustry }}
-      </p>
-    </div>
+    <h2>
+      {{ (data?.fmpProfile?.companyName ?? data?.profile?.name) ?? 'N/A' }}
+      ({{ symbol }})
+    </h2>
+
+    <p class="sub">
+      {{ data?.fmpProfile?.sector ?? 'N/A' }} • 
+      {{ data?.profile?.finnhubIndustry ?? 'N/A' }}
+    </p>
+
   </div>
 
-  <hr>
+  <!-- 📊 CHART -->
+  <div class="chart-card">
+    <app-stock-chart [symbol]="symbol"></app-stock-chart>
+  </div>
 
-  <!-- 🏢 COMPANY INFO -->
-  <h3>Company Info</h3>
-  <p><b>CEO:</b> {{ data?.fmpProfile?.ceo }}</p>
-  <p><b>Employees:</b> {{ data?.fmpProfile?.fullTimeEmployees }}</p>
-  <p><b>Exchange:</b> {{ data?.fmpProfile?.exchangeShortName }}</p>
+  <!-- 📊 STATS GRID -->
+  <div class="stats-grid">
 
-  <p><b>Address:</b> 
-    {{ data?.fmpProfile?.address }},
-    {{ data?.fmpProfile?.city }},
-    {{ data?.fmpProfile?.state }},
-    {{ data?.fmpProfile?.country }}
-  </p>
+    <!-- 🏢 COMPANY INFO -->
+    <div class="section">
+      <h3>Company Info</h3>
 
-  <p><b>IPO:</b> {{ data?.profile?.ipo }}</p>
-  <p><b>Market Cap:</b> {{ data?.profile?.marketCapitalization }}</p>
+      <p><b>CEO:</b> {{ data?.fmpProfile?.ceo ?? 'N/A' }}</p>
+      <p><b>Employees:</b> {{ data?.fmpProfile?.fullTimeEmployees ?? 'N/A' }}</p>
+      <p><b>Exchange:</b> {{ data?.fmpProfile?.exchangeShortName ?? 'N/A' }}</p>
 
-  <hr>
+      <p><b>Address:</b><br>
+        {{
+          data?.fmpProfile?.address
+            ? data.fmpProfile.address + ', ' +
+              (data.fmpProfile.city ?? '') + ', ' +
+              (data.fmpProfile.state ?? '') + ', ' +
+              (data.fmpProfile.country ?? '')
+            : 'N/A'
+        }}
+      </p>
 
-  <!-- 📊 KEY STATISTICS -->
-  <h3>Key Statistics</h3>
-  <p>P/E Ratio: {{ data?.metrics?.peNormalizedAnnual }}</p>
-  <p>Dividend Yield: {{ data?.metrics?.dividendYieldIndicatedAnnual }}</p>
-  <p>52 Week High: {{ data?.metrics?.['52WeekHigh'] }}</p>
-  <p>52 Week Low: {{ data?.metrics?.['52WeekLow'] }}</p>
-  <p>Avg Volume: {{ data?.metrics?.['10DayAverageTradingVolume'] }}</p>
+      <p><b>IPO:</b> {{ data?.profile?.ipo ?? 'N/A' }}</p>
 
-  <hr>
+      <p><b>Market Cap:</b> 
+        {{
+          data?.profile?.marketCapitalization != null
+            ? (data.profile.marketCapitalization | number)
+            : 'N/A'
+        }}
+      </p>
+    </div>
 
-  <!-- 📈 DAILY STATS -->
-  <h3>Daily Stats</h3>
-  <p>Current Price: {{ data?.quote?.c }}</p>
-  <p>High Today: {{ data?.quote?.h }}</p>
-  <p>Low Today: {{ data?.quote?.l }}</p>
-  <p>Open: {{ data?.quote?.o }}</p>
-  <p>Previous Close: {{ data?.quote?.pc }}</p>
+    <!-- 📈 KEY STATISTICS -->
+    <div class="section">
+      <h3>Key Statistics</h3>
 
-  <hr>
+      <p><b>P/E Ratio:</b> {{ data?.metrics?.peNormalizedAnnual ?? 'N/A' }}</p>
 
-  <!-- 📝 DESCRIPTION -->
-  <h3>About</h3>
-  <p style="max-width:600px;">
-    {{ data?.fmpProfile?.description }}
-  </p>
+      <p><b>Dividend Yield:</b> 
+        {{ data?.metrics?.dividendYieldIndicatedAnnual ?? 'N/A' }}
+      </p>
+
+      <p><b>52 Week High:</b> {{ data?.metrics?.['52WeekHigh'] ?? 'N/A' }}</p>
+      <p><b>52 Week Low:</b> {{ data?.metrics?.['52WeekLow'] ?? 'N/A' }}</p>
+
+      <p><b>Avg Volume:</b> 
+        {{ data?.metrics?.['10DayAverageTradingVolume'] ?? 'N/A' }}
+      </p>
+    </div>
+
+    <!-- 📊 DAILY STATS -->
+    <div class="section">
+      <h3>Daily Stats</h3>
+
+      <p><b>Current Price:</b> {{ data?.quote?.c ?? 'N/A' }}</p>
+      <p><b>High Today:</b> {{ data?.quote?.h ?? 'N/A' }}</p>
+      <p><b>Low Today:</b> {{ data?.quote?.l ?? 'N/A' }}</p>
+      <p><b>Open:</b> {{ data?.quote?.o ?? 'N/A' }}</p>
+      <p><b>Previous Close:</b> {{ data?.quote?.pc ?? 'N/A' }}</p>
+    </div>
+
+  </div>
+
+  <!-- 📝 ABOUT -->
+  <div class="section about">
+    <h3>About</h3>
+
+    <p>
+      {{ data?.fmpProfile?.description ?? 'N/A' }}
+    </p>
+  </div>
 
 </div>

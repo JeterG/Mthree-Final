@@ -20,15 +20,7 @@
           placeholder="Email"
           name="email"
           [(ngModel)]="email"
-          required
-          email
-          #emailInput="ngModel"
         />
-        <div class="error">
-          <span *ngIf="emailInput.invalid && emailInput.touched">
-            Please enter a valid email
-          </span>
-        </div>
       </div>
 
       <!-- PASSWORD -->
@@ -38,26 +30,16 @@
           placeholder="Password"
           name="password"
           [(ngModel)]="password"
-          required
-          minlength="6"
-          #passwordInput="ngModel"
         />
-        <div class="error">
-          <span *ngIf="passwordInput.invalid && passwordInput.touched">
-            Password must be at least 6 characters
-          </span>
-        </div>
       </div>
 
-      <!-- 🔥 MESSAGE AREA (same as signup fix) -->
-      <div class="message-area">
-        <div class="error" *ngIf="errorMessage">
-          {{ errorMessage }}
-        </div>
-      </div>
+      <!-- 🔥 ERROR MESSAGE (ONLY AFTER FAILED LOGIN) -->
+      <div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+</div>
 
       <!-- BUTTON -->
-      <button type="submit" [disabled]="loginForm.invalid">
+      <button type="submit">
         Login
       </button>
 

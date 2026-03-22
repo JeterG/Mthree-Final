@@ -2,11 +2,16 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../services/api.services';
+import { StockChartComponent } from '../stock-chart.component/stock-chart.component';
 @Component({
   selector: 'app-stock-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    StockChartComponent
+  ],
   templateUrl: './stock-page.html',
+  styleUrls: ['./stock-page.css'] // 🔥 ADD THIS
 })
 export class StockPageComponent implements OnInit {
   symbol: string = '';

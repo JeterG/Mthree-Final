@@ -24,6 +24,16 @@ export class ProfileComponent implements OnInit {
   // 🔥 MODAL STATE
   showOnboardingModal: boolean = false;
   currentStep: number = 0;
+showNameSuccess = false;
+nameSuccessTimeout: any;
+showOnboardingSuccess = false;
+onboardingSuccessTimeout: any;
+selectedEmoji = '🙂';   // saved (real)
+tempEmoji = '🙂';       // preview
+emojis = ['🙂','😎','🔥','🚀','💰','📈','📊','🐂','🐻','🧠','💡'];
+
+showEmojiSuccess = false;
+emojiTimeout: any;
 
   // 🔥 OPTIONS
   experienceOptions: string[] = [
@@ -65,9 +75,15 @@ export class ProfileComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
-  ngOnInit(): void {
-    this.loadProfile();
+ngOnInit() {
+  const savedEmoji = localStorage.getItem('userEmoji');
+  if (savedEmoji) {
+    this.selectedEmoji = savedEmoji;
+    this.tempEmoji = savedEmoji;
   }
+
+  this.loadProfile();
+}
 
   loadProfile() {
     this.api.get<any>('/api/account/me').subscribe({
@@ -85,23 +101,33 @@ export class ProfileComponent implements OnInit {
     this.email = localStorage.getItem('email') || '';
   }
 
-  // 🔥 UPDATE NAME
-  updateName() {
-    this.nameSuccessMessage = '';
 
-    this.api.put('/api/account/update-name', {
-      firstName: this.firstName,
-      lastName: this.lastName
-    }).subscribe({
-      next: () => {
-        this.nameSuccessMessage = 'Name updated successfully';
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Failed to update name:', err);
+updateName() {
+  this.showNameSuccess = false;
+
+  this.api.put('/api/account/update-name', {
+    firstName: this.firstName,
+    lastName: this.lastName
+  }).subscribe({
+    next: () => {
+      this.showNameSuccess = true;
+
+      if (this.nameSuccessTimeout) {
+        clearTimeout(this.nameSuccessTimeout);
       }
-    });
-  }
+
+      this.cdr.detectChanges();
+
+      this.nameSuccessTimeout = setTimeout(() => {
+        this.showNameSuccess = false;
+        this.cdr.detectChanges();
+      }, 1500);
+    },
+    error: (err) => {
+      console.error('Failed to update name:', err);
+    }
+  });
+}
 
   // 🔥 OPEN MODAL
   openOnboarding() {
@@ -129,16 +155,51 @@ export class ProfileComponent implements OnInit {
   }
 
   // 🔥 FINISH ONBOARDING
-  finishOnboarding() {
-    console.log('Onboarding answers:', this.onboardingData);
+finishOnboarding() {
+  // whatever logic you already have (saving data, etc.)
 
-    this.showOnboardingModal = false;
+  this.showOnboardingModal = false; // 🔥 CLOSE MODAL
 
-    this.onboardingSuccessMessage = 'Trading preferences saved successfully';
-    this.cdr.detectChanges();
+  // success message logic
+  this.showOnboardingSuccess = true;
+
+  if (this.onboardingSuccessTimeout) {
+    clearTimeout(this.onboardingSuccessTimeout);
   }
+
+  this.cdr.detectChanges();
+
+  this.onboardingSuccessTimeout = setTimeout(() => {
+    this.showOnboardingSuccess = false;
+    this.cdr.detectChanges();
+  }, 1500);
+}
+
   clearMessages() {
-  this.nameSuccessMessage = '';
-  this.onboardingSuccessMessage = '';
+    this.nameSuccessMessage = '';
+    this.onboardingSuccessMessage = '';
+  }
+
+selectEmoji(emoji: string) {
+  this.tempEmoji = emoji; // 🔥 ONLY preview
+}
+
+saveEmoji() {
+  this.selectedEmoji = this.tempEmoji; // 🔥 APPLY change
+
+  localStorage.setItem('userEmoji', this.selectedEmoji);
+
+  this.showEmojiSuccess = true;
+
+  if (this.emojiTimeout) {
+    clearTimeout(this.emojiTimeout);
+  }
+
+  this.cdr.detectChanges();
+
+  this.emojiTimeout = setTimeout(() => {
+    this.showEmojiSuccess = false;
+    this.cdr.detectChanges();
+  }, 1500);
 }
 }

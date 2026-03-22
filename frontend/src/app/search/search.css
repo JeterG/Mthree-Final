@@ -1,17 +1,145 @@
-.chart-container {
-  max-width: 600px;
-  margin: 0 auto;
-  margin-bottom: 40px;
+/* =========================
+   🌍 PAGE
+========================= */
+
+
+/* =========================
+   🔍 SEARCH
+========================= */
+.search-wrapper {
+  max-width: 700px; /* tighter, cleaner */
+  margin: 0 auto 40px auto;
 }
 
-/* Buttons match homepage */
+.container app-stock-search {
+  display: block;
+}
+
+/* =========================
+   💡 SUGGESTIONS
+========================= */
+.suggestions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  margin: 10px 0 50px;
+  color: #ccc;
+}
+
+.suggestions button {
+  background: #2a2a2a;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.suggestions button:hover {
+  background: orange;
+  color: black;
+}
+
+/* =========================
+   🔥 MAIN LAYOUT
+========================= */
+.content-wrapper {
+  max-width: 1000px;   /* 🔥 fixes visual centering */
+  margin: 0 auto;
+}
+
+.content-row {
+  display: flex;
+  gap: 60px;           /* cleaner spacing */
+  align-items: flex-start;
+}
+
+/* =========================
+   📊 CHART
+========================= */
+.chart-container {
+  flex: 1.4;           /* 🔥 balances visual weight */
+  max-width: 650px;
+}
+.chart-container .card {
+  background: #ffffff; /* white card */
+  border: none;        /* 🔥 removes black outline */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* clean soft shadow */
+}
+
+/* =========================
+   📘 INFO PANEL
+========================= */
+.info-panel {
+  flex: 1;
+  max-width: 350px;
+
+  background: #ffffff; /* clean white */
+  padding: 20px;
+  border-radius: 10px;
+
+  color: #111; /* 🔥 default readable text */
+  border: 1px solid #ddd; /* subtle border */
+}
+
+.info-panel h4 {
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.info-panel ul {
+  padding-left: 18px;
+  margin-top: 10px;
+}
+
+.info-panel li {
+  margin-bottom: 8px;
+}
+
+.tip {
+  margin-top: 12px;
+  color: #ff9800;
+  font-weight: 500;
+}
+
+/* =========================
+   🎴 CARDS
+========================= */
+.card {
+  background: #1e1e1e;
+  border-radius: 10px;
+}
+
+/* =========================
+   🔘 BUTTONS
+========================= */
 .btn {
   border-radius: 6px;
   padding: 6px 12px;
 }
 
-/* Optional: spacing polish */
+/* =========================
+   🧼 TYPOGRAPHY
+========================= */
 h2 {
-  margin-bottom: 12px;
+  margin-bottom: 15px;
 }
 
+
+.suggestions {
+  color: #555;
+}
+
+.suggestions button {
+  background: #f0f0f0;
+  color: #111;
+  border: 1px solid #ddd;
+}
+
+.suggestions button:hover {
+  background: #ff9800;
+  color: black;
+}

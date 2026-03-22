@@ -21,6 +21,12 @@ symbols = [
   { name: 'Dow Jones', symbol: 'DIA' },
 ];
 
+topMoverSymbols = ['AAPL','TSLA','NVDA','AMZN','META','NFLX'];
+topWinners: any[] = [];
+topLosers: any[] = [];
+
+selectedMoverType: 'winners' | 'losers' = 'winners';
+
   isMarketOpen: boolean = false;
   marketStatus: string = '';
   countdown: string = '';
@@ -63,6 +69,7 @@ symbols = [
     });
 
     this.startMarketTimer();
+    this.loadTopMovers();
   }
 
   ngOnDestroy(): void {
@@ -80,6 +87,52 @@ symbols = [
       this.cdr.detectChanges();
     }, 1000);
   }
+async loadTopMovers() {
+
+  const cached = localStorage.getItem('topMovers');
+
+  if (cached) {
+    const parsed = JSON.parse(cached);
+
+const now = Date.now();
+const cacheAge = now - parsed.timestamp;
+
+// ✅ 48 HOURS CACHE
+if (cacheAge < 48 * 60 * 60 * 1000) {
+  this.topWinners = parsed.winners;
+  this.topLosers = parsed.losers;
+  return;
+}
+  }
+
+  const results: any[] = [];
+
+  for (const symbol of this.topMoverSymbols) {
+    const res = await fetch(`http://localhost:8080/api/market/history/${symbol}`);
+    const data = await res.json();
+
+    if (data.length > 1) {
+      const start = data[0].close;
+      const end = data[data.length - 1].close;
+
+      const change = ((end - start) / start) * 100;
+
+      results.push({ symbol, change });
+    }
+  }
+
+  results.sort((a, b) => b.change - a.change);
+
+  this.topWinners = results.slice(0, 3);
+  this.topLosers = results.slice(-3).reverse();
+
+  // ✅ SAVE WITH TIMESTAMP
+  localStorage.setItem('topMovers', JSON.stringify({
+    winners: this.topWinners,
+    losers: this.topLosers,
+    timestamp: Date.now()
+  }));
+}
 
   updateMarketTime(userTimezone: string) {
     const now = new Date();
@@ -181,4 +234,12 @@ symbols = [
 
     alert(`💰 Confidence boost level +1!\nCurrent confidence level: ${this.wealthLevel}`);
   }
+getBarWidth(change: number): number {
+  const max = 50; // max expected % range
+  const normalized = Math.min(Math.abs(change), max);
+
+  return (normalized / max) * 85; 
+  // 🔥 85% instead of 100% → leaves space for %
+}
+  
 }

@@ -13,7 +13,8 @@ import com.sakib_jeter.backend.service.JwtService;
 import com.sakib_jeter.backend.service.SignupService;
 
 import jakarta.validation.Valid;
-
+import com.sakib_jeter.backend.dto.ChangePasswordRequest;
+import org.springframework.web.bind.annotation.RequestHeader;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -49,4 +50,17 @@ public class AuthController {
                 "userId", userId,
                 "email", request.getEmail()));
     }
+    @PostMapping("/change-password")
+public ResponseEntity<String> changePassword(
+        @RequestBody ChangePasswordRequest request,
+        @RequestHeader("Authorization") String authHeader) {
+
+    service.changePassword(
+        authHeader,
+        request.getCurrentPassword(),
+        request.getNewPassword()
+    );
+
+    return ResponseEntity.ok("Password updated successfully");
+}
 }
