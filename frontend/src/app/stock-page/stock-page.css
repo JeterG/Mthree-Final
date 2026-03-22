@@ -112,6 +112,33 @@
   padding: 40px;
 }
 
+/* 🌙 DARK MODE TITLE FIX */
+:host-context(.dark-mode) .stock-title {
+  color: #ffffff !important;
+}
+
+/* 🌙 DARK MODE — ALL SECTION CARDS */
+:host-context(.dark-mode) .section {
+  background: #1e1e1e !important;   /* dark card */
+  color: #ffffff !important;        /* main text */
+}
+
+/* 🔥 HEADINGS (Company Info, Key Stats, etc.) */
+:host-context(.dark-mode) .section h3 {
+  color: orange !important;         /* keep your orange theme */
+}
+
+/* 🔥 BODY TEXT */
+:host-context(.dark-mode) .section p,
+:host-context(.dark-mode) .section b {
+  color: #ffffff !important;
+}
+
+/* 🔥 OPTIONAL: softer secondary text */
+:host-context(.dark-mode) .section p {
+  color: #dddddd !important;
+}
+
 /* =========================
    📱 MOBILE
 ========================= */
