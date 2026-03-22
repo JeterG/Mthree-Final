@@ -1,32 +1,46 @@
-<div class="market-container">
+<div class="chart-container">
 
-  <h2>Market Overview</h2>
-<div class="range-tabs">
-  <button
-    *ngFor="let r of ranges"
-    [class.active]="activeRange === r"
-    (click)="selectRange(r)">
-    {{ r }}
-  </button>
-</div>
-  <!-- 🔹 Tabs -->
-  <div class="tabs">
-    <button 
+  <!-- 🔥 INDEX SELECTOR -->
+  <div class="d-flex gap-2 mb-3">
+    <button
       *ngFor="let index of indexes"
-      (click)="selectIndex(index.symbol)">
+      type="button"
+      class="btn"
+      [ngClass]="selectedSymbol === index.symbol ? 'btn-secondary' : 'btn-light'"
+      (click)="selectIndex(index.symbol)"
+    >
       {{ index.name }}
     </button>
   </div>
 
-  <!-- 🔹 Chart -->
-  <div class="card">
-    <h3>
-  {{ indexes.find(i => i.symbol === selectedSymbol)?.name }}
-</h3>
+  <!-- 🔥 CARD -->
+  <div class="card custom-card shadow-sm p-3">
 
+    <!-- 🔥 TITLE -->
+    <h5 class="fw-bold mb-2 text-center">
+      {{ indexes.find(i => i.symbol === selectedSymbol)?.name }}
+    </h5>
+
+    <!-- 🔥 RANGE BUTTONS (FIXED ALIGNMENT) -->
+    <div class="w-100 d-flex justify-content-start mb-3">
+      <div class="btn-group" role="group">
+        <button
+          *ngFor="let r of ranges"
+          type="button"
+          class="btn btn-sm"
+          [ngClass]="activeRange === r ? 'btn-dark' : 'btn-outline-secondary'"
+          (click)="selectRange(r)"
+        >
+          {{ r }}
+        </button>
+      </div>
+    </div>
+
+    <!-- 🔥 CHART -->
     <div class="chart-wrapper">
       <canvas id="mainChart"></canvas>
     </div>
+
   </div>
 
 </div>

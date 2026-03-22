@@ -27,7 +27,7 @@ public class MarketService {
     private String fmpBaseUrl;
     // Stocks shown in the ticker
     private static final String[] TICKER_SYMBOLS = {
-            "AAPL", "AMZN", "GOOGL", "JPM", "META", "MSFT", "NVDA", "TSLA", "V", "WMT"
+            "AAPL", "AMZN", "GOOGL", "JPM", "META", "MSFT", "NVDA", "TSLA", "V", "WMT", "SPY", "QQQ", "DIA"
     };
 
     public MarketService(StockCacheRepository stockCacheRepository) {

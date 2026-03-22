@@ -13,18 +13,30 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./home.css'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  selectedSymbol: string = 'AAPL';
-  symbols = ['AAPL', 'NVDA', 'MSFT', 'TSLA'];
+  selectedSymbol: string = 'SPY';
+
+symbols = [
+  { name: 'S&P 500', symbol: 'SPY' },
+  { name: 'Nasdaq', symbol: 'QQQ' },
+  { name: 'Dow Jones', symbol: 'DIA' },
+];
 
   isMarketOpen: boolean = false;
   marketStatus: string = '';
   countdown: string = '';
-  marketTimeDisplay: string = ''; // 🔥 NEW
+
+  marketTimeDisplay: string = ''; // ⏰ time
+  marketDayDisplay: string = '';  // 📅 day
 
   intervalId: any;
 
   currentTimezone: string = 'America/New_York';
   timezoneSub!: Subscription;
+
+  // 🔥 NEW: Gamification Levels
+  investingLevel: number = 0;
+  learningLevel: number = 0;
+  wealthLevel: number = 0;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -36,7 +48,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // 🔥 Subscribe to timezone changes
+    // 🔥 Load saved levels (optional but recommended)
+    this.investingLevel = Number(localStorage.getItem('investing')) || 0;
+    this.learningLevel = Number(localStorage.getItem('learning')) || 0;
+    this.wealthLevel = Number(localStorage.getItem('wealth')) || 0;
+
+    // 🔥 Timezone subscription
     this.timezoneSub = this.timezoneService.timezone$.subscribe((tz) => {
       console.log('timezone updated:', tz);
       this.currentTimezone = tz;
@@ -67,16 +84,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   updateMarketTime(userTimezone: string) {
     const now = new Date();
 
-    // Market logic always in ET
+    // Always calculate market logic in ET
     const nowET = new Date(
       now.toLocaleString('en-US', { timeZone: 'America/New_York' })
     );
 
     const day = nowET.getDay();
 
+    let targetTime: Date;
+
     // 🟡 WEEKEND
     if (day === 0 || day === 6) {
-      this.marketStatus = 'Market closed (Weekend)';
       this.isMarketOpen = false;
 
       const nextMonday = new Date(nowET);
@@ -84,57 +102,47 @@ export class HomeComponent implements OnInit, OnDestroy {
       nextMonday.setDate(nowET.getDate() + daysUntilMonday);
       nextMonday.setHours(9, 30, 0, 0);
 
-      const diff = nextMonday.getTime() - nowET.getTime();
-      this.countdown = this.formatTime(diff);
-
-      // 🔥 Display local time
-      const targetUser = new Date(
-        nextMonday.toLocaleString('en-US', { timeZone: userTimezone })
-      );
-
-      this.marketTimeDisplay = targetUser.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-
-      return;
-    }
-
-    const openET = new Date(nowET);
-    openET.setHours(9, 30, 0, 0);
-
-    const closeET = new Date(nowET);
-    closeET.setHours(16, 0, 0, 0);
-
-    let targetTime: Date;
-
-    if (nowET < openET) {
-      this.marketStatus = 'Market opens in';
-      this.isMarketOpen = false;
-      targetTime = openET;
-
-    } else if (nowET >= openET && nowET < closeET) {
-      this.marketStatus = 'Market closes in';
-      this.isMarketOpen = true;
-      targetTime = closeET;
+      targetTime = nextMonday;
 
     } else {
-      this.marketStatus = 'Market opens in';
-      this.isMarketOpen = false;
+      const openET = new Date(nowET);
+      openET.setHours(9, 30, 0, 0);
 
-      const nextOpen = new Date(openET);
-      nextOpen.setDate(nextOpen.getDate() + 1);
-      targetTime = nextOpen;
+      const closeET = new Date(nowET);
+      closeET.setHours(16, 0, 0, 0);
+
+      if (nowET < openET) {
+        this.isMarketOpen = false;
+        targetTime = openET;
+
+      } else if (nowET >= openET && nowET < closeET) {
+        this.isMarketOpen = true;
+        targetTime = closeET;
+
+      } else {
+        this.isMarketOpen = false;
+
+        const nextOpen = new Date(openET);
+        nextOpen.setDate(nextOpen.getDate() + 1);
+        targetTime = nextOpen;
+      }
     }
 
+    // ⏱ Countdown
     const diff = targetTime.getTime() - nowET.getTime();
     this.countdown = this.formatTime(diff);
 
-    // 🔥 Convert to user timezone for display
+    // 🌍 Convert to USER timezone
     const targetUser = new Date(
       targetTime.toLocaleString('en-US', { timeZone: userTimezone })
     );
 
+    // 📅 Day
+    this.marketDayDisplay = targetUser.toLocaleDateString('en-US', {
+      weekday: 'long',
+    });
+
+    // ⏰ Time
     this.marketTimeDisplay = targetUser.toLocaleTimeString([], {
       hour: '2-digit',
       minute: '2-digit',
@@ -149,5 +157,28 @@ export class HomeComponent implements OnInit, OnDestroy {
     const seconds = totalSeconds % 60;
 
     return `${hours}h ${minutes}m ${seconds}s`;
+  }
+
+  // 🔥 NEW: Click Handlers
+
+  increaseInvesting() {
+    this.investingLevel++;
+    localStorage.setItem('investing', this.investingLevel.toString());
+
+    alert(`📈 Investing level +1!\nCurrent investing level: ${this.investingLevel}`);
+  }
+
+  increaseLearning() {
+    this.learningLevel++;
+    localStorage.setItem('learning', this.learningLevel.toString());
+
+    alert(`🧠 Market knowledge level +1!\nCurrent market knowledge level: ${this.learningLevel}`);
+  }
+
+  increaseWealth() {
+    this.wealthLevel++;
+    localStorage.setItem('wealth', this.wealthLevel.toString());
+
+    alert(`💰 Confidence boost level +1!\nCurrent confidence level: ${this.wealthLevel}`);
   }
 }
