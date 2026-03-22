@@ -22,32 +22,68 @@
   margin: 0 auto 30px auto;
 }
 
+/* =========================
+   🔥 MARKET SECTION
+========================= */
 .market-section {
   display: flex;
   gap: 30px;
   justify-content: center;
-  align-items: stretch; /* ✅ keep this */
+  align-items: stretch;
 }
 
-/* 📊 CHART */
+/* =========================
+   📊 LEFT SIDE (CHART)
+========================= */
 .chart-area {
   flex: 2;
   max-width: 650px;
   width: 100%;
+  display: flex;
 }
 
-/* 📈 MOVERS CARD */
+/* 🔥 LEFT CARD WRAPPER */
+.card-wrapper {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* INNER LAYOUT */
+.chart-card-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* CHART FILL */
+.chart-card-inner app-stock-chart {
+  flex: 1;
+}
+
+/* =========================
+   📈 RIGHT SIDE (MOVERS)
+========================= */
 .movers-card {
-  width: 280px;
+  flex: 1;
+  max-width: 400px;
+
   background: #1e1e1e;
   padding: 16px;
   border-radius: 10px;
   color: white;
-  min-height: 100%;
+
+  display: flex;
+  flex-direction: column;
 }
 
-
-/* 🔘 TOGGLE */
+/* =========================
+   🔘 TOGGLE
+========================= */
 .toggle {
   display: flex;
   gap: 8px;
@@ -68,19 +104,15 @@
   color: black;
 }
 
-/* 📊 MOVERS LIST */
-.movers-card {
-  height: 100%;
-  min-height: 320px; /* 🔥 adjust based on your chart */
-}
-
+/* =========================
+   📊 MOVERS LIST
+========================= */
 .mover-header {
   display: flex;
   justify-content: space-between;
   margin-bottom: 4px;
 }
 
-/* 📊 BARS */
 .bar-fill-container {
   width: 100%;
 }
@@ -99,7 +131,6 @@
   background: #f44336;
 }
 
-/* % TEXT */
 .percent {
   font-size: 13px;
 }
@@ -112,7 +143,9 @@
   color: #f44336;
 }
 
-/* ⚡ GET STARTED */
+/* =========================
+   ⚡ GET STARTED
+========================= */
 .get-started {
   background: #1c1c1c;
   border-radius: 12px;
@@ -154,7 +187,9 @@
   justify-content: center;
 }
 
-/* 🎯 FEATURES */
+/* =========================
+   🎯 FEATURES
+========================= */
 .row.text-center {
   margin-top: 70px !important;
   margin-bottom: 70px !important;
@@ -185,7 +220,9 @@
   transform: scale(1.05);
 }
 
-/* 📦 CARDS */
+/* =========================
+   📦 GENERIC CARDS
+========================= */
 .card {
   margin-top: 30px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -215,7 +252,9 @@
   border: 1px solid rgba(255, 153, 0, 0.3);
 }
 
-/* 📋 TEXT */
+/* =========================
+   📋 TEXT
+========================= */
 ul li {
   line-height: 1.6;
 }
@@ -223,25 +262,6 @@ ul li {
 h5, h6 {
   margin-bottom: 10px;
 }
-
-.chart-area,
-.movers-card {
-  display: flex;
-  flex-direction: column;
-}
-
-.chart-area app-stock-chart {
-  flex: 1;
-}
-
-.movers-card {
-  width: 575px;
-  background: #1e1e1e;
-  padding: 16px;
-  border-radius: 10px;
-  color: white;
-
-  margin-top: 110px;
-
-  min-height: 350px; /* 🔥 increase this */
+.chart-card-inner app-stock-chart {
+  height: 50px; /* 🔥 key control */
 }

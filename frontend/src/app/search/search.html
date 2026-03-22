@@ -3,11 +3,33 @@
   <!-- 🔍 SEARCH -->
   <h2 class="mt-4 text-center">Search Stocks</h2>
 
-  <!-- 🔥 WRAPPED SEARCH (controls width + spacing) -->
+  <!-- 🔥 WRAPPED SEARCH -->
   <div class="search-wrapper">
+
+    <!-- 🔍 ICON -->
+    <span class="search-icon">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#111"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <circle cx="11" cy="11" r="8"></circle>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</span>
+
+    <!-- SEARCH COMPONENT -->
     <app-stock-search
+      class="search-input"
       (symbolSelected)="onSymbolSelected($event)">
     </app-stock-search>
+
   </div>
 
   <!-- 💡 SUGGESTED SEARCHES -->
@@ -23,7 +45,7 @@
   <!-- 🔥 SIDE-BY-SIDE SECTION -->
   <div class="content-row">
 
-    <!-- 📘 INFO PANEL (LEFT) -->
+    <!-- 📘 INFO PANEL -->
     <div class="info-panel">
 
       <h4>How to Use Search</h4>
@@ -43,7 +65,7 @@
 
     </div>
 
-    <!-- 📈 POPULAR STOCKS (RIGHT) -->
+    <!-- 📈 POPULAR STOCKS -->
     <div class="chart-container">
 
       <h5 class="fw-bold mb-3 text-center">

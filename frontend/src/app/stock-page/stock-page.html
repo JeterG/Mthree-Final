@@ -13,7 +13,7 @@
       class="stock-logo"
     />
 
-    <h2>
+    <h2 class="stock-title">
       {{ (data?.fmpProfile?.companyName ?? data?.profile?.name) ?? 'N/A' }}
       ({{ symbol }})
     </h2>
@@ -39,7 +39,6 @@
 
       <p><b>CEO:</b> {{ data?.fmpProfile?.ceo ?? 'N/A' }}</p>
       <p><b>Employees:</b> {{ data?.fmpProfile?.fullTimeEmployees ?? 'N/A' }}</p>
-      <p><b>Exchange:</b> {{ data?.fmpProfile?.exchangeShortName ?? 'N/A' }}</p>
 
       <p><b>Address:</b><br>
         {{
@@ -96,7 +95,7 @@
 
   <!-- 📝 ABOUT -->
   <div class="section about">
-    <h3>About</h3>
+    <h3>About This Company</h3>
 
     <p>
       {{ data?.fmpProfile?.description ?? 'N/A' }}

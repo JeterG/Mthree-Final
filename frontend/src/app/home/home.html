@@ -23,27 +23,30 @@
   <div class="market-section">
 
     <!-- LEFT: CHART -->
-    <div class="chart-area">
+<!-- LEFT: CHART -->
+<div class="chart-area card-wrapper">
 
-      <h4 class="fw-bold mb-3 text-center">Market Overview</h4>
+  <div class="chart-card-inner">
 
-      <div class="d-flex gap-2 mb-3">
-        <button
-          *ngFor="let s of symbols"
-          type="button"
-          class="btn"
-          [ngClass]="selectedSymbol === s.symbol ? 'btn-secondary' : 'btn-light'"
-          (click)="selectSymbol(s.symbol)"
-        >
-          {{ s.name }}
-        </button>
-      </div>
+    <h4 class="fw-bold mb-3 text-center">Market Overview</h4>
 
-      
-
-      <app-stock-chart [symbol]="selectedSymbol"></app-stock-chart>
-      
+    <div class="d-flex gap-2 mb-3">
+      <button
+        *ngFor="let s of symbols"
+        type="button"
+        class="btn"
+        [ngClass]="selectedSymbol === s.symbol ? 'btn-secondary' : 'btn-light'"
+        (click)="selectSymbol(s.symbol)"
+      >
+        {{ s.name }}
+      </button>
     </div>
+
+    <app-stock-chart [symbol]="selectedSymbol"></app-stock-chart>
+
+  </div>
+
+</div>
 
     <!-- RIGHT: TOP MOVERS -->
     <div class="movers-card">

@@ -21,7 +21,12 @@ symbols = [
   { name: 'Dow Jones', symbol: 'DIA' },
 ];
 
-topMoverSymbols = ['AAPL','TSLA','NVDA','AMZN','META','NFLX'];
+topMoverSymbols = [
+  'AAPL', 'TSLA', 'NVDA', 'AMZN', 'META', 'NFLX',
+  'MSFT', 'GOOGL', 'AMD', 'INTC', 'BA',
+  'JPM', 'XOM', 'PLTR', 'COIN', 'SHOP',
+  'SMCI', 'RIVN', 'SNOW', 'UBER', 'ROKU'
+];
 topWinners: any[] = [];
 topLosers: any[] = [];
 
@@ -107,24 +112,28 @@ if (cacheAge < 48 * 60 * 60 * 1000) {
 
   const results: any[] = [];
 
-  for (const symbol of this.topMoverSymbols) {
-    const res = await fetch(`http://localhost:8080/api/market/history/${symbol}`);
-    const data = await res.json();
+for (const symbol of this.topMoverSymbols) {
+  const res = await fetch(`http://localhost:8080/api/market/history/${symbol}`);
+  const data = await res.json();
 
-    if (data.length > 1) {
-      const start = data[0].close;
-      const end = data[data.length - 1].close;
+  if (data.length < 2) continue;
 
-      const change = ((end - start) / start) * 100;
+  const recent = data.slice(-28);
 
-      results.push({ symbol, change });
-    }
-  }
+  if (recent.length < 2) continue;
+
+  const start = recent[0].close;
+  const end = recent[recent.length - 1].close;
+
+  const change = ((end - start) / start) * 100;
+
+  results.push({ symbol, change });
+}
 
   results.sort((a, b) => b.change - a.change);
 
-  this.topWinners = results.slice(0, 3);
-  this.topLosers = results.slice(-3).reverse();
+this.topWinners = results.slice(0, 5);
+this.topLosers = results.slice(-5).reverse();
 
   // ✅ SAVE WITH TIMESTAMP
   localStorage.setItem('topMovers', JSON.stringify({
