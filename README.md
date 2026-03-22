@@ -25,37 +25,37 @@ Final Capstone Project for Sakib and Jeter
 
 ### 2. Angular Frontend Implementation — 5 marks
 
-- [ ] Components
-- [ ] Services
-- [ ] Routing
-- [ ] Forms
-- [ ] Data binding
-- [ ] UI design
+- [x] Components
+- [x] Services
+- [x] Routing
+- [x] Forms
+- [x] Data binding
+- [x] UI design
 
 ---
 
 ### 3. Spring Boot Backend Implementation — 5 marks
 
-- [ ] Proper REST API design
-- [ ] Controllers
-- [ ] Service layer
-- [ ] Dependency injection
+- [x] Proper REST API design
+- [x] Controllers
+- [x] Service layer
+- [x] Dependency injection
 - [ ] Correct use of Spring Boot features
 
 ---
 
 ### 4. Database Design (MySQL) — 3 marks
 
-- [ ] Proper table structure
-- [ ] Relationships
-- [ ] Normalization
-- [ ] Correct database connectivity with Spring Boot
+- [x] Proper table structure
+- [x] Relationships
+- [x] Normalization
+- [x] Correct database connectivity with Spring Boot
 
 ---
 
 ### 5. Integration (Frontend ↔ Backend) — 3 marks
 
-- [ ] Angular communicating with Spring Boot APIs using HTTP requests
+- [x] Angular communicating with Spring Boot APIs using HTTP requests
 - [ ] Handling responses correctly
 
 ---
@@ -63,23 +63,23 @@ Final Capstone Project for Sakib and Jeter
 ### 6. Functionality — 5 marks
 
 - [ ] Application correctly performs all operations
-- [ ] Proper validations
+- [x] Proper validations
 
 ---
 
 ### 7. Code Quality & Project Structure — 1 mark
 
-- [ ] Clean code
+- [x] Clean code
 - [ ] Proper folder structure
-- [ ] Naming conventions
-- [ ] Readability
+- [x] Naming conventions
+- [x] Readability
 
 ---
 
 ### 8. Presentation & Explanation — 1 mark
 
-- [ ] Ability to explain project workflow and architecture
-- [ ] Able to answer questions confidently
+- [x] Ability to explain project workflow and architecture
+- [x] Able to answer questions confidently
 
 ---
 
