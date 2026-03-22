@@ -44,7 +44,7 @@
 
 /* 🔥 LEFT CARD WRAPPER */
 .card-wrapper {
-  background: #ffffff;
+  background: inherit;
   border-radius: 12px;
   padding: 16px;
   width: 100%;
@@ -265,3 +265,4 @@ h5, h6 {
 .chart-card-inner app-stock-chart {
   height: 50px; /* 🔥 key control */
 }
+

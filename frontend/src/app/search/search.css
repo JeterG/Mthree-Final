@@ -74,6 +74,7 @@
   align-items: flex-start;
 }
 
+
 /* =========================
    📊 CHART
 ========================= */
@@ -100,12 +101,14 @@
   border-radius: 10px;
 
   color: #111;
-  border: 1px solid #ddd;
+  box-shadow: 0 0 0 2px orange;
+
 }
 
 .info-panel h4 {
   color: #000;
   margin-bottom: 10px;
+  text-decoration: underline;
 }
 
 .info-panel ul {
@@ -119,7 +122,7 @@
 
 .tip {
   margin-top: 12px;
-  color: #ff9800;
+  color: black;
   font-weight: bold;
 }
 
