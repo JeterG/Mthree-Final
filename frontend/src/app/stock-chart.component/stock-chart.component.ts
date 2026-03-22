@@ -128,8 +128,7 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
 
     switch (range) {
       case '1D':
-        cutoff = new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000);
-        break;
+        return data.slice(-1); // or last 2 for slight movement
       case '1W':
         cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
         break;
