@@ -48,6 +48,7 @@ export class BuyComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['symbol'] && this.symbol) {
       this.resetMessages();
+      this.quantity = 1;
       this.loadPrice(this.symbol);
     }
   }
