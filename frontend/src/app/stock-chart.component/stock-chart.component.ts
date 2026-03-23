@@ -79,6 +79,7 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
 
   ngAfterViewInit(): void {
     setTimeout(() => {
+      if (this.chartMode === 'projection') return;
       if (this.data.length > 0) {
         this.allHistory = this.data;
         this.renderPortfolioChart(this.data);
@@ -95,7 +96,10 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] && this.data.length > 0) {
       this.allHistory = this.data;
-      setTimeout(() => this.renderPortfolioChart(this.data), 100);
+      // Don't re-render if projection is active — it would wipe the projection chart
+      if (this.chartMode !== 'projection') {
+        setTimeout(() => this.renderPortfolioChart(this.data), 100);
+      }
       return;
     }
     if (changes['symbol'] && !changes['symbol'].firstChange && this.symbol) {
@@ -343,7 +347,10 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
     const histLabels = portfolioHistory.map((d) => d.date.split('T')[0]);
     const histValues = portfolioHistory.map((d) => +d.close);
 
-    // Right side: project forward from today
+    // Current actual value of selected holdings = lastPrice * quantity (today's value)
+    const currentHoldingsValue = symbolData.reduce((sum, s) => sum + s.lastPrice * s.quantity, 0);
+
+    // Right side: project forward from today using actual prices * quantities
     const today = new Date();
     const projLabels: string[] = [];
     const projValues: number[] = [];
@@ -361,25 +368,24 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
       projValues.push(+total.toFixed(2));
     }
 
-    // Scale projection to start from actual current portfolio value
-    const currentValue = histValues.length ? histValues[histValues.length - 1] : 0;
-    const currentProjectedBase = symbolData.reduce((sum, s) => sum + s.lastPrice * s.quantity, 0);
-    const scaledProjValues = projValues.map((v) =>
-      currentProjectedBase > 0 ? +(currentValue * (v / currentProjectedBase)).toFixed(2) : v,
-    );
+    // Left side: scale transaction history so it ends at currentHoldingsValue
+    // This keeps the left line shape but joins correctly with the projection
+    const rawLastHist = histValues.length ? histValues[histValues.length - 1] : 0;
+    const histScale = rawLastHist > 0 ? currentHoldingsValue / rawLastHist : 1;
+    const scaledHistValues = histValues.map((v) => +(v * histScale).toFixed(2));
 
-    const allLabels = [...histLabels, ...projLabels];
-    const solidData: (number | null)[] = [...histValues, ...projLabels.map(() => null)];
-    const dashedData: (number | null)[] = [
-      ...histValues.map((v, i) => (i === histValues.length - 1 ? v : null)),
-      ...scaledProjValues,
-    ];
-
-    const lastHist = histValues[histValues.length - 1] ?? 0;
-    const lastProj = scaledProjValues[scaledProjValues.length - 1] ?? lastHist;
+    const lastHist = currentHoldingsValue;
+    const lastProj = projValues[projValues.length - 1] ?? lastHist;
     const isGrowth = lastProj >= lastHist;
     const color = isGrowth ? '#43a047' : '#e53935';
     const bgColor = isGrowth ? 'rgba(67,160,71,0.08)' : 'rgba(229,57,53,0.08)';
+
+    const allLabels = [...histLabels, ...projLabels];
+    const solidData: (number | null)[] = [...scaledHistValues, ...projLabels.map(() => null)];
+    const dashedData: (number | null)[] = [
+      ...scaledHistValues.map((v, i) => (i === scaledHistValues.length - 1 ? v : null)),
+      ...projValues,
+    ];
 
     const pct = lastHist > 0 ? (((lastProj - lastHist) / lastHist) * 100).toFixed(2) : '0.00';
     const sign = +pct >= 0 ? '+' : '';
@@ -452,6 +458,7 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
             },
           },
         },
+        onClick: () => {},
         scales: {
           x: { ticks: { maxTicksLimit: 10, font: { size: 10 }, maxRotation: 30 } },
           y: {
@@ -468,10 +475,9 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
   // ── Standard chart methods ────────────────────────────────────
 
   selectRange(range: string): void {
+    if (this.chartMode === 'projection') return;
     this.activeRange = range;
-    if (this.chartMode === 'portfolio') {
-      this.renderPortfolioChart(this.filterByRange(this.allHistory, range));
-    }
+    this.renderPortfolioChart(this.filterByRange(this.allHistory, range));
   }
 
   loadData(symbol: string): void {
@@ -546,6 +552,7 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
   }
 
   renderPortfolioChart(data: any[]): void {
+    if (this.chartMode === 'projection') return;
     if (!this.chartRef?.nativeElement || !data.length) return;
 
     const labels = data.map((s) => s.date.split('T')[0]);
