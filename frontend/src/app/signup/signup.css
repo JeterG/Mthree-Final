@@ -19,21 +19,12 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  justify-content: flex-start;
 
   box-shadow:
     0 0 40px rgba(255, 165, 0, 0.08),
     0 10px 40px rgba(0, 0, 0, 0.8);
 
   border: 1px solid #222;
-}
-
-/* FORM */
-.login-card form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
 }
 
 /* LOGO */
@@ -44,7 +35,7 @@
 
 .logo-img {
   width: 150px;
-  height: 90px; /* forces vertical stretch */
+  height: 90px;
 }
 
 /* TITLE */
@@ -66,7 +57,7 @@
 .login-card input {
   width: 100%;
   padding: 12px;
-  margin-bottom: 4px; /*  slightly tighter */
+  margin-bottom: 6px;
   border-radius: 6px;
   border: 1px solid #333;
   background-color: #0d0d0d;
@@ -81,11 +72,42 @@
   box-shadow: 0 0 8px rgba(255, 165, 0, 0.4);
 }
 
+/* FORM GROUP */
+.form-group {
+  margin-bottom: 8px;
+}
+
+/* 🔥 MESSAGE AREA (FIXED) */
+.message-area {
+  min-height: 40px;           /* ensures space ALWAYS exists */
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;        /* center text */
+  justify-content: center;
+}
+
+/* ERROR */
+.error {
+  color: #ff6b6b;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* SUCCESS (ONLY ONE DEFINITION NOW) */
+.success {
+  color: #00ff88;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 5px;
+}
+
 /* BUTTON */
 .login-card button {
   width: 100%;
   padding: 12px;
-  margin-top: 6px; /*  closer to inputs */
+  margin-top: 10px;
   background: linear-gradient(90deg, orange, #ff9800);
   color: black;
   border: none;
@@ -123,31 +145,4 @@
   font-size: 11px;
   color: #666;
   text-align: center;
-}
-
-/* ERRORS */
-.error {
-  color: #ff6b6b;
-  font-size: 12px;
-  min-height: 14px;
-  margin-bottom: 2px;
-}
-
-/* SUCCESS */
-.success {
-  color: #4caf50;
-  font-size: 12px;
-  min-height: 14px;
-  margin-bottom: 4px;
-  display: block;
-}
-
-/* FORM GROUP */
-.form-group {
-  margin-bottom: 6px;
-}
-
-.message-area {
-  min-height: 0;
-  margin-bottom: 6px;
 }

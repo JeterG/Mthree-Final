@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ApiService } from '../services/api.services';
+
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -18,44 +19,57 @@ export class SignupComponent {
   errorMessage: string = '';
   successMessage: string = '';
 
+  isSubmitting: boolean = false;
+
   constructor(
     private api: ApiService,
-    private router: Router,
+    private cd: ChangeDetectorRef // 🔥 added
   ) {}
 
   signup() {
+    console.log('SIGNUP CALLED');
+
+    if (this.isSubmitting) return;
+    this.isSubmitting = true;
+
     this.errorMessage = '';
     this.successMessage = '';
 
-    // ✅ confirm password check
+    // password check
     if (this.password !== this.confirmPassword) {
       this.errorMessage = 'Passwords do not match';
+      this.isSubmitting = false;
       return;
     }
 
     this.api
       .post(
         '/api/auth/signup',
-
         {
           email: this.email,
           password: this.password,
         },
         {
-          responseType: 'text', // ✅ FIX: prevents Angular JSON parse error
-        },
+          responseType: 'text',
+        }
       )
       .subscribe({
         next: (res: any) => {
           console.log('SUCCESS HIT');
           console.log(res);
 
-          this.successMessage = 'Signup successful! Redirecting...';
+          // ✅ set message
+          this.successMessage = 'Account created successfully! You can now log in.';
 
-          // ✅ redirect to login
-          this.router.navigate(['/login']).then((success) => {
-            console.log('NAV RESULT:', success);
-          });
+          // 🔥 FORCE Angular to update UI immediately
+          this.cd.detectChanges();
+
+          // reset fields
+          this.email = '';
+          this.password = '';
+          this.confirmPassword = '';
+
+          this.isSubmitting = false;
         },
 
         error: (err) => {
@@ -65,6 +79,11 @@ export class SignupComponent {
             typeof err.error === 'string'
               ? err.error
               : 'Signup failed (maybe email already exists)';
+
+          this.isSubmitting = false;
+
+          // 🔥 also update UI on error
+          this.cd.detectChanges();
         },
       });
   }
