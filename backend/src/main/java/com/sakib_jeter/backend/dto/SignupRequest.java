@@ -10,10 +10,7 @@ public class SignupRequest {
     @NotBlank
     private String email;
 
-    @Pattern(
-        regexp = "^(?=.*[A-Z])(?=.*\\d).{6,}$",
-        message = "Password must be at least 6 characters, contain one uppercase letter and one number"
-    )
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d).{6,}$", message = "Password must be at least 6 characters, contain one uppercase letter and one number")
     @NotBlank
     private String password;
 

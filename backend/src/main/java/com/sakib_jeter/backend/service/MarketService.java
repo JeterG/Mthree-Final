@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import com.sakib_jeter.backend.entity.StockCache;
 import com.sakib_jeter.backend.repository.StockCacheRepository;
-import org.springframework.web.client.RestTemplate;
+
 @Service
 public class MarketService {
 
@@ -73,61 +75,57 @@ public class MarketService {
         ticker.put("changesPercentage", pct);
         return ticker;
     }
-public Map<String, Object> getStockDetails(String symbol) {
-    RestTemplate restTemplate = new RestTemplate();
 
-    // 🔹 QUOTE (daily stats)
-    String quoteUrl = "https://finnhub.io/api/v1/quote?symbol=" + symbol + "&token=" + finnhubKey;
-    Map<String, Object> quote = restTemplate.getForObject(quoteUrl, Map.class);
+    public Map<String, Object> getStockDetails(String symbol) {
+        RestTemplate restTemplate = new RestTemplate();
 
-    // 🔹 METRICS (key stats)
-    String metricUrl = "https://finnhub.io/api/v1/stock/metric?symbol=" + symbol + "&metric=all&token=" + finnhubKey;
-    Map<String, Object> metricResponse = restTemplate.getForObject(metricUrl, Map.class);
+        // QUOTE (daily stats)
+        String quoteUrl = "https://finnhub.io/api/v1/quote?symbol=" + symbol + "&token=" + finnhubKey;
+        Map<String, Object> quote = restTemplate.getForObject(quoteUrl, Map.class);
 
-    // 🔹 PROFILE (basic info)
-    String profileUrl = "https://finnhub.io/api/v1/stock/profile2?symbol=" + symbol + "&token=" + finnhubKey;
-    Map<String, Object> profile = restTemplate.getForObject(profileUrl, Map.class);
+        // METRICS (key stats)
+        String metricUrl = "https://finnhub.io/api/v1/stock/metric?symbol=" + symbol + "&metric=all&token="
+                + finnhubKey;
+        Map<String, Object> metricResponse = restTemplate.getForObject(metricUrl, Map.class);
 
-    // 🔹 FMP PROFILE (CEO, description, etc.)
+        // PROFILE (basic info)
+        String profileUrl = "https://finnhub.io/api/v1/stock/profile2?symbol=" + symbol + "&token=" + finnhubKey;
+        Map<String, Object> profile = restTemplate.getForObject(profileUrl, Map.class);
 
+        // FMP PROFILE (CEO, description, etc.)
 
-Map<String, Object> fmpProfile = null;
+        Map<String, Object> fmpProfile = null;
 
+        try {
+            String fmpUrl = fmpBaseUrl + "/profile?symbol=" + symbol + "&apikey=" + fmpApiKey;
 
+            Object response = restTemplate.getForObject(fmpUrl, Object.class);
 
-try {
-    String fmpUrl = fmpBaseUrl + "/profile?symbol=" + symbol + "&apikey=" + fmpApiKey;
+            if (response instanceof List<?>) {
+                List<?> list = (List<?>) response;
 
-    Object response = restTemplate.getForObject(fmpUrl, Object.class);
+                if (!list.isEmpty() && list.get(0) instanceof Map) {
+                    fmpProfile = (Map<String, Object>) list.get(0);
+                }
+            }
 
-    if (response instanceof List<?>) {
-        List<?> list = (List<?>) response;
-
-        if (!list.isEmpty() && list.get(0) instanceof Map) {
-            fmpProfile = (Map<String, Object>) list.get(0);
+        } catch (Exception e) {
+            System.out.println("FMP API FAILED: " + e.getMessage());
         }
+        // Extract metrics safely
+        Map<String, Object> metrics = null;
+        if (metricResponse != null && metricResponse.get("metric") != null) {
+            metrics = (Map<String, Object>) metricResponse.get("metric");
+        }
+
+        // Final response
+        Map<String, Object> result = new HashMap<>();
+        result.put("quote", quote);
+        result.put("metrics", metrics);
+        result.put("profile", profile);
+        result.put("fmpProfile", fmpProfile);
+
+        return result;
     }
 
-} catch (Exception e) {
-    System.out.println("FMP API FAILED: " + e.getMessage());
-}
-    // 🔹 Extract metrics safely
-    Map<String, Object> metrics = null;
-    if (metricResponse != null && metricResponse.get("metric") != null) {
-        metrics = (Map<String, Object>) metricResponse.get("metric");
-    }
-
-    // 🔹 Final response
-    Map<String, Object> result = new HashMap<>();
-    result.put("quote", quote);
-    result.put("metrics", metrics);
-    result.put("profile", profile);
-    result.put("fmpProfile", fmpProfile); // ✅ NEW
-
-    return result;
-}
-
-
-
-    
 }

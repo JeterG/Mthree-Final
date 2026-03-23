@@ -1,10 +1,17 @@
 package com.sakib_jeter.backend.entity;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 // Represents a user's current stock position
 // A holding is created on first buy and updated on every subsequent buy or sell
@@ -34,7 +41,8 @@ public class Holding {
     private BigDecimal quantity;
 
     // Weighted average of all buy prices for this symbol
-    // Recalculated on every buy using: (oldQty * oldAvg + newQty * newPrice) / (oldQty + newQty)
+    // Recalculated on every buy using: (oldQty * oldAvg + newQty * newPrice) /
+    // (oldQty + newQty)
     @Column(name = "avg_buy_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal avgBuyPrice;
 

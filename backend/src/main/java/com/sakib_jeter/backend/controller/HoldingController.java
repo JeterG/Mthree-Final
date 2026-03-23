@@ -6,7 +6,12 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.sakib_jeter.backend.entity.Holding;
 import com.sakib_jeter.backend.entity.Transaction;
@@ -49,10 +54,9 @@ public class HoldingController {
         return holdingService.getHoldingsByUser(userId);
     }
 
-    // ✅ FIXED BUY (no userId)
     @PostMapping("/buy")
     public ResponseEntity<Holding> buy(@RequestBody Map<String, Object> body,
-                                      Authentication authentication) {
+            Authentication authentication) {
 
         String email = authentication.getName();
 
@@ -63,14 +67,12 @@ public class HoldingController {
         BigDecimal quantity = new BigDecimal(body.get("quantity").toString());
 
         return ResponseEntity.ok(
-                holdingService.buyStock(user.getId(), symbol, quantity)
-        );
+                holdingService.buyStock(user.getId(), symbol, quantity));
     }
 
-    // ✅ FIXED SELL (no userId)
     @PostMapping("/sell")
     public ResponseEntity<Transaction> sell(@RequestBody Map<String, Object> body,
-                                           Authentication authentication) {
+            Authentication authentication) {
 
         String email = authentication.getName();
 
@@ -81,7 +83,6 @@ public class HoldingController {
         BigDecimal quantity = new BigDecimal(body.get("quantity").toString());
 
         return ResponseEntity.ok(
-                holdingService.sellStock(user.getId(), symbol, quantity)
-        );
+                holdingService.sellStock(user.getId(), symbol, quantity));
     }
 }

@@ -3,7 +3,12 @@ package com.sakib_jeter.backend.controller;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.sakib_jeter.backend.entity.Transaction;
 import com.sakib_jeter.backend.entity.User;
@@ -22,12 +27,12 @@ public class TransactionController {
     private final UserRepository userRepository;
 
     public TransactionController(TransactionService transactionService,
-                                 UserRepository userRepository) {
+            UserRepository userRepository) {
         this.transactionService = transactionService;
         this.userRepository = userRepository;
     }
 
-    // ✅ NEW JWT endpoint
+    // NEW JWT endpoint
     @Operation(summary = "Get current user's transactions")
     @GetMapping("/me")
     public List<Transaction> getMyTransactions(Authentication authentication) {
