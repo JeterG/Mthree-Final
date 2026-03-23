@@ -47,11 +47,30 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
   stockDetails: any = null;
 
   get marketCap(): string {
-    // Try FMP profile first (most accurate), then Finnhub metrics
-    const mc =
-      this.stockDetails?.fmpProfile?.mktCap ?? this.stockDetails?.metrics?.marketCapitalization;
-    if (!mc) return '';
-    const n = Number(mc);
+    const fmp = this.stockDetails?.fmpProfile;
+    const metrics = this.stockDetails?.metrics;
+
+    let raw: number | null = null;
+
+    if (fmp?.mktCap && Number(fmp.mktCap) > 0) {
+      raw = Number(fmp.mktCap);
+    } else if (fmp?.marketCap && Number(fmp.marketCap) > 0) {
+      raw = Number(fmp.marketCap);
+    } else if (metrics?.marketCapitalization && Number(metrics.marketCapitalization) > 0) {
+      raw = Number(metrics.marketCapitalization);
+    }
+
+    if (!raw || isNaN(raw)) return '';
+
+    // Normalize: if value looks like it's in millions (< 100_000_000 for a large cap)
+    // scale it up. AAPL ~$3.6T, TSLA ~$1.2T — raw should be > 1_000_000_000_000
+    // FMP returns full dollars, Finnhub returns millions
+    let n = raw;
+    if (n < 1_000_000_000) {
+      // Likely in millions — multiply up
+      n = raw * 1_000_000;
+    }
+
     if (n >= 1_000_000_000_000) return `$${(n / 1_000_000_000_000).toFixed(2)}T`;
     if (n >= 1_000_000_000) return `$${(n / 1_000_000_000).toFixed(2)}B`;
     if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(2)}M`;
