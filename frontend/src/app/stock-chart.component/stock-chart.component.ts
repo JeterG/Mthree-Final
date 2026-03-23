@@ -714,7 +714,7 @@ updateChartWithLatestPrice(symbol: string): void {
         this.chart.data.datasets[0].data.shift();
       }
 
-      this.chart.update('active');
+      this.chart.update();
     },
     error: (err) => console.error('Live update error:', err),
   });
@@ -758,7 +758,7 @@ updateChartWithLatestPrice(symbol: string): void {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        interaction: { mode: 'index', intersect: false },
+        interaction: { mode: 'nearest', intersect: false },
         plugins: {
           legend: { display: false },
           tooltip: {
