@@ -34,6 +34,7 @@ cleanup() {
     for sock in "/var/run/docker.sock" "$HOME/.docker/run/docker.sock"; do
         if [ -S "$sock" ]; then export DOCKER_HOST="unix://$sock"; break; fi
     done
+    # Stop containers but preserve named volumes and images
     docker compose down --timeout 10 2>/dev/null || true
     if [ -n "$(docker ps -q 2>/dev/null)" ]; then
         docker ps -q | xargs docker stop 2>/dev/null || true
@@ -56,7 +57,7 @@ cleanup() {
 
 trap cleanup INT TERM
 
-# ── Docker socket — try known Mac locations, auto-start if needed ──
+# ── Docker socket ──
 DOCKER_FOUND=false
 for sock in "/var/run/docker.sock" "$HOME/.docker/run/docker.sock" "$HOME/.docker/desktop/docker.sock"; do
     if [ -S "$sock" ]; then
@@ -94,7 +95,7 @@ if [ "$DOCKER_FOUND" = false ]; then
     exit 1
 fi
 
-# ── Hard reset all containers safely ──
+# ── Stop containers ──
 echo "🧹 Stopping any running containers..."
 RUNNING=$(docker ps -q 2>/dev/null)
 if [ -n "$RUNNING" ]; then
@@ -114,16 +115,22 @@ pkill -f "cloudflared tunnel" 2>/dev/null || true
 pkill -f "ngrok http" 2>/dev/null || true
 sleep 1
 
-# ── Reset DB ──
+# ── Reset DB — only wipes named volume when explicitly requested ──
 if [ "$RESET_DB" = true ]; then
-    echo "♻️  Resetting database volumes..."
-    docker compose down -v 2>/dev/null || true
-    echo "✅ Volumes wiped"
+    echo "♻️  Resetting database — removing named volume financeDb..."
+    docker volume rm financeDb 2>/dev/null || echo "  (volume didn't exist, skipping)"
+    echo "✅ Volume wiped — fresh database will be created on next start"
+else
+    echo "💾 Keeping existing financeDb volume (use --reset-db to wipe)"
 fi
+
+# ── Prune dangling images to avoid buildup ──
+echo "🧹 Pruning dangling images..."
+docker image prune -f 2>/dev/null || true
 
 rm -f "$CLOUDFLARE_LOG" "$NGROK_LOG"
 
-# ── STEP 1: Cloudflare — get URL first ──
+# ── STEP 1: Cloudflare ──
 echo "🚀 Starting Cloudflare tunnel..."
 cloudflared tunnel --url http://localhost:8080 > "$CLOUDFLARE_LOG" 2>&1 &
 CLOUDFLARE_PID=$!
@@ -142,7 +149,7 @@ if [ -z "$BACKEND_URL" ]; then
 fi
 echo "🌐 Cloudflare URL: $BACKEND_URL"
 
-# ── STEP 2: Patch .env and environment.ts before Docker builds ──
+# ── STEP 2: Patch .env and environment.ts ──
 if grep -q "^BACKEND_URL=" "$ROOT_ENV"; then
     sed -i '' "s|^BACKEND_URL=.*|BACKEND_URL=$BACKEND_URL|" "$ROOT_ENV"
 else
@@ -162,9 +169,13 @@ echo "🚀 Starting ngrok..."
 ngrok http --url=unflecked-rhamnaceous-lynne.ngrok-free.dev 4200 > "$NGROK_LOG" 2>&1 &
 NGROK_PID=$!
 
-# ── STEP 4: Docker ──
-echo "🐳 Starting Docker..."
+# ── STEP 4: Docker build and up ──
+echo "🐳 Building and starting Docker..."
 docker compose up --build -d --remove-orphans
+
+# ── Prune dangling images created by this build ──
+echo "🧹 Pruning dangling images from build..."
+docker image prune -f 2>/dev/null || true
 
 echo ""
 echo "✅ PRODUCTION ENVIRONMENT RUNNING"
