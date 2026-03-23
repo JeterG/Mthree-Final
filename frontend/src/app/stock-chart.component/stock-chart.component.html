@@ -184,24 +184,73 @@
 
   <!-- ── Symbol mode header ── -->
   <ng-container *ngIf="symbol && chartMode !== 'projection'">
-    <div class="d-flex align-items-center gap-3 mb-2">
-      <h5 class="mb-0 fw-bold">{{ symbol }}</h5>
-      <span class="fs-5 fw-semibold">${{ quoteData?.currentPrice || '--' }}</span>
-      <span
-        [ngClass]="
-          quoteData?.currentPrice - quoteData?.openPrice >= 0 ? 'text-success' : 'text-danger'
-        "
-      >
-        {{
-          quoteData?.openPrice
-            ? (
-                ((quoteData.currentPrice - quoteData.openPrice) / quoteData.openPrice) *
-                100
-              ).toFixed(2)
-            : '--'
-        }}%
+    <!-- Quote + Price/Volume toggle on same row -->
+    <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
+      <div class="d-flex align-items-center gap-3 flex-wrap">
+        <h5 class="mb-0 fw-bold">{{ symbol }}</h5>
+        <span class="fs-5 fw-semibold">${{ quoteData?.currentPrice || '--' }}</span>
+        <span
+          [ngClass]="
+            quoteData?.currentPrice - quoteData?.openPrice >= 0 ? 'text-success' : 'text-danger'
+          "
+        >
+          {{
+            quoteData?.openPrice
+              ? (
+                  ((quoteData.currentPrice - quoteData.openPrice) / quoteData.openPrice) *
+                  100
+                ).toFixed(2)
+              : '--'
+          }}%
+        </span>
+        <span *ngIf="todayVolume" class="text-muted small">
+          Vol: <strong style="color: rgba(0, 188, 212, 0.85)">{{ todayVolume }}</strong>
+        </span>
+        <span *ngIf="marketCap" class="text-muted small">
+          Mkt Cap: <strong>{{ marketCap }}</strong>
+        </span>
+      </div>
+
+      <!-- Price / Volume toggle -->
+      <div class="btn-group btn-group-sm" role="group">
+        <button
+          type="button"
+          class="btn"
+          [ngClass]="chartView === 'price' ? 'btn-dark' : 'btn-outline-secondary'"
+          (click)="setChartView('price')"
+        >
+          Price
+        </button>
+        <button
+          type="button"
+          class="btn"
+          [ngClass]="chartView === 'volume' ? 'btn-outline-info' : 'btn-outline-secondary'"
+          (click)="setChartView('volume')"
+        >
+          Volume
+        </button>
+      </div>
+    </div>
+
+    <!-- Volume stat row when in volume view -->
+    <div *ngIf="chartView === 'volume' && quoteData?.volume" class="mb-2">
+      <span class="text-muted small"
+        >Today's Volume:
+        <strong style="color: rgba(0, 188, 212, 0.9)">
+          {{
+            quoteData.volume >= 1000000000
+              ? (quoteData.volume / 1000000000).toFixed(1) + 'B'
+              : quoteData.volume >= 1000000
+                ? (quoteData.volume / 1000000).toFixed(1) + 'M'
+                : quoteData.volume >= 1000
+                  ? (quoteData.volume / 1000).toFixed(0) + 'K'
+                  : quoteData.volume
+          }}
+        </strong>
       </span>
     </div>
+
+    <!-- Range buttons -->
     <div class="btn-group mb-3" role="group">
       <button
         *ngFor="let r of ranges"
@@ -229,7 +278,7 @@
   </div>
 
   <!-- ── Canvas ── -->
-  <div style="height: 250px; position: relative">
+  <div style="min-height: 250px; flex: 1; position: relative">
     <canvas #chartCanvas></canvas>
   </div>
 </div>

@@ -15,4 +15,5 @@ public class Stock {
     private double high;
     private double low;
     private double close;
+    private long volume;
 }

@@ -42,6 +42,30 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
   @ViewChild('chartCanvas', { static: false }) chartRef!: ElementRef<HTMLCanvasElement>;
 
   quoteData: any;
+  chartView: 'price' | 'volume' = 'price';
+
+  stockDetails: any = null;
+
+  get marketCap(): string {
+    // Try FMP profile first (most accurate), then Finnhub metrics
+    const mc =
+      this.stockDetails?.fmpProfile?.mktCap ?? this.stockDetails?.metrics?.marketCapitalization;
+    if (!mc) return '';
+    const n = Number(mc);
+    if (n >= 1_000_000_000_000) return `$${(n / 1_000_000_000_000).toFixed(2)}T`;
+    if (n >= 1_000_000_000) return `$${(n / 1_000_000_000).toFixed(2)}B`;
+    if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(2)}M`;
+    return `$${n.toLocaleString()}`;
+  }
+
+  get todayVolume(): string {
+    const v = this.quoteData?.volume;
+    if (!v) return '';
+    if (v >= 1_000_000_000) return `${(v / 1_000_000_000).toFixed(1)}B`;
+    if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;
+    if (v >= 1_000) return `${(v / 1_000).toFixed(0)}K`;
+    return `${v}`;
+  }
   activeRange: string = '1Y';
   allHistory: any[] = [];
   chart: any;
@@ -227,6 +251,16 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
         this.runProjection();
       }
     }, 150);
+  }
+
+  setChartView(view: 'price' | 'volume'): void {
+    this.chartView = view;
+    this.destroyChart();
+    const filtered = this.filterByRange(this.allHistory, this.activeRange);
+    setTimeout(() => {
+      if (view === 'volume') this.renderVolumeChart(filtered);
+      else this.renderPortfolioChart(filtered);
+    }, 100);
   }
 
   onProjectionChange(): void {
@@ -548,7 +582,12 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
   selectRange(range: string): void {
     if (this.chartMode === 'projection') return;
     this.activeRange = range;
-    this.renderPortfolioChart(this.filterByRange(this.allHistory, range));
+    this.destroyChart();
+    const filtered = this.filterByRange(this.allHistory, range);
+    setTimeout(() => {
+      if (this.chartView === 'volume') this.renderVolumeChart(filtered);
+      else this.renderPortfolioChart(filtered);
+    }, 50);
   }
 
   loadData(symbol: string): void {
@@ -569,13 +608,23 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
       },
       error: (err) => console.error('Quote error:', err),
     });
+    // Fetch market cap and details in parallel
+    this.api.get(`/api/market/stocks/${symbol}/details`).subscribe({
+      next: (res: any) => {
+        this.stockDetails = res;
+        this.cdr.detectChanges();
+      },
+      error: () => {},
+    });
   }
 
   fetchChart(symbol: string): void {
     this.api.get<any[]>(`/api/market/history/${symbol}`).subscribe({
       next: (res) => {
         this.allHistory = res;
-        this.renderPortfolioChart(this.filterByRange(res, this.activeRange));
+        const filtered = this.filterByRange(res, this.activeRange);
+        if (this.chartView === 'volume') this.renderVolumeChart(filtered);
+        else this.renderPortfolioChart(filtered);
       },
       error: (err) => console.error('Chart fetch error:', err),
     });
@@ -629,16 +678,14 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
     const labels = data.map((s) => s.date.split('T')[0]);
     const prices = data.map((s) => s.close);
     const isGreen = prices[prices.length - 1] >= prices[0];
-    const color = isGreen ? 'green' : 'red';
-    const bgColor = isGreen ? 'rgba(0,200,0,0.1)' : 'rgba(255,0,0,0.1)';
+    const color = isGreen ? '#43a047' : '#e53935';
+    const bgColor = isGreen ? 'rgba(67,160,71,0.1)' : 'rgba(229,57,53,0.1)';
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    const pricePad = (maxPrice - minPrice) * 0.08 || 1;
 
     if (this.chart) {
-      this.chart.data.labels = labels;
-      this.chart.data.datasets[0].data = prices;
-      this.chart.data.datasets[0].borderColor = color;
-      this.chart.data.datasets[0].backgroundColor = bgColor;
-      this.chart.update();
-      return;
+      this.destroyChart();
     }
 
     this.chart = new Chart(this.chartRef.nativeElement, {
@@ -647,6 +694,7 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
         labels,
         datasets: [
           {
+            label: 'Price',
             data: prices,
             borderColor: color,
             backgroundColor: bgColor,
@@ -667,13 +715,98 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
           tooltip: {
             enabled: true,
             callbacks: {
-              label: (ctx) => `$${(ctx.parsed?.y ?? 0).toFixed(2)}`,
+              label: (ctx: any) => `$${(ctx.parsed?.y ?? 0).toFixed(2)}`,
             },
           },
         },
         scales: {
-          x: { ticks: { maxTicksLimit: 6 } },
-          y: { display: false },
+          x: { ticks: { maxTicksLimit: 6, font: { size: 10 } }, grid: { display: false } },
+          y: {
+            position: 'right',
+            min: minPrice - pricePad,
+            max: maxPrice + pricePad,
+            ticks: {
+              font: { size: 10 },
+              callback: (val: any) => `$${Number(val).toFixed(0)}`,
+            },
+            grid: { color: 'rgba(0,0,0,0.05)' },
+          },
+        },
+      },
+    });
+  }
+
+  renderVolumeChart(data: any[]): void {
+    if (!this.chartRef?.nativeElement || !data.length) return;
+
+    const labels = data.map((s) => s.date.split('T')[0]);
+    const volumes = data.map((s) => s.volume ?? 0);
+    const maxVol = Math.max(...volumes.filter((v: number) => v > 0)) || 1;
+
+    if (this.chart) {
+      this.destroyChart();
+    }
+
+    this.chart = new Chart(this.chartRef.nativeElement, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Volume',
+            data: volumes,
+            backgroundColor: 'rgba(0,188,212,0.4)',
+            borderColor: 'rgba(0,188,212,0.8)',
+            borderWidth: 1,
+            barPercentage: 0.9,
+            categoryPercentage: 1.0,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx: any) => {
+                const v = ctx.parsed?.y ?? 0;
+                if (v >= 1_000_000_000) return `Vol: ${(v / 1_000_000_000).toFixed(1)}B`;
+                if (v >= 1_000_000) return `Vol: ${(v / 1_000_000).toFixed(1)}M`;
+                if (v >= 1_000) return `Vol: ${(v / 1_000).toFixed(0)}K`;
+                return `Vol: ${v}`;
+              },
+            },
+          },
+        },
+        scales: {
+          x: { ticks: { maxTicksLimit: 6, font: { size: 10 } }, grid: { display: false } },
+          y: {
+            position: 'left',
+            min: 0,
+            max: maxVol * 1.15,
+            title: {
+              display: true,
+              text: 'Volume',
+              font: { size: 10 },
+              color: 'rgba(0,188,212,0.9)',
+            },
+            ticks: {
+              font: { size: 9 },
+              color: 'rgba(0,188,212,0.9)',
+              maxTicksLimit: 5,
+              callback: (val: any) => {
+                const v = Number(val);
+                if (v >= 1_000_000_000) return `${(v / 1_000_000_000).toFixed(1)}B`;
+                if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(0)}M`;
+                if (v >= 1_000) return `${(v / 1_000).toFixed(0)}K`;
+                return `${v}`;
+              },
+            },
+            grid: { color: 'rgba(0,0,0,0.05)' },
+          },
         },
       },
     });
