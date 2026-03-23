@@ -35,18 +35,20 @@
 
   <!-- Charts Row -->
   <div class="row g-4 mb-4">
+    <!-- Left: selected stock chart -->
     <div class="col-12 col-lg-6">
       <div class="card border-0 shadow-sm h-100 p-3">
         <p class="text-muted small mb-2" *ngIf="!selectedSymbol">
           Search a stock below to view its chart
         </p>
-        <app-stock-chart *ngIf="selectedSymbol" [symbol]="selectedSymbol"></app-stock-chart>
+        <app-stock-chart *ngIf="selectedSymbol" [symbol]="selectedSymbol"> </app-stock-chart>
       </div>
     </div>
+
+    <!-- Right: portfolio value over time + projection toggle -->
     <div class="col-12 col-lg-6">
       <div class="card border-0 shadow-sm h-100 p-3">
-        <p class="text-muted small mb-2">Portfolio Value Over Time</p>
-        <app-stock-chart [data]="transactionsForChart"></app-stock-chart>
+        <app-stock-chart [data]="transactionsForChart" [holdings]="holdings"> </app-stock-chart>
       </div>
     </div>
   </div>
@@ -222,7 +224,9 @@
                   <td>
                     <strong>{{ w.stockSymbol }}</strong>
                   </td>
-                  <td>${{ w.currentPrice | number: '1.2-2' }}</td>
+                  <td>
+                    {{ w.currentPrice !== null ? '$' + (w.currentPrice | number: '1.2-2') : '--' }}
+                  </td>
                   <td (click)="$event.stopPropagation()">
                     <button
                       class="btn btn-sm btn-outline-danger"

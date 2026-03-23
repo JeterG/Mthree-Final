@@ -1,24 +1,222 @@
 <div class="card border-0 shadow-sm p-3">
-  <div class="d-flex align-items-center gap-3 mb-2" *ngIf="symbol">
-    <h5 class="mb-0 fw-bold">{{ symbol }}</h5>
-    <span class="fs-5 fw-semibold">${{ quoteData?.currentPrice || '--' }}</span>
-    <span
-      [ngClass]="
-        quoteData?.currentPrice - quoteData?.openPrice >= 0 ? 'text-success' : 'text-danger'
-      "
+  <!-- ── Mode toggle ── -->
+  <div *ngIf="data.length > 0" class="d-flex gap-2 mb-3">
+    <button
+      class="btn btn-sm"
+      [ngClass]="chartMode === 'portfolio' ? 'btn-dark' : 'btn-outline-secondary'"
+      (click)="setMode('portfolio')"
     >
-      {{
-        quoteData?.openPrice
-          ? (((quoteData.currentPrice - quoteData.openPrice) / quoteData.openPrice) * 100).toFixed(
-              2
-            )
-          : '--'
-      }}%
-    </span>
+      Portfolio Value
+    </button>
+    <button
+      class="btn btn-sm"
+      [ngClass]="chartMode === 'projection' ? 'btn-dark' : 'btn-outline-secondary'"
+      (click)="setMode('projection')"
+    >
+      Price Projection
+    </button>
   </div>
 
-  <!-- Range buttons — works for both symbol and data mode -->
-  <div class="btn-group mb-3" role="group">
+  <!-- ── Projection controls ── -->
+  <div *ngIf="chartMode === 'projection'" class="mb-3">
+    <!-- Frequency + Horizon -->
+    <div class="d-flex gap-2 align-items-center flex-wrap mb-3">
+      <span class="text-muted small fw-semibold">Avg by</span>
+      <div class="btn-group btn-group-sm">
+        <button
+          type="button"
+          class="btn"
+          [ngClass]="projectionFrequency === '1W' ? 'btn-dark' : 'btn-outline-secondary'"
+          (click)="projectionFrequency = '1W'; onProjectionChange()"
+        >
+          1W
+        </button>
+        <button
+          type="button"
+          class="btn"
+          [ngClass]="projectionFrequency === '1M' ? 'btn-dark' : 'btn-outline-secondary'"
+          (click)="projectionFrequency = '1M'; onProjectionChange()"
+        >
+          1M
+        </button>
+        <button
+          type="button"
+          class="btn"
+          [ngClass]="projectionFrequency === '3M' ? 'btn-dark' : 'btn-outline-secondary'"
+          (click)="projectionFrequency = '3M'; onProjectionChange()"
+        >
+          3M
+        </button>
+      </div>
+      <span class="text-muted small fw-semibold">Project ahead</span>
+      <div class="btn-group btn-group-sm">
+        <button
+          type="button"
+          class="btn"
+          [ngClass]="projectionHorizon === '1M' ? 'btn-dark' : 'btn-outline-secondary'"
+          (click)="projectionHorizon = '1M'; onProjectionChange()"
+        >
+          1M
+        </button>
+        <button
+          type="button"
+          class="btn"
+          [ngClass]="projectionHorizon === '3M' ? 'btn-dark' : 'btn-outline-secondary'"
+          (click)="projectionHorizon = '3M'; onProjectionChange()"
+        >
+          3M
+        </button>
+        <button
+          type="button"
+          class="btn"
+          [ngClass]="projectionHorizon === '6M' ? 'btn-dark' : 'btn-outline-secondary'"
+          (click)="projectionHorizon = '6M'; onProjectionChange()"
+        >
+          6M
+        </button>
+        <button
+          type="button"
+          class="btn"
+          [ngClass]="projectionHorizon === '1Y' ? 'btn-dark' : 'btn-outline-secondary'"
+          (click)="projectionHorizon = '1Y'; onProjectionChange()"
+        >
+          1Y
+        </button>
+      </div>
+    </div>
+
+    <!-- Holdings toggles -->
+    <div *ngIf="holdingToggles.length > 0" class="mb-3">
+      <p class="text-muted small fw-semibold mb-1">Your holdings</p>
+      <div class="d-flex flex-wrap gap-2">
+        <button
+          *ngFor="let t of holdingToggles"
+          type="button"
+          class="btn btn-sm d-flex align-items-center gap-1"
+          [ngClass]="t.enabled ? 'btn-dark' : 'btn-outline-secondary'"
+          (click)="toggleHolding(t)"
+        >
+          <span>{{ t.symbol }}</span>
+          <span style="font-size: 10px; opacity: 0.7">×{{ t.quantity }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Hypothetical: inline search -->
+    <div class="mb-2">
+      <p class="text-muted small fw-semibold mb-1">Add hypothetical stock</p>
+      <div class="d-flex gap-2 align-items-start flex-wrap">
+        <!-- Inline search dropdown -->
+        <div class="position-relative" style="flex: 1; min-width: 160px; max-width: 240px">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            placeholder="Search symbol"
+            [(ngModel)]="hypSearchQuery"
+            (input)="onHypSearch()"
+            (blur)="onHypBlur()"
+          />
+          <div
+            class="dropdown-menu show w-100 shadow-sm"
+            *ngIf="hypDropdownVisible && hypFilteredStocks.length > 0"
+            style="max-height: 180px; overflow-y: auto; z-index: 1050"
+          >
+            <button
+              *ngFor="let stock of hypFilteredStocks"
+              type="button"
+              class="dropdown-item py-1"
+              (mousedown)="selectHypStock(stock)"
+            >
+              <div class="d-flex justify-content-between align-items-center">
+                <span
+                  ><strong>{{ stock.symbol }}</strong></span
+                >
+                <span class="text-muted small">${{ stock.currentPrice | number: '1.2-2' }}</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quantity input -->
+        <input
+          type="number"
+          class="form-control form-control-sm"
+          style="width: 70px"
+          placeholder="Qty"
+          [(ngModel)]="newHypQuantity"
+          min="1"
+          (keyup.enter)="addHypothetical()"
+        />
+
+        <button class="btn btn-sm btn-outline-primary" (click)="addHypothetical()">Add</button>
+      </div>
+      <p *ngIf="addHypError" class="text-danger small mt-1 mb-0">{{ addHypError }}</p>
+
+      <!-- Added hypotheticals as badges -->
+      <div *ngIf="hypotheticals.length > 0" class="d-flex flex-wrap gap-2 mt-2">
+        <span
+          *ngFor="let h of hypotheticals"
+          class="badge bg-primary d-flex align-items-center gap-1"
+          style="font-size: 11px; padding: 5px 10px"
+        >
+          {{ h.symbol }} ×{{ h.quantity }}
+          <button
+            type="button"
+            class="btn-close btn-close-white ms-1"
+            style="font-size: 8px"
+            (click)="removeHypothetical(h.symbol)"
+          ></button>
+        </span>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <p
+      *ngIf="projectionSummary"
+      class="small mb-0 mt-2"
+      [ngClass]="projectionSummary.includes('+') ? 'text-success' : 'text-danger'"
+    >
+      {{ projectionSummary }}
+    </p>
+    <p *ngIf="projectionLoading" class="text-muted small mb-0">Calculating projection...</p>
+    <p *ngIf="projectionError" class="text-danger small mb-0">{{ projectionError }}</p>
+  </div>
+
+  <!-- ── Symbol mode header ── -->
+  <ng-container *ngIf="symbol && chartMode !== 'projection'">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <h5 class="mb-0 fw-bold">{{ symbol }}</h5>
+      <span class="fs-5 fw-semibold">${{ quoteData?.currentPrice || '--' }}</span>
+      <span
+        [ngClass]="
+          quoteData?.currentPrice - quoteData?.openPrice >= 0 ? 'text-success' : 'text-danger'
+        "
+      >
+        {{
+          quoteData?.openPrice
+            ? (
+                ((quoteData.currentPrice - quoteData.openPrice) / quoteData.openPrice) *
+                100
+              ).toFixed(2)
+            : '--'
+        }}%
+      </span>
+    </div>
+    <div class="btn-group mb-3" role="group">
+      <button
+        *ngFor="let r of ranges"
+        type="button"
+        class="btn btn-sm"
+        [ngClass]="activeRange === r ? 'btn-dark' : 'btn-outline-secondary'"
+        (click)="selectRange(r)"
+      >
+        {{ r }}
+      </button>
+    </div>
+  </ng-container>
+
+  <!-- ── Range buttons for portfolio mode ── -->
+  <div *ngIf="data.length > 0 && chartMode === 'portfolio'" class="btn-group mb-3" role="group">
     <button
       *ngFor="let r of ranges"
       type="button"
@@ -29,6 +227,8 @@
       {{ r }}
     </button>
   </div>
+
+  <!-- ── Canvas ── -->
   <div style="height: 250px; position: relative">
     <canvas #chartCanvas></canvas>
   </div>
