@@ -1,12 +1,1 @@
-backend  | 
-backend  |   .   ____          _            __ _ _
-backend  |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
-backend  | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
-backend  |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
-backend  |   '  |____| .__|_| |_|_| |_\__, | / / / /
-backend  |  =========|_|==============|___/=/_/_/_/
-backend  | 
-backend  |  :: Spring Boot ::                (v4.0.3)
-backend  | 
-backend  | Database already contains data. Skipping seeding.
-[Kbackend exited with code 143
+Cannot connect to the Docker daemon at unix:///Users/jeterg/.docker/run/docker.sock. Is the docker daemon running?
