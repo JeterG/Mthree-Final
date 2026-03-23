@@ -26,6 +26,7 @@ export class BuyComponent implements OnInit, OnChanges {
 
   currentPrice: number | null = null;
   cashBalance: number | null = null;
+  watchlistMap: { [symbol: string]: number } = {}; // symbol -> watchlist entry id
   action: 'buy' | 'cart' | 'watchlist' = 'buy';
   quantity = 1;
   loading = false;
@@ -40,6 +41,7 @@ export class BuyComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.loadCashBalance();
+    this.loadWatchlist();
     if (this.symbol) {
       this.loadPrice(this.symbol);
     }
@@ -57,6 +59,17 @@ export class BuyComponent implements OnInit, OnChanges {
     this.api.get<any>('/api/account/me').subscribe({
       next: (account) => {
         this.cashBalance = account.cashBalance;
+        this.cdr.detectChanges();
+      },
+      error: () => {},
+    });
+  }
+
+  loadWatchlist(): void {
+    this.api.get<any[]>('/api/watchlist/me').subscribe({
+      next: (watchlist) => {
+        this.watchlistMap = {};
+        watchlist.forEach((w) => (this.watchlistMap[w.stockSymbol] = w.id));
         this.cdr.detectChanges();
       },
       error: () => {},
@@ -98,6 +111,27 @@ export class BuyComponent implements OnInit, OnChanges {
     return Math.floor(this.cashBalance / this.currentPrice);
   }
 
+  get isAlreadyWatched(): boolean {
+    return this.symbol in this.watchlistMap;
+  }
+
+  get watchlistEntryId(): number | null {
+    return this.watchlistMap[this.symbol] ?? null;
+  }
+
+  get cannotAffordOne(): boolean {
+    if (!this.currentPrice || this.currentPrice <= 0 || this.cashBalance === null) return false;
+    return this.cashBalance < this.currentPrice;
+  }
+
+  get buyDisabled(): boolean {
+    return this.submitting || this.loading || this.currentPrice === null || this.cannotAffordOne;
+  }
+
+  get watchlistDisabled(): boolean {
+    return this.submitting;
+  }
+
   get buttonLabel(): string {
     if (this.submitting) return '';
     switch (this.action) {
@@ -106,7 +140,9 @@ export class BuyComponent implements OnInit, OnChanges {
       case 'cart':
         return `Add ${this.symbol} to Cart`;
       case 'watchlist':
-        return `Watch ${this.symbol}`;
+        return this.isAlreadyWatched
+          ? `Remove ${this.symbol} from Watchlist`
+          : `Watch ${this.symbol}`;
     }
   }
 
@@ -142,26 +178,46 @@ export class BuyComponent implements OnInit, OnChanges {
           },
         });
     } else {
-      this.api
-        .post<any>('/api/watchlist', {
-          stockSymbol: this.symbol,
-        })
-        .subscribe({
+      if (this.isAlreadyWatched && this.watchlistEntryId !== null) {
+        // Remove from watchlist
+        this.api.delete(`/api/watchlist/${this.watchlistEntryId}`).subscribe({
           next: () => {
-            this.successMessage = `${this.symbol} added to watchlist`;
+            this.successMessage = `${this.symbol} removed from watchlist`;
             this.submitting = false;
+            this.loadWatchlist();
             this.watchlistComplete.emit();
             this.cdr.detectChanges();
           },
-          error: (err) => {
-            this.errorMessage =
-              err.status === 400
-                ? `${this.symbol} is already in your watchlist`
-                : 'Failed to add to watchlist';
+          error: () => {
+            this.errorMessage = 'Failed to remove from watchlist';
             this.submitting = false;
             this.cdr.detectChanges();
           },
         });
+      } else {
+        // Add to watchlist
+        this.api
+          .post<any>('/api/watchlist', {
+            stockSymbol: this.symbol,
+          })
+          .subscribe({
+            next: () => {
+              this.successMessage = `${this.symbol} added to watchlist`;
+              this.submitting = false;
+              this.loadWatchlist();
+              this.watchlistComplete.emit();
+              this.cdr.detectChanges();
+            },
+            error: (err) => {
+              this.errorMessage =
+                err.status === 400
+                  ? `${this.symbol} is already in your watchlist`
+                  : 'Failed to add to watchlist';
+              this.submitting = false;
+              this.cdr.detectChanges();
+            },
+          });
+      }
     }
   }
 

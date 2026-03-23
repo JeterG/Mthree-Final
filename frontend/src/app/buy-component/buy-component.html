@@ -1,11 +1,9 @@
 <!-- Buy Component -->
 <div class="card border-0 shadow-sm p-3">
-  <!-- No symbol -->
   <div *ngIf="!symbol" class="text-muted small">Select a stock to buy or add to watchlist</div>
 
-  <!-- Symbol selected -->
   <div *ngIf="symbol">
-    <!-- Header: symbol + price -->
+    <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h6 class="fw-bold mb-0">{{ symbol }}</h6>
       <span *ngIf="loading" class="text-muted small">Loading...</span>
@@ -14,11 +12,14 @@
       </span>
     </div>
 
-    <!-- Cash balance display -->
+    <!-- Cash balance -->
     <div *ngIf="cashBalance !== null" class="text-muted small mb-3">
       Available: <strong>${{ cashBalance | number: '1.2-2' }}</strong>
       <span *ngIf="maxAffordable > 0" class="ms-2">
         (max {{ maxAffordable | number: '1.0-0' }} shares)
+      </span>
+      <span *ngIf="cannotAffordOne && currentPrice !== null" class="ms-2 text-danger fw-semibold">
+        — insufficient funds
       </span>
     </div>
 
@@ -28,15 +29,22 @@
       <select class="form-select form-select-sm" [(ngModel)]="action">
         <option value="buy">Buy</option>
         <option value="cart">Add to Cart</option>
-        <option value="watchlist">Add to Watchlist</option>
+        <option value="watchlist">Watchlist</option>
       </select>
     </div>
 
-    <!-- Quantity + Max button — only for buy and cart -->
+    <!-- Quantity + Max -->
     <div *ngIf="action === 'buy' || action === 'cart'" class="mb-3">
       <label class="form-label small text-muted">Quantity</label>
       <div class="d-flex gap-2">
-        <input type="number" class="form-control" [(ngModel)]="quantity" min="1" step="1" />
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="quantity"
+          min="1"
+          step="1"
+          [disabled]="cannotAffordOne"
+        />
         <button
           class="btn btn-outline-secondary btn-sm px-3"
           type="button"
@@ -46,27 +54,39 @@
           Max
         </button>
       </div>
-      <div class="mt-2 small text-muted" *ngIf="currentPrice !== null">
-        Total: <strong>${{ totalCost | number: '1.2-2' }}</strong>
+      <div class="mt-2 small" *ngIf="currentPrice !== null">
+        <span class="text-muted"
+          >Total: <strong>${{ totalCost | number: '1.2-2' }}</strong></span
+        >
         <span *ngIf="cashBalance !== null && totalCost > cashBalance" class="text-danger ms-2">
           Exceeds balance
         </span>
       </div>
     </div>
 
+    <!-- Watchlist status indicator -->
+    <div *ngIf="action === 'watchlist'" class="mb-3">
+      <span *ngIf="isAlreadyWatched" class="badge bg-success py-2 px-3">
+        ★ Currently watching {{ symbol }}
+      </span>
+      <span *ngIf="!isAlreadyWatched" class="text-muted small">
+        Not currently watching {{ symbol }}
+      </span>
+    </div>
+
     <!-- Success / error -->
     <div class="alert alert-success py-2 small mb-3" *ngIf="successMessage">
       {{ successMessage }}
     </div>
-    <div class="alert alert-danger py-2 small mb-3" *ngIf="errorMessage">
-      {{ errorMessage }}
-    </div>
+    <div class="alert alert-danger py-2 small mb-3" *ngIf="errorMessage">{{ errorMessage }}</div>
 
-    <!-- Submit button -->
+    <!-- Submit button — red outline when removing from watchlist, dark otherwise -->
     <button
-      class="btn btn-dark w-100"
+      class="btn w-100"
       (click)="submit()"
-      [disabled]="submitting || loading || currentPrice === null"
+      [class.btn-dark]="!(action === 'watchlist' && isAlreadyWatched)"
+      [class.btn-outline-danger]="action === 'watchlist' && isAlreadyWatched"
+      [disabled]="action === 'buy' || action === 'cart' ? buyDisabled : watchlistDisabled"
     >
       <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2"></span>
       <span *ngIf="!submitting">{{ buttonLabel }}</span>
