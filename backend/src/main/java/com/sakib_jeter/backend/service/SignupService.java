@@ -18,10 +18,10 @@ public class SignupService {
     private final JwtService jwtService; // 🔥 NEW
 
     public SignupService(
-        UserRepository repo,
-        BCryptPasswordEncoder encoder,
-        AccountRepository accountRepository,
-        JwtService jwtService // 🔥 NEW
+            UserRepository repo,
+            BCryptPasswordEncoder encoder,
+            AccountRepository accountRepository,
+            JwtService jwtService // 🔥 NEW
     ) {
         this.repo = repo;
         this.encoder = encoder;
@@ -49,7 +49,7 @@ public class SignupService {
     public Long login(String email, String password) {
 
         User user = repo.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!encoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
@@ -58,13 +58,12 @@ public class SignupService {
         return user.getId();
     }
 
-    // 🔥 NEW METHOD
     public void changePassword(String token, String currentPassword, String newPassword) {
 
         String email = jwtService.extractEmail(token.replace("Bearer ", ""));
 
         User user = repo.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!encoder.matches(currentPassword, user.getPassword())) {
             throw new RuntimeException("Current password is incorrect");

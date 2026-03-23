@@ -1,13 +1,20 @@
 package com.sakib_jeter.backend.entity;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
-@Table(name = "watchlist",
-       uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "stock_symbol"}))
+@Table(name = "watchlist", uniqueConstraints = @UniqueConstraint(columnNames = { "user_id", "stock_symbol" }))
 @Data
 @NoArgsConstructor
 public class Watchlist {
