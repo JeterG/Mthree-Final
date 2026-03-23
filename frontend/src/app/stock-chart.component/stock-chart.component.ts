@@ -679,24 +679,46 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
     return data.filter((s) => new Date(s.date) >= cutoff);
   }
 
-  updateChartWithLatestPrice(symbol: string): void {
-    if (!this.chart) return;
-    this.api.get<any>(`/api/market/quote/${symbol}`).subscribe({
-      next: (stock) => {
-        const now = new Date().toISOString();
-        const price = stock.currentPrice;
-        this.allHistory.push({ date: now, close: price, open: price, high: price, low: price });
-        this.chart.data.labels.push(new Date().toLocaleDateString());
-        this.chart.data.datasets[0].data.push(price);
-        if (this.chart.data.labels.length > 365) {
-          this.chart.data.labels.shift();
-          this.chart.data.datasets[0].data.shift();
-        }
-        this.chart.update();
-      },
-      error: (err) => console.error('Live update error:', err),
-    });
-  }
+updateChartWithLatestPrice(symbol: string): void {
+  if (!this.chart) return;
+
+  this.api.get<any>(`/api/market/quote/${symbol}`).subscribe({
+    next: (stock) => {
+      const now = new Date().toISOString();
+      const price = stock.currentPrice;
+
+      // Add new data point
+      this.allHistory.push({
+        date: now,
+        close: price,
+        open: price,
+        high: price,
+        low: price,
+      });
+
+      this.chart.data.labels.push(new Date().toLocaleDateString());
+      this.chart.data.datasets[0].data.push(price);
+
+      // 🔥 Recalculate bounds
+      const prices = this.chart.data.datasets[0].data as number[];
+      const minPrice = Math.min(...prices);
+      const maxPrice = Math.max(...prices);
+      const pad = (maxPrice - minPrice) * 0.08 || 1;
+
+      this.chart.options.scales.y.min = minPrice - pad;
+      this.chart.options.scales.y.max = maxPrice + pad;
+
+      // Limit points
+      if (this.chart.data.labels.length > 365) {
+        this.chart.data.labels.shift();
+        this.chart.data.datasets[0].data.shift();
+      }
+
+      this.chart.update('active');
+    },
+    error: (err) => console.error('Live update error:', err),
+  });
+}
 
   renderPortfolioChart(data: any[]): void {
     if (this.chartMode === 'projection') return;
