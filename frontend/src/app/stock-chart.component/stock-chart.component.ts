@@ -44,7 +44,21 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
   quoteData: any;
   chartView: 'price' | 'volume' = 'price';
 
+  stockDetails: any = null;
+
   get marketCap(): string {
+    // Try FMP profile first (most accurate), then Finnhub metrics
+    const mc =
+      this.stockDetails?.fmpProfile?.mktCap ?? this.stockDetails?.metrics?.marketCapitalization;
+    if (!mc) return '';
+    const n = Number(mc);
+    if (n >= 1_000_000_000_000) return `$${(n / 1_000_000_000_000).toFixed(2)}T`;
+    if (n >= 1_000_000_000) return `$${(n / 1_000_000_000).toFixed(2)}B`;
+    if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(2)}M`;
+    return `$${n.toLocaleString()}`;
+  }
+
+  get todayVolume(): string {
     const v = this.quoteData?.volume;
     if (!v) return '';
     if (v >= 1_000_000_000) return `${(v / 1_000_000_000).toFixed(1)}B`;
@@ -593,6 +607,14 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Quote error:', err),
+    });
+    // Fetch market cap and details in parallel
+    this.api.get(`/api/market/stocks/${symbol}/details`).subscribe({
+      next: (res: any) => {
+        this.stockDetails = res;
+        this.cdr.detectChanges();
+      },
+      error: () => {},
     });
   }
 

@@ -34,15 +34,37 @@
   </div>
 
   <!-- Charts Row -->
-  <div class="row g-4 mb-4">
-    <div class="col-12 col-lg-6">
-      <div class="card border-0 shadow-sm h-100 p-3">
-        <app-stock-chart [symbol]="selectedSymbol"></app-stock-chart>
+  <div class="row g-4 mb-4 align-items-stretch">
+    <!-- Left: stock chart — fills full height of row -->
+    <div class="col-12 col-lg-6 d-flex flex-column">
+      <div class="card border-0 shadow-sm p-3 flex-grow-1 d-flex flex-column">
+        <app-stock-chart
+          [symbol]="selectedSymbol"
+          style="flex: 1; display: flex; flex-direction: column"
+        ></app-stock-chart>
       </div>
     </div>
-    <div class="col-12 col-lg-6">
-      <div class="card border-0 shadow-sm h-100 p-3">
-        <app-stock-chart [data]="transactionsForChart" [holdings]="holdings"></app-stock-chart>
+
+    <!-- Right: portfolio chart — only show if there are transactions -->
+    <div class="col-12 col-lg-6 d-flex flex-column" *ngIf="transactions.length > 0">
+      <div class="card border-0 shadow-sm p-3 flex-grow-1 d-flex flex-column">
+        <app-stock-chart
+          [data]="transactionsForChart"
+          [holdings]="holdings"
+          style="flex: 1; display: flex; flex-direction: column"
+        ></app-stock-chart>
+      </div>
+    </div>
+
+    <!-- Right placeholder for new users -->
+    <div class="col-12 col-lg-6 d-flex flex-column" *ngIf="transactions.length === 0">
+      <div
+        class="card border-0 shadow-sm p-3 flex-grow-1 d-flex flex-column align-items-center justify-content-center text-center text-muted"
+      >
+        <p class="mb-1 fw-semibold">No portfolio history yet</p>
+        <p class="small mb-0">
+          Make your first trade to see your portfolio chart and projections here.
+        </p>
       </div>
     </div>
   </div>
