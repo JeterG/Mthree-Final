@@ -15,11 +15,12 @@ import { StockChartComponent } from '../stock-chart.component/stock-chart.compon
 export class HomeComponent implements OnInit, OnDestroy {
   selectedSymbol: string = 'SPY';
 
-  symbols = [
-    { name: 'S&P 500', symbol: 'SPY' },
-    { name: 'Nasdaq', symbol: 'QQQ' },
-    { name: 'Dow Jones', symbol: 'DIA' },
-  ];
+symbols = [
+  { name: 'S&P 500', symbol: 'SPY' },
+  { name: 'Nasdaq', symbol: 'QQQ' },
+  { name: 'Dow Jones', symbol: 'DIA' },
+  { name: 'Russell 2000', symbol: 'IWM' }, // ✅ ADD THIS
+];
 
   topMoverSymbols = [
     'AAPL',
