@@ -1,4 +1,4 @@
-/* 🔥 MATCH HOMEPAGE WIDTH */
+/*  MATCH HOMEPAGE WIDTH */
 .chart-container {
   max-width: 600px;
   margin: 0 auto;
@@ -6,46 +6,46 @@
 }
 
 /* =========================
-   📊 CARD (LIGHT MODE FIX)
+    CARD (LIGHT MODE FIX)
 ========================= */
 .custom-card {
-  background: #ffffff !important;      /* force white */
+  background: #ffffff !important; /* force white */
   border: 1px solid #ddd;
   border-radius: 12px;
 
-  color: #111 !important;              /* force black text */
+  color: #111 !important; /* force black text */
 }
 
-/* 🔥 TITLE FIX (THIS WAS YOUR MAIN ISSUE) */
+/*  TITLE FIX (THIS WAS YOUR MAIN ISSUE) */
 .chart-title {
   color: #111 !important;
 }
 
-/* 🔥 ALSO FORCE ALL TEXT INSIDE CARD */
+/*  ALSO FORCE ALL TEXT INSIDE CARD */
 .custom-card h5,
 .custom-card p,
 .custom-card span {
   color: #111 !important;
 }
 
-/* 🔥 CHART SIZE */
+/*  CHART SIZE */
 .chart-wrapper {
   height: 300px;
 }
 
-/* 🔥 BUTTON CONSISTENCY */
+/*  BUTTON CONSISTENCY */
 .btn {
   border-radius: 6px;
   padding: 6px 12px;
 }
 
-/* 🔥 SMALL RANGE BUTTONS */
+/*  SMALL RANGE BUTTONS */
 .btn-sm {
   padding: 4px 10px;
   font-size: 12px;
 }
 
-/* 🔥 RANGE BUTTON GROUP */
+/*  RANGE BUTTON GROUP */
 .btn-group {
   display: flex;
   justify-content: flex-start;
@@ -53,7 +53,7 @@
 }
 
 /* =========================
-   🌙 DARK MODE (SCOPED FIX)
+   DARK MODE (SCOPED FIX)
 ========================= */
 
 /* ONLY apply dark mode styles when .dark-mode is active */
@@ -74,7 +74,7 @@
 }
 
 /* =========================
-   🔥 FORCE LIGHT MODE FOR MARKET PAGE
+    FORCE LIGHT MODE FOR MARKET PAGE
 ========================= */
 
 /* Card stays white EVEN in dark mode */
@@ -103,7 +103,7 @@
 }
 
 /* =========================
-   🔥 HARD OVERRIDE (FINAL FIX)
+    HARD OVERRIDE (FINAL FIX)
 ========================= */
 
 /* Beat global styles.css */

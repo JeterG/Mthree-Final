@@ -1,5 +1,4 @@
 <div class="settings-page">
-
   <!-- HEADER -->
   <div class="settings-header">
     <h2>Settings</h2>
@@ -8,36 +7,27 @@
 
   <!-- CARD -->
   <div class="settings-card">
-
-    <!-- 🌙 DARK MODE -->
+    <!-- DARK MODE -->
     <div class="setting-row">
       <span>Dark Mode</span>
 
       <label class="toggle">
-        <input
-          type="checkbox"
-          [(ngModel)]="isDarkMode"
-          (change)="toggleTheme()"
-        >
+        <input type="checkbox" [(ngModel)]="isDarkMode" (change)="toggleTheme()" />
         <span class="slider"></span>
       </label>
     </div>
 
-    <!-- ⏰ TIMEZONE -->
+    <!-- TIMEZONE -->
     <div class="form-group">
       <label>Timezone</label>
-      <select
-        [(ngModel)]="selectedTimezone"
-        (change)="onTimezoneChange()"
-      >
+      <select [(ngModel)]="selectedTimezone" (change)="onTimezoneChange()">
         <option *ngFor="let tz of timezones" [value]="tz.value">
           {{ tz.label }}
         </option>
       </select>
     </div>
 
-
-    <!-- 🔔 NOTIFICATIONS -->
+    <!-- NOTIFICATIONS -->
     <h3 class="section-title">Notifications</h3>
 
     <div class="setting-row">
@@ -47,7 +37,7 @@
           type="checkbox"
           [(ngModel)]="notifications.priceAlerts"
           (change)="saveNotifications()"
-        >
+        />
         <span class="slider"></span>
       </label>
     </div>
@@ -59,7 +49,7 @@
           type="checkbox"
           [(ngModel)]="notifications.tradeConfirmations"
           (change)="saveNotifications()"
-        >
+        />
         <span class="slider"></span>
       </label>
     </div>
@@ -71,111 +61,88 @@
           type="checkbox"
           [(ngModel)]="notifications.dailySummary"
           (change)="saveNotifications()"
-        >
+        />
         <span class="slider"></span>
       </label>
     </div>
 
-    <!-- 📊 TRADING PREFERENCES -->
-<h3 class="section-title">Trading Preferences</h3>
+    <!-- TRADING PREFERENCES -->
+    <h3 class="section-title">Trading Preferences</h3>
 
-<div class="setting-row">
-  <span>Enable Fractional Shares</span>
-  <label class="toggle">
-    <input
-      type="checkbox"
-      [(ngModel)]="trading.confirmTrade"
-      (change)="saveTradingPreferences()"
-    >
-    <span class="slider"></span>
-  </label>
-</div>
-
-<div class="setting-row">
-  <span>Auto-Fill Last Trade Amount</span>
-  <label class="toggle">
-    <input
-      type="checkbox"
-      [(ngModel)]="trading.autoRefresh"
-      (change)="saveTradingPreferences()"
-    >
-    <span class="slider"></span>
-  </label>
-</div>
-
-<div class="setting-row">
-  <span>Refresh Speed</span>
-
-  <select
-    class="refresh-dropdown"
-    [(ngModel)]="trading.refreshSpeed"
-    (change)="saveTradingPreferences()"
-  >
-    <option value="slow">Slow</option>
-    <option value="medium">Medium</option>
-    <option value="fast">Fast</option>
-  </select>
-</div>
-
-
-
-        <!-- 🔐 RESET PASSWORD -->
-<!-- 🔐 PASSWORD RESET ROW -->
-<div class="password-row mt-3">
-  <span class="forgot-text">Forgot your password?</span>
-
-  <button class="reset-small-btn" (click)="showResetModal = true">
-    Reset Password
-  </button>
-</div>
-
-<!-- 🔐 MODAL -->
-<div class="modal" *ngIf="showResetModal">
-  <div class="modal-content">
-
-    <h3>Reset Password</h3>
-
-    <input
-      type="password"
-      placeholder="Current Password"
-      [(ngModel)]="currentPassword"
-    />
-
-    <input
-      type="password"
-      placeholder="New Password"
-      [(ngModel)]="newPassword"
-    />
-
-    <input
-      type="password"
-      placeholder="Confirm New Password"
-      [(ngModel)]="confirmPassword"
-    />
-
-    <p class="error" *ngIf="passwordError">{{ passwordError }}</p>
-
-    <div class="modal-actions">
-      <button (click)="closeModal()">Cancel</button>
-      <button class="confirm-btn" (click)="submitPasswordChange()">
-        Reset
-      </button>
+    <div class="setting-row">
+      <span>Enable Fractional Shares</span>
+      <label class="toggle">
+        <input
+          type="checkbox"
+          [(ngModel)]="trading.confirmTrade"
+          (change)="saveTradingPreferences()"
+        />
+        <span class="slider"></span>
+      </label>
     </div>
 
-  </div>
-</div>
+    <div class="setting-row">
+      <span>Auto-Fill Last Trade Amount</span>
+      <label class="toggle">
+        <input
+          type="checkbox"
+          [(ngModel)]="trading.autoRefresh"
+          (change)="saveTradingPreferences()"
+        />
+        <span class="slider"></span>
+      </label>
+    </div>
 
-<!-- ✅ APPLY CHANGES BUTTON -->
-<div class="form-group mt-3">
-  <button class="apply-btn" (click)="applyChanges()">
-    Apply Changes
-  </button>
+    <div class="setting-row">
+      <span>Refresh Speed</span>
 
-<div class="success-container">
-  <p class="success-msg" [class.visible]="showSuccessMessage">
-    Changes saved successfully ✅
-  </p>
-</div>
-</div>
+      <select
+        class="refresh-dropdown"
+        [(ngModel)]="trading.refreshSpeed"
+        (change)="saveTradingPreferences()"
+      >
+        <option value="slow">Slow</option>
+        <option value="medium">Medium</option>
+        <option value="fast">Fast</option>
+      </select>
+    </div>
+
+    <!-- RESET PASSWORD -->
+    <div class="password-row mt-3">
+      <span class="forgot-text">Forgot your password?</span>
+
+      <button class="reset-small-btn" (click)="showResetModal = true">Reset Password</button>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal" *ngIf="showResetModal">
+      <div class="modal-content">
+        <h3>Reset Password</h3>
+
+        <input type="password" placeholder="Current Password" [(ngModel)]="currentPassword" />
+
+        <input type="password" placeholder="New Password" [(ngModel)]="newPassword" />
+
+        <input type="password" placeholder="Confirm New Password" [(ngModel)]="confirmPassword" />
+
+        <p class="error" *ngIf="passwordError">{{ passwordError }}</p>
+
+        <div class="modal-actions">
+          <button (click)="closeModal()">Cancel</button>
+          <button class="confirm-btn" (click)="submitPasswordChange()">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPLY CHANGES BUTTON -->
+    <div class="form-group mt-3">
+      <button class="apply-btn" (click)="applyChanges()">Apply Changes</button>
+
+      <div class="success-container">
+        <p class="success-msg" [class.visible]="showSuccessMessage">
+          Changes saved successfully ✅
+        </p>
+      </div>
+    </div>
   </div>
 </div>

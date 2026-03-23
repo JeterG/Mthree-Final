@@ -1,7 +1,5 @@
 <div class="login-container">
-
   <div class="login-card">
-
     <!-- LOGO -->
     <div class="logo-wrapper">
       <img src="assets/logo.png" class="logo-img" alt="Logo" />
@@ -12,47 +10,32 @@
     <p class="subtitle">Sign in to your StockQuik account!</p>
 
     <form #loginForm="ngForm" (ngSubmit)="login()">
-
       <!-- EMAIL -->
       <div class="form-group">
-        <input
-          type="email"
-          placeholder="Email"
-          name="email"
-          [(ngModel)]="email"
-        />
+        <input type="email" placeholder="Email" name="email" [(ngModel)]="email" />
       </div>
 
       <!-- PASSWORD -->
       <div class="form-group">
-        <input
-          type="password"
-          placeholder="Password"
-          name="password"
-          [(ngModel)]="password"
-        />
+        <input type="password" placeholder="Password" name="password" [(ngModel)]="password" />
       </div>
 
-      <!-- 🔥 ERROR MESSAGE (ONLY AFTER FAILED LOGIN) -->
+      <!--  ERROR MESSAGE (ONLY AFTER FAILED LOGIN) -->
       <div *ngIf="errorMessage" class="error-message">
-  {{ errorMessage }}
-</div>
+        {{ errorMessage }}
+      </div>
 
       <!-- BUTTON -->
-      <button type="submit">
-        Login
-      </button>
+      <button type="submit">Login</button>
 
       <!-- LINK -->
       <p class="signup-link">
         Don’t have an account?
         <a routerLink="/signup">Sign up</a>
       </p>
-
     </form>
 
     <!-- FOOTER -->
     <p class="footer">Paper trading. Zero risk. Real experience.</p>
-
   </div>
 </div>

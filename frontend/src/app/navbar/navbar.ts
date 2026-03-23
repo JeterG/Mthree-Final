@@ -1,14 +1,13 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
-import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './navbar.html',
-  styleUrls: ['./navbar.css']
+  styleUrls: ['./navbar.css'],
 })
 export class Navbar implements OnInit {
   email: string | null = null;
@@ -29,7 +28,7 @@ export class Navbar implements OnInit {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  // 🔥 NEW: Navigate to profile properly
+  //  NEW: Navigate to profile properly
   goToProfile(): void {
     this.isDropdownOpen = false; // close dropdown FIRST
 
@@ -39,16 +38,16 @@ export class Navbar implements OnInit {
     }, 0);
   }
 
-logout(): void {
-  localStorage.removeItem('token');
-  localStorage.removeItem('email');
-  localStorage.removeItem('userId');
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    localStorage.removeItem('userId');
 
-  this.isDropdownOpen = false;
+    this.isDropdownOpen = false;
 
-  // 🔥 CRITICAL: replace history so back button can't return
-  this.router.navigateByUrl('/login', { replaceUrl: true });
-}
+    //  CRITICAL: replace history so back button can't return
+    this.router.navigateByUrl('/login', { replaceUrl: true });
+  }
 
   @HostListener('document:click', ['$event'])
   handleClick(event: Event): void {

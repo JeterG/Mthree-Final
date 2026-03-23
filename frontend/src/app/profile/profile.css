@@ -123,8 +123,7 @@ button:disabled {
   opacity: 1;
 }
 
-/* 🔥 when message exists → visible */
-
+/*  when message exists → visible */
 
 /* MODAL */
 .modal-overlay {
@@ -189,7 +188,9 @@ button:disabled {
   border-radius: 10px;
   padding: 14px 16px;
   cursor: pointer;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
 .option-item:hover {
@@ -197,7 +198,7 @@ button:disabled {
   background: #313131;
 }
 
-.option-item input[type="radio"] {
+.option-item input[type='radio'] {
   margin: 0;
   accent-color: #ff9800;
   transform: scale(1.1);
@@ -284,12 +285,12 @@ button:disabled {
 }
 .profile-emoji {
   font-size: 32px;
-  transform: translateY(2px); /* 🔥 vertical alignment tweak */
+  transform: translateY(2px); /*  vertical alignment tweak */
 }
 .emoji-preview {
   display: flex;
-  justify-content: center;   /* 🔥 centers horizontally */
-  align-items: center;       /* optional vertical alignment */
+  justify-content: center; /*  centers horizontally */
+  align-items: center; /* optional vertical alignment */
 
   font-size: 32px;
   margin-bottom: 10px;
@@ -306,7 +307,9 @@ button:disabled {
   padding: 6px;
   cursor: pointer;
   border-radius: 6px;
-  transition: transform 0.2s, background 0.2s;
+  transition:
+    transform 0.2s,
+    background 0.2s;
 }
 
 .emoji-grid span:hover {

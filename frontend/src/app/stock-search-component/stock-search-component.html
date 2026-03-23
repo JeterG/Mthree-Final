@@ -18,10 +18,10 @@
       (mousedown)="selectStock(stock)"
     >
       <div class="d-flex flex-column">
-        <!-- 🔥 MAIN LINE -->
+        <!--  MAIN LINE -->
         <strong>{{ stock.companyName }} ({{ stock.symbol }})</strong>
 
-        <!-- 🔥 SUB LINE -->
+        <!--  SUB LINE -->
         <span class="text-muted small"> ${{ stock.currentPrice | number: '1.2-2' }} </span>
       </div>
     </button>

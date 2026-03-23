@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { TimezoneService } from '../home/timezone.service';
 
 @Component({
@@ -8,12 +8,12 @@ import { TimezoneService } from '../home/timezone.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './settings.html',
-  styleUrls: ['./settings.css']
+  styleUrls: ['./settings.css'],
 })
 export class SettingsComponent implements OnInit {
   constructor(
     private timezoneService: TimezoneService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
   ) {}
 
   isDarkMode = false;
@@ -33,17 +33,17 @@ export class SettingsComponent implements OnInit {
     { label: 'Mountain (MT)', value: 'America/Denver' },
     { label: 'Pacific (PT)', value: 'America/Los_Angeles' },
     { label: 'Alaska (AKT)', value: 'America/Anchorage' },
-    { label: 'Hawaii (HST)', value: 'Pacific/Honolulu' }
+    { label: 'Hawaii (HST)', value: 'Pacific/Honolulu' },
   ];
-trading = {
-  confirmTrade: true,
-  autoRefresh: true,
-  refreshSpeed: 'medium' // 🔥 add this
-};
+  trading = {
+    confirmTrade: true,
+    autoRefresh: true,
+    refreshSpeed: 'medium',
+  };
   notifications = {
     priceAlerts: true,
     tradeConfirmations: true,
-    dailySummary: false
+    dailySummary: false,
   };
 
   selectedTimezone = 'America/New_York';
@@ -60,9 +60,9 @@ trading = {
       this.notifications = JSON.parse(savedNotifications);
     }
     const savedTrading = localStorage.getItem('tradingPreferences');
-if (savedTrading) {
-  this.trading = JSON.parse(savedTrading);
-}
+    if (savedTrading) {
+      this.trading = JSON.parse(savedTrading);
+    }
   }
 
   saveNotifications() {
@@ -97,9 +97,9 @@ if (savedTrading) {
   }
 
   saveTradingPreferences() {
-  localStorage.setItem('tradingPreferences', JSON.stringify(this.trading));
-  console.log('Trading preferences updated');
-}
+    localStorage.setItem('tradingPreferences', JSON.stringify(this.trading));
+    console.log('Trading preferences updated');
+  }
 
   applyTheme() {
     const root = document.documentElement;
@@ -138,14 +138,14 @@ if (savedTrading) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         currentPassword: this.currentPassword,
-        newPassword: this.newPassword
-      })
+        newPassword: this.newPassword,
+      }),
     })
-      .then(res => {
+      .then((res) => {
         if (!res.ok) {
           throw new Error('Failed');
         }

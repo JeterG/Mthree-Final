@@ -1,51 +1,45 @@
-<div *ngIf="data === null" class="loading">
-  Loading stock data...
-</div>
+<div *ngIf="data === null" class="loading">Loading stock data...</div>
 
 <div *ngIf="data !== null" class="stock-page">
-
-  <!-- 🔥 HEADER -->
+  <!--  HEADER -->
   <div class="stock-header">
-
-    <img 
-      *ngIf="data?.fmpProfile?.image"
-      [src]="data?.fmpProfile?.image"
-      class="stock-logo"
-    />
+    <img *ngIf="data?.fmpProfile?.image" [src]="data?.fmpProfile?.image" class="stock-logo" />
 
     <h2 class="stock-title">
-      {{ (data?.fmpProfile?.companyName ?? data?.profile?.name) ?? 'N/A' }}
+      {{ data?.fmpProfile?.companyName ?? data?.profile?.name ?? 'N/A' }}
       ({{ symbol }})
     </h2>
 
     <p class="sub">
-      {{ data?.fmpProfile?.sector ?? 'N/A' }} • 
+      {{ data?.fmpProfile?.sector ?? 'N/A' }} •
       {{ data?.profile?.finnhubIndustry ?? 'N/A' }}
     </p>
-
   </div>
 
-  <!-- 📊 CHART -->
+  <!--  CHART -->
   <div class="chart-card">
     <app-stock-chart [symbol]="symbol"></app-stock-chart>
   </div>
 
-  <!-- 📊 STATS GRID -->
+  <!-- STATS GRID -->
   <div class="stats-grid">
-
-    <!-- 🏢 COMPANY INFO -->
+    <!--  COMPANY INFO -->
     <div class="section">
       <h3>Company Info</h3>
 
       <p><b>CEO:</b> {{ data?.fmpProfile?.ceo ?? 'N/A' }}</p>
       <p><b>Employees:</b> {{ data?.fmpProfile?.fullTimeEmployees ?? 'N/A' }}</p>
 
-      <p><b>Address:</b><br>
+      <p>
+        <b>Address:</b><br />
         {{
           data?.fmpProfile?.address
-            ? data.fmpProfile.address + ', ' +
-              (data.fmpProfile.city ?? '') + ', ' +
-              (data.fmpProfile.state ?? '') + ', ' +
+            ? data.fmpProfile.address +
+              ', ' +
+              (data.fmpProfile.city ?? '') +
+              ', ' +
+              (data.fmpProfile.state ?? '') +
+              ', ' +
               (data.fmpProfile.country ?? '')
             : 'N/A'
         }}
@@ -53,7 +47,8 @@
 
       <p><b>IPO:</b> {{ data?.profile?.ipo ?? 'N/A' }}</p>
 
-      <p><b>Market Cap:</b> 
+      <p>
+        <b>Market Cap:</b>
         {{
           data?.profile?.marketCapitalization != null
             ? (data.profile.marketCapitalization | number)
@@ -62,25 +57,27 @@
       </p>
     </div>
 
-    <!-- 📈 KEY STATISTICS -->
+    <!-- KEY STATISTICS -->
     <div class="section">
       <h3>Key Statistics</h3>
 
       <p><b>P/E Ratio:</b> {{ data?.metrics?.peNormalizedAnnual ?? 'N/A' }}</p>
 
-      <p><b>Dividend Yield:</b> 
+      <p>
+        <b>Dividend Yield:</b>
         {{ data?.metrics?.dividendYieldIndicatedAnnual ?? 'N/A' }}
       </p>
 
       <p><b>52 Week High:</b> {{ data?.metrics?.['52WeekHigh'] ?? 'N/A' }}</p>
       <p><b>52 Week Low:</b> {{ data?.metrics?.['52WeekLow'] ?? 'N/A' }}</p>
 
-      <p><b>Avg Volume:</b> 
+      <p>
+        <b>Avg Volume:</b>
         {{ data?.metrics?.['10DayAverageTradingVolume'] ?? 'N/A' }}
       </p>
     </div>
 
-    <!-- 📊 DAILY STATS -->
+    <!-- DAILY STATS -->
     <div class="section">
       <h3>Daily Stats</h3>
 
@@ -90,10 +87,9 @@
       <p><b>Open:</b> {{ data?.quote?.o ?? 'N/A' }}</p>
       <p><b>Previous Close:</b> {{ data?.quote?.pc ?? 'N/A' }}</p>
     </div>
-
   </div>
 
-  <!-- 📝 ABOUT -->
+  <!-- ABOUT -->
   <div class="section about">
     <h3>About This Company</h3>
 
@@ -101,5 +97,4 @@
       {{ data?.fmpProfile?.description ?? 'N/A' }}
     </p>
   </div>
-
 </div>

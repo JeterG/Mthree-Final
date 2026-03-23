@@ -1,7 +1,5 @@
 <div class="login-container">
-
   <div class="login-card">
-
     <!-- LOGO -->
     <div class="logo-wrapper">
       <img src="assets/logo.png" class="logo-img" alt="Logo" />
@@ -12,7 +10,6 @@
     <p class="subtitle">Start paper trading today! 😀</p>
 
     <form #signupForm="ngForm" (ngSubmit)="signup()">
-
       <!-- EMAIL -->
       <div class="form-group">
         <input
@@ -25,9 +22,7 @@
           #emailInput="ngModel"
         />
         <div class="error">
-          <span *ngIf="emailInput.invalid && emailInput.touched">
-            Valid email is required
-          </span>
+          <span *ngIf="emailInput.invalid && emailInput.touched"> Valid email is required </span>
         </div>
       </div>
 
@@ -47,7 +42,9 @@
           <span *ngIf="passwordInput.touched && passwordInput.invalid">
             <span *ngIf="passwordInput.errors?.['required']">Password is required</span>
             <span *ngIf="passwordInput.errors?.['minlength']">Must be at least 6 characters</span>
-            <span *ngIf="passwordInput.errors?.['pattern']">Must contain 1 uppercase letter and 1 number</span>
+            <span *ngIf="passwordInput.errors?.['pattern']"
+              >Must contain 1 uppercase letter and 1 number</span
+            >
           </span>
         </div>
       </div>
@@ -70,31 +67,27 @@
       </div>
 
       <!-- BACKEND ERROR -->
-<div class="message-area">
-  <div class="error" *ngIf="errorMessage">
-    {{ errorMessage }}
-  </div>
+      <div class="message-area">
+        <div class="error" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
 
-  <div class="success" *ngIf="successMessage">
-    {{ successMessage }}
-  </div>
-</div>
+        <div class="success" *ngIf="successMessage">
+          {{ successMessage }}
+        </div>
+      </div>
 
-      <!-- 🔥 BUTTON (NOW RIGHT UNDER INPUTS) -->
-      <button type="submit" [disabled]="signupForm.invalid">
-        Sign Up
-      </button>
+      <!--  BUTTON (NOW RIGHT UNDER INPUTS) -->
+      <button type="submit" [disabled]="signupForm.invalid">Sign Up</button>
 
       <!-- LOGIN LINK -->
       <p class="signup-link">
         Already have an account?
         <a routerLink="/login">Login</a>
       </p>
-
     </form>
 
     <!-- FOOTER -->
     <p class="footer">Paper trading. Zero risk. Real experience.</p>
-
   </div>
 </div>

@@ -1,13 +1,12 @@
 <nav class="navbar">
-
-  <!-- 🔥 LOGO -->
+  <!--  LOGO -->
   <div class="logo">
     <a routerLink="/home">
       <img src="assets/logo.png" alt="Logo" class="logo-img" />
     </a>
   </div>
 
-  <!-- 🔥 NAV LINKS (LEFT SIDE) -->
+  <!--  NAV LINKS (LEFT SIDE) -->
   <div class="nav-links">
     <a routerLink="/home" routerLinkActive="active">Home</a>
     <a routerLink="/portfolio" routerLinkActive="active">Portfolio</a>
@@ -17,7 +16,7 @@
     <a routerLink="/diagrams" routerLinkActive="active">Diagrams</a>
   </div>
 
-  <!-- 🔥 USER (RIGHT SIDE LOCKED) -->
+  <!--  USER (RIGHT SIDE LOCKED) -->
   <div class="user-wrapper" *ngIf="isLoggedIn()">
     <div class="user-section" [class.open]="isDropdownOpen" (click)="toggleDropdown($event)">
       <span class="user-email">{{ email }}</span>
@@ -25,14 +24,11 @@
     </div>
 
     <div *ngIf="isDropdownOpen" class="user-dropdown">
-      <button class="user-dropdown-item" (click)="goToProfile()">
-        Profile
-      </button>
+      <button class="user-dropdown-item" (click)="goToProfile()">Profile</button>
 
       <div class="dropdown-divider"></div>
 
       <button class="user-dropdown-item" (click)="logout()">Logout</button>
     </div>
   </div>
-
 </nav>
