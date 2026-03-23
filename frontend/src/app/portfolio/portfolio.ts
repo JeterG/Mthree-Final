@@ -15,7 +15,7 @@ import { StockSearchComponent } from '../stock-search-component/stock-search-com
 })
 export class Portfolio implements OnInit {
   Math = Math;
-  selectedSymbol = '';
+  selectedSymbol = 'TSLA'; // default stock
   activeTab: 'holdings' | 'transactions' | 'watchlist' = 'holdings';
 
   cashBalance = 0;
@@ -51,7 +51,6 @@ export class Portfolio implements OnInit {
     this.loadAccount();
   }
 
-  // ✅ JWT-based account
   loadAccount(): void {
     this.api.get<any>(`/api/account/me`).subscribe({
       next: (account) => {
@@ -65,7 +64,6 @@ export class Portfolio implements OnInit {
     });
   }
 
-  // ✅ JWT-based holdings
   loadHoldings(): void {
     this.api.get<any[]>(`/api/holdings/me`).subscribe({
       next: (holdings) => {
@@ -119,7 +117,6 @@ export class Portfolio implements OnInit {
                 gainLoss: 0,
               };
               completed++;
-
               if (completed === holdings.length) {
                 this.ngZone.run(() => {
                   this.holdings = [...enriched];
@@ -138,7 +135,6 @@ export class Portfolio implements OnInit {
     });
   }
 
-  // ✅ JWT-based transactions
   loadTransactions(): void {
     this.api.get<any[]>(`/api/transactions/me`).subscribe({
       next: (transactions) => {
@@ -153,7 +149,6 @@ export class Portfolio implements OnInit {
     });
   }
 
-  // ✅ JWT-based watchlist
   loadWatchlist(): void {
     this.api.get<any[]>(`/api/watchlist/me`).subscribe({
       next: (watchlist) => {
@@ -173,7 +168,6 @@ export class Portfolio implements OnInit {
             next: (stock) => {
               enriched[index] = { ...w, currentPrice: stock.currentPrice };
               completed++;
-
               if (completed === watchlist.length) {
                 this.ngZone.run(() => {
                   this.watchlist = [...enriched];
@@ -184,7 +178,6 @@ export class Portfolio implements OnInit {
             error: () => {
               enriched[index] = { ...w, currentPrice: null };
               completed++;
-
               if (completed === watchlist.length) {
                 this.ngZone.run(() => {
                   this.watchlist = [...enriched];
@@ -220,13 +213,11 @@ export class Portfolio implements OnInit {
 
     return sorted.map((t) => {
       const amount = +t.totalAmount;
-
       if (t.type === 'BUY') {
         runningBalance += amount;
       } else {
         runningBalance -= amount;
       }
-
       return {
         date: t.createdAt,
         close: +runningBalance.toFixed(2),
@@ -237,7 +228,6 @@ export class Portfolio implements OnInit {
     });
   }
 
-  // ✅ FIXED SELL (no userId)
   sell(holding: any): void {
     const quantity = holding.sellQuantity || holding.quantity;
     if (!quantity || quantity <= 0) return;

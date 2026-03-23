@@ -1,13 +1,11 @@
-<!-- Buy / Watchlist Component -->
-<!-- Usage: <app-buy [symbol]="selectedSymbol" [userId]="userId"></app-buy> -->
-
+<!-- Buy Component -->
 <div class="card border-0 shadow-sm p-3">
-  <!-- No symbol selected -->
+  <!-- No symbol -->
   <div *ngIf="!symbol" class="text-muted small">Select a stock to buy or add to watchlist</div>
 
   <!-- Symbol selected -->
   <div *ngIf="symbol">
-    <!-- Header -->
+    <!-- Header: symbol + price -->
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h6 class="fw-bold mb-0">{{ symbol }}</h6>
       <span *ngIf="loading" class="text-muted small">Loading...</span>
@@ -16,40 +14,47 @@
       </span>
     </div>
 
-    <!-- Action radio buttons -->
-    <div class="d-flex gap-3 mb-3">
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          id="buyRadio"
-          [(ngModel)]="action"
-          value="buy"
-        />
-        <label class="form-check-label" for="buyRadio">Buy</label>
-      </div>
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          id="watchlistRadio"
-          [(ngModel)]="action"
-          value="watchlist"
-        />
-        <label class="form-check-label" for="watchlistRadio">Add to Watchlist</label>
-      </div>
+    <!-- Cash balance display -->
+    <div *ngIf="cashBalance !== null" class="text-muted small mb-3">
+      Available: <strong>${{ cashBalance | number: '1.2-2' }}</strong>
+      <span *ngIf="maxAffordable > 0" class="ms-2">
+        (max {{ maxAffordable | number: '1.0-0' }} shares)
+      </span>
     </div>
 
-    <!-- Quantity input — only for buy -->
-    <div *ngIf="action === 'buy'" class="mb-3">
+    <!-- Action dropdown -->
+    <div class="mb-3">
+      <label class="form-label small text-muted">Action</label>
+      <select class="form-select form-select-sm" [(ngModel)]="action">
+        <option value="buy">Buy</option>
+        <option value="cart">Add to Cart</option>
+        <option value="watchlist">Add to Watchlist</option>
+      </select>
+    </div>
+
+    <!-- Quantity + Max button — only for buy and cart -->
+    <div *ngIf="action === 'buy' || action === 'cart'" class="mb-3">
       <label class="form-label small text-muted">Quantity</label>
-      <input type="number" class="form-control" [(ngModel)]="quantity" min="1" step="1" />
+      <div class="d-flex gap-2">
+        <input type="number" class="form-control" [(ngModel)]="quantity" min="1" step="1" />
+        <button
+          class="btn btn-outline-secondary btn-sm px-3"
+          type="button"
+          (click)="setMaxQuantity()"
+          [disabled]="!currentPrice || maxAffordable < 1"
+        >
+          Max
+        </button>
+      </div>
       <div class="mt-2 small text-muted" *ngIf="currentPrice !== null">
         Total: <strong>${{ totalCost | number: '1.2-2' }}</strong>
+        <span *ngIf="cashBalance !== null && totalCost > cashBalance" class="text-danger ms-2">
+          Exceeds balance
+        </span>
       </div>
     </div>
 
-    <!-- Success / error messages -->
+    <!-- Success / error -->
     <div class="alert alert-success py-2 small mb-3" *ngIf="successMessage">
       {{ successMessage }}
     </div>
@@ -64,7 +69,7 @@
       [disabled]="submitting || loading || currentPrice === null"
     >
       <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2"></span>
-      {{ action === 'buy' ? 'Buy' : 'Add to Watchlist' }}
+      <span *ngIf="!submitting">{{ buttonLabel }}</span>
     </button>
   </div>
 </div>

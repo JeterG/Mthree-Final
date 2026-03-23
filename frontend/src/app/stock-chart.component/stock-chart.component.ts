@@ -216,6 +216,14 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
       if (mode === 'portfolio') {
         this.renderPortfolioChart(this.allHistory.length ? this.allHistory : this.data);
       } else {
+        // Render transaction history immediately as a placeholder while projection loads
+        const histData = this.data.length ? this.data : this.allHistory;
+        if (histData.length) {
+          // Temporarily allow rendering even in projection mode for the placeholder
+          this.chartMode = 'portfolio';
+          this.renderPortfolioChart(histData);
+          this.chartMode = 'projection';
+        }
         this.runProjection();
       }
     }, 150);
