@@ -25,36 +25,28 @@
   line-height: 1.6;
 }
 
-/* 🔥 FIX STARTS HERE */
 .diagrams-wrapper .diagram-card {
   background: white;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   padding: 24px;
-
-  /* IMPORTANT */
   overflow-x: auto;
   overflow-y: hidden;
 }
 
-/* FORCE SVG TO BE VISIBLE */
 .diagrams-wrapper svg {
   display: block;
-
-  /* 🔑 critical fixes */
-  min-width: 900px; /* prevents collapsing */
+  min-width: 900px;
   height: auto;
-  max-width: none; /* allow horizontal scroll */
+  max-width: none;
 }
 
-/* Optional: center when smaller */
 @media (max-width: 1000px) {
   .diagrams-wrapper svg {
     min-width: 1000px;
   }
 }
 
-/* TEXT STYLES */
 .diagrams-wrapper .lb {
   font-family: Arial, sans-serif;
   font-size: 12px;
@@ -81,4 +73,24 @@
   fill: #888;
 }
 
+/* =========================
+   🌙 DARK MODE — DIAGRAMS
+   ViewEncapsulation.None required on component
+========================= */
 
+.dark-mode .diagrams-wrapper {
+  background: #1a1a1a !important;
+}
+
+.dark-mode .diagrams-wrapper section h2 {
+  color: #ffffff !important;
+}
+
+.dark-mode .diagrams-wrapper section p {
+  color: #cccccc !important;
+}
+
+.dark-mode .diagrams-wrapper .diagram-card {
+  background: #2a2a2a !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6) !important;
+}
