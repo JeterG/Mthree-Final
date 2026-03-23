@@ -2,3 +2,37 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 SESSION START: 2026-03-23 11:58:50
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+frontend  | 
+frontend  | Warning: This is a simple server for use in testing or debugging Angular applications
+frontend  | locally. It hasn't been reviewed for security issues.
+frontend  | 
+frontend  | Binding this server to an open connection can result in compromising your application or
+frontend  | computer. Using a different host than the one passed to the "--host" flag might result in
+frontend  | websocket connection issues.
+frontend  |     
+frontend  | ❯ Building...
+frontend  | ✔ Building...
+frontend  | Initial chunk files | Names         |  Raw size
+frontend  | main.js             | main          | 505.11 kB | 
+frontend  | styles.css          | styles        | 496.33 kB | 
+frontend  | scripts.js          | scripts       | 107.73 kB | 
+frontend  | chunk-HFPSWFMW.js   | -             |  67.32 kB | 
+frontend  | 
+frontend  |                     | Initial total |   1.18 MB
+frontend  | 
+frontend  | Lazy chunk files    | Names         |  Raw size
+frontend  | chunk-RH4UDSRM.js   | stock-page    |  20.72 kB | 
+frontend  | 
+frontend  | Application bundle generation complete. [3.832 seconds] - 2026-03-23T15:59:24.107Z
+frontend  | 
+frontend  | Watch mode enabled. Watching for file changes...
+frontend  | NOTE: Raw file sizes do not reflect development server per-request transformations.
+frontend  | 3:59:24 PM [vite] (client) Re-optimizing dependencies because vite config has changed
+frontend  |   ➜  Local:   http://localhost:4200/
+frontend  |   ➜  Network: http://172.18.0.4:4200/
+frontend  | npm error path /app
+frontend  | npm error command failed
+frontend  | npm error signal SIGTERM
+frontend  | npm error command sh -c ng serve --host=0.0.0.0
+frontend  | npm error A complete log of this run can be found in: /root/.npm/_logs/2026-03-23T15_59_19_518Z-debug-0.log
+[Kfrontend exited with code 1
