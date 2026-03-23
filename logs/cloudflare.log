@@ -23,3 +23,4 @@ SESSION START: 2026-03-23 11:58:50
 2026-03-23T15:59:00Z INF Starting metrics server on 127.0.0.1:20241/metrics
 2026-03-23T15:59:00Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.27
 2026-03-23T15:59:01Z INF Registered tunnel connection connIndex=0 connection=7f397858-9740-4705-be3a-6ac320be1b42 event=0 ip=198.41.192.27 location=ord02 protocol=quic
+2026-03-23T16:05:48Z INF Initiating graceful shutdown due to signal terminated ...
