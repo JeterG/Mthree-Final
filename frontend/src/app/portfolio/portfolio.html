@@ -35,14 +35,11 @@
 
   <!-- Charts Row -->
   <div class="row g-4 mb-4">
-    <!-- Left: stock chart — always shown, defaults to TSLA -->
     <div class="col-12 col-lg-6">
       <div class="card border-0 shadow-sm h-100 p-3">
         <app-stock-chart [symbol]="selectedSymbol"></app-stock-chart>
       </div>
     </div>
-
-    <!-- Right: portfolio value over time + projection toggle -->
     <div class="col-12 col-lg-6">
       <div class="card border-0 shadow-sm h-100 p-3">
         <app-stock-chart [data]="transactionsForChart" [holdings]="holdings"></app-stock-chart>
@@ -55,16 +52,17 @@
     <div class="col-12 col-lg-6">
       <div class="card border-0 shadow-sm p-3">
         <p class="text-muted small mb-2">Search a stock</p>
-        <app-stock-search
-          [defaultSymbol]="'TSLA'"
-          (symbolSelected)="onSymbolSelected($event)"
-        ></app-stock-search>
+        <app-stock-search [defaultSymbol]="'TSLA'" (symbolSelected)="onSymbolSelected($event)">
+        </app-stock-search>
       </div>
     </div>
     <div class="col-12 col-lg-6">
       <app-buy
         [symbol]="selectedSymbol"
-        (buyComplete)="loadPortfolio(); loadTransactions(); loadWatchlist()"
+        [refreshTrigger]="refreshTrigger"
+        (buyComplete)="
+          loadPortfolio(); loadTransactions(); loadWatchlist(); refreshTrigger = refreshTrigger + 1
+        "
         (watchlistComplete)="loadWatchlist()"
       >
       </app-buy>
@@ -104,8 +102,18 @@
                 Watchlist
               </button>
             </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                [class.active]="activeTab === 'analytics'"
+                (click)="activeTab = 'analytics'"
+              >
+                Analytics
+              </button>
+            </li>
           </ul>
         </div>
+
         <div class="card-body p-4">
           <!-- Holdings Tab -->
           <div *ngIf="activeTab === 'holdings'">
@@ -244,6 +252,155 @@
               </tbody>
             </table>
           </div>
+
+          <!-- Analytics Tab -->
+          <div *ngIf="activeTab === 'analytics'">
+            <div *ngIf="!analytics" class="text-center text-muted py-4">
+              No transaction data yet — make some trades to see analytics.
+            </div>
+
+            <div *ngIf="analytics">
+              <!-- Row 1: Returns -->
+              <div class="row g-3 mb-4">
+                <div class="col-12">
+                  <p class="text-muted small fw-semibold mb-2">Returns</p>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="card border-0 bg-light p-3 h-100">
+                    <p class="text-muted small mb-1">Total Invested</p>
+                    <h5 class="fw-bold mb-0">${{ analytics.totalInvested | number: '1.2-2' }}</h5>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="card border-0 bg-light p-3 h-100">
+                    <p class="text-muted small mb-1">Total Return ($)</p>
+                    <h5
+                      class="fw-bold mb-0"
+                      [class.text-success]="analytics.totalReturnDollar >= 0"
+                      [class.text-danger]="analytics.totalReturnDollar < 0"
+                    >
+                      {{ analytics.totalReturnDollar >= 0 ? '+' : '' }}${{
+                        analytics.totalReturnDollar | number: '1.2-2'
+                      }}
+                    </h5>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="card border-0 bg-light p-3 h-100">
+                    <p class="text-muted small mb-1">Total Return (%)</p>
+                    <h5
+                      class="fw-bold mb-0"
+                      [class.text-success]="analytics.totalReturnPct >= 0"
+                      [class.text-danger]="analytics.totalReturnPct < 0"
+                    >
+                      {{ analytics.totalReturnPct >= 0 ? '+' : ''
+                      }}{{ analytics.totalReturnPct | number: '1.2-2' }}%
+                    </h5>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="card border-0 bg-light p-3 h-100">
+                    <p class="text-muted small mb-1">Most Traded</p>
+                    <h5 class="fw-bold mb-0">{{ analytics.mostTraded }}</h5>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 2: Trade Activity -->
+              <div class="row g-3 mb-4">
+                <div class="col-12">
+                  <p class="text-muted small fw-semibold mb-2">Trade Activity</p>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="card border-0 bg-light p-3 h-100">
+                    <p class="text-muted small mb-1">Total Transactions</p>
+                    <h5 class="fw-bold mb-0">{{ analytics.totalTransactions }}</h5>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="card border-0 bg-light p-3 h-100">
+                    <p class="text-muted small mb-1">Buys</p>
+                    <h5 class="fw-bold mb-0 text-success">{{ analytics.buyCount }}</h5>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="card border-0 bg-light p-3 h-100">
+                    <p class="text-muted small mb-1">Sells</p>
+                    <h5 class="fw-bold mb-0 text-danger">{{ analytics.sellCount }}</h5>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="card border-0 bg-light p-3 h-100">
+                    <p class="text-muted small mb-1">Profitable Sells</p>
+                    <h5 class="fw-bold mb-0">
+                      <span class="text-success">{{ analytics.sellsWithGain }}W</span>
+                      <span class="text-muted mx-1">/</span>
+                      <span class="text-danger">{{ analytics.sellsWithLoss }}L</span>
+                    </h5>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 3: Best / Worst -->
+              <div class="row g-3 mb-4" *ngIf="analytics.bestHolding || analytics.worstHolding">
+                <div class="col-12">
+                  <p class="text-muted small fw-semibold mb-2">Holdings Performance</p>
+                </div>
+                <div class="col-6" *ngIf="analytics.bestHolding">
+                  <div class="card border-0 bg-light p-3">
+                    <p class="text-muted small mb-1">Best Performing</p>
+                    <h5 class="fw-bold mb-0 text-success">
+                      {{ analytics.bestHolding.stockSymbol }}
+                    </h5>
+                    <p class="small text-success mb-0">
+                      +${{ analytics.bestHolding.gainLoss | number: '1.2-2' }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-6" *ngIf="analytics.worstHolding">
+                  <div class="card border-0 bg-light p-3">
+                    <p class="text-muted small mb-1">Worst Performing</p>
+                    <h5 class="fw-bold mb-0 text-danger">
+                      {{ analytics.worstHolding.stockSymbol }}
+                    </h5>
+                    <p class="small text-danger mb-0">
+                      {{ analytics.worstHolding.gainLoss >= 0 ? '+' : '' }}${{
+                        analytics.worstHolding.gainLoss | number: '1.2-2'
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 4: Risk -->
+              <div class="row g-3">
+                <div class="col-12">
+                  <p class="text-muted small fw-semibold mb-2">Risk & Volatility</p>
+                </div>
+                <div class="col-6 col-md-4">
+                  <div class="card border-0 bg-light p-3 h-100">
+                    <p class="text-muted small mb-1">Max Drawdown</p>
+                    <h5 class="fw-bold mb-0 text-danger">
+                      {{ analytics.maxDrawdown | number: '1.2-2' }}%
+                    </h5>
+                    <p class="text-muted" style="font-size: 10px; margin-bottom: 0">
+                      Largest peak-to-trough portfolio drop
+                    </p>
+                  </div>
+                </div>
+                <div class="col-6 col-md-4">
+                  <div class="card border-0 bg-light p-3 h-100">
+                    <p class="text-muted small mb-1">Std Deviation</p>
+                    <h5 class="fw-bold mb-0">${{ analytics.stdDev | number: '1.2-2' }}</h5>
+                    <p class="text-muted" style="font-size: 10px; margin-bottom: 0">
+                      Volatility of portfolio value over time
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- end analytics -->
         </div>
       </div>
     </div>
