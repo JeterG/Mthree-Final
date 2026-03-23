@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://plastics-brooks-structure-dark.trycloudflare.com',
+  apiUrl: 'http://localhost:8080',
 };
