@@ -10,6 +10,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CartService } from '../cart/cart.service';
 import { ApiService } from '../services/api.services';
 
 @Component({
@@ -38,6 +39,7 @@ export class BuyComponent implements OnInit, OnChanges {
   constructor(
     private api: ApiService,
     private cdr: ChangeDetectorRef,
+    private cartService: CartService,
   ) {}
 
   ngOnInit(): void {
@@ -161,7 +163,13 @@ export class BuyComponent implements OnInit, OnChanges {
     this.submitting = true;
     this.resetMessages();
 
-    if (this.action === 'buy' || this.action === 'cart') {
+    if (this.action === 'cart') {
+      // Add to cart locally — no API call
+      this.cartService.addItem(this.symbol, this.quantity, this.currentPrice ?? 0);
+      this.successMessage = `${this.quantity} share(s) of ${this.symbol} added to cart`;
+      this.submitting = false;
+      this.cdr.detectChanges();
+    } else if (this.action === 'buy') {
       this.api
         .post<any>('/api/holdings/buy', {
           stockSymbol: this.symbol,
@@ -169,18 +177,14 @@ export class BuyComponent implements OnInit, OnChanges {
         })
         .subscribe({
           next: () => {
-            this.successMessage =
-              this.action === 'buy'
-                ? `Bought ${this.quantity} share(s) of ${this.symbol}`
-                : `${this.quantity} share(s) of ${this.symbol} added to cart`;
+            this.successMessage = `Bought ${this.quantity} share(s) of ${this.symbol}`;
             this.submitting = false;
-            // Refresh cash balance after purchase
             this.loadCashBalance();
             this.buyComplete.emit();
             this.cdr.detectChanges();
           },
           error: (err) => {
-            this.errorMessage = err.error?.message || 'Purchase failed';
+            this.errorMessage = err.error?.userMessage || err.error?.message || 'Purchase failed';
             this.submitting = false;
             this.cdr.detectChanges();
           },

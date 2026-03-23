@@ -1,6 +1,7 @@
 package com.sakib_jeter.backend.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,54 +36,74 @@ public class HoldingController {
         this.userRepository = userRepository;
     }
 
-    // ✅ NEW JWT endpoint
     @Operation(summary = "Get current user's holdings")
     @GetMapping("/me")
     public List<Holding> getMyHoldings(Authentication authentication) {
-
         String email = authentication.getName();
-
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
         return holdingService.getHoldingsByUser(user.getId());
     }
 
-    // (optional: keep for admin/testing)
     @GetMapping("/{userId}")
     public List<Holding> getHoldings(@PathVariable Long userId) {
         return holdingService.getHoldingsByUser(userId);
     }
 
+    @Operation(summary = "Buy a single stock")
     @PostMapping("/buy")
     public ResponseEntity<Holding> buy(@RequestBody Map<String, Object> body,
             Authentication authentication) {
-
         String email = authentication.getName();
-
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
         String symbol = body.get("stockSymbol").toString().toUpperCase();
         BigDecimal quantity = new BigDecimal(body.get("quantity").toString());
-
-        return ResponseEntity.ok(
-                holdingService.buyStock(user.getId(), symbol, quantity));
+        return ResponseEntity.ok(holdingService.buyStock(user.getId(), symbol, quantity));
     }
 
-    @PostMapping("/sell")
-    public ResponseEntity<Transaction> sell(@RequestBody Map<String, Object> body,
+    @Operation(summary = "Buy multiple stocks from cart in one request")
+    @PostMapping("/buy-bulk")
+    public ResponseEntity<Map<String, Object>> buyBulk(
+            @RequestBody List<Map<String, Object>> items,
             Authentication authentication) {
 
         String email = authentication.getName();
-
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        List<String> succeeded = new ArrayList<>();
+        List<String> failed = new ArrayList<>();
+
+        for (Map<String, Object> item : items) {
+            try {
+                String symbol = item.get("stockSymbol").toString().toUpperCase();
+                BigDecimal quantity = new BigDecimal(item.get("quantity").toString());
+                holdingService.buyStock(user.getId(), symbol, quantity);
+                succeeded.add(symbol);
+            } catch (Exception e) {
+                String symbol = item.getOrDefault("stockSymbol", "unknown").toString();
+                failed.add(symbol + ": " + e.getMessage());
+            }
+        }
+
+        Map<String, Object> result = Map.of(
+                "succeeded", succeeded,
+                "failed", failed,
+                "total", items.size());
+
+        return ResponseEntity.ok(result);
+    }
+
+    @Operation(summary = "Sell a stock")
+    @PostMapping("/sell")
+    public ResponseEntity<Transaction> sell(@RequestBody Map<String, Object> body,
+            Authentication authentication) {
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
         String symbol = body.get("stockSymbol").toString().toUpperCase();
         BigDecimal quantity = new BigDecimal(body.get("quantity").toString());
-
-        return ResponseEntity.ok(
-                holdingService.sellStock(user.getId(), symbol, quantity));
+        return ResponseEntity.ok(holdingService.sellStock(user.getId(), symbol, quantity));
     }
 }

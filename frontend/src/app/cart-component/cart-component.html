@@ -1,0 +1,98 @@
+<!-- Cart button — always visible -->
+<div class="cart-trigger" (click)="toggle()">
+  <button class="btn btn-outline-secondary btn-sm position-relative">
+    🛒 Cart
+    <span
+      *ngIf="count > 0"
+      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+      style="font-size: 9px"
+    >
+      {{ count }}
+    </span>
+  </button>
+</div>
+
+<!-- Slide-in panel -->
+<div class="cart-panel shadow" [class.open]="isOpen">
+  <div class="cart-header d-flex justify-content-between align-items-center p-3 border-bottom">
+    <h6 class="mb-0 fw-bold">🛒 Cart ({{ count }})</h6>
+    <button class="btn-close" (click)="close()"></button>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="items.length === 0" class="p-4 text-center text-muted">
+    <p class="mb-0">Your cart is empty.</p>
+    <p class="small">Use the Buy panel and choose "Add to Cart".</p>
+  </div>
+
+  <!-- Items -->
+  <div class="cart-items" *ngIf="items.length > 0">
+    <div *ngFor="let item of items" class="cart-item px-3 py-2 border-bottom">
+      <div class="d-flex justify-content-between align-items-center">
+        <strong>{{ item.stockSymbol }}</strong>
+        <button class="btn btn-sm btn-link text-danger p-0" (click)="remove(item.stockSymbol)">
+          ✕
+        </button>
+      </div>
+      <div class="d-flex align-items-center gap-2 mt-1">
+        <span class="text-muted small">@ ${{ item.priceAtAdd | number: '1.2-2' }}</span>
+        <input
+          type="number"
+          class="form-control form-control-sm"
+          style="width: 65px"
+          [value]="item.quantity"
+          min="1"
+          (change)="updateQty(item, +$any($event.target).value)"
+        />
+        <span class="ms-auto fw-semibold">${{ item.totalAtAdd | number: '1.2-2' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary + checkout -->
+  <div *ngIf="items.length > 0" class="cart-footer p-3">
+    <div class="d-flex justify-content-between small mb-1">
+      <span class="text-muted">Estimated Total</span>
+      <span class="fw-semibold">${{ estimatedTotal | number: '1.2-2' }}</span>
+    </div>
+    <div class="d-flex justify-content-between small mb-1">
+      <span class="text-muted">Cash Balance</span>
+      <span>${{ cashBalance | number: '1.2-2' }}</span>
+    </div>
+    <div class="d-flex justify-content-between small mb-3">
+      <span class="text-muted">Remaining after</span>
+      <span [class.text-danger]="!canAfford" [class.text-success]="canAfford">
+        ${{ remaining | number: '1.2-2' }}
+      </span>
+    </div>
+
+    <div *ngIf="!canAfford" class="alert alert-danger py-1 px-2 small mb-2">
+      Insufficient funds — remove items or reduce quantities.
+    </div>
+
+    <button
+      class="btn btn-success w-100"
+      [disabled]="checkingOut || !canAfford"
+      (click)="checkout()"
+    >
+      <span *ngIf="checkingOut">Processing...</span>
+      <span *ngIf="!checkingOut">Checkout ({{ count }} items)</span>
+    </button>
+
+    <!-- Result -->
+    <div *ngIf="checkoutResult" class="mt-2">
+      <div
+        *ngIf="checkoutResult.succeeded.length > 0"
+        class="alert alert-success py-1 px-2 small mb-1"
+      >
+        ✓ Bought: {{ checkoutResult.succeeded.join(', ') }}
+      </div>
+      <div *ngFor="let f of checkoutResult.failed" class="alert alert-danger py-1 px-2 small mb-1">
+        ✗ {{ f }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Backdrop -->
+<div *ngIf="isOpen" class="cart-backdrop" (click)="close()"></div>

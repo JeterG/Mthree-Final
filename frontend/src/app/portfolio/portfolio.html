@@ -79,13 +79,18 @@
       </div>
     </div>
     <div class="col-12 col-lg-6">
-      <app-buy
-        [symbol]="selectedSymbol"
-        [refreshTrigger]="refreshTrigger"
-        (buyComplete)="onBuyComplete()"
-        (watchlistComplete)="loadWatchlist()"
-      >
-      </app-buy>
+      <div class="d-flex flex-column gap-2">
+        <app-buy
+          [symbol]="selectedSymbol"
+          [refreshTrigger]="refreshTrigger"
+          (buyComplete)="onBuyComplete()"
+          (watchlistComplete)="loadWatchlist()"
+        >
+        </app-buy>
+        <div class="d-flex justify-content-end">
+          <app-cart [cashBalance]="cashBalance" (checkoutComplete)="onBuyComplete()"> </app-cart>
+        </div>
+      </div>
     </div>
   </div>
 
