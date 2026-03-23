@@ -52,8 +52,6 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        // JWT handles authentication — this bean just suppresses the
-        // auto-configured InMemoryUserDetailsManager and its warning
         return username -> {
             throw new UsernameNotFoundException("Use JWT");
         };
@@ -67,9 +65,17 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(
+
+        // Use pattern matching to allow any Cloudflare tunnel URL (changes every run)
+        // plus the fixed ngrok URL and localhost
+        config.setAllowedOriginPatterns(List.of(
                 "http://localhost:4200",
-                "https://unflecked-rhamnaceous-lynne.ngrok-free.dev"));
+                "http://localhost:*",
+                "https://unflecked-rhamnaceous-lynne.ngrok-free.dev",
+                "https://*.trycloudflare.com",
+                "https://*.ngrok-free.dev",
+                "https://*.ngrok.io"));
+
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowCredentials(true);
