@@ -2,14 +2,21 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BuyComponent } from '../buy-component/buy-component';
+import { CartComponent } from '../cart-component/cart-component';
 import { ApiService } from '../services/api.services';
 import { StockChartComponent } from '../stock-chart.component/stock-chart.component';
 import { StockSearchComponent } from '../stock-search-component/stock-search-component';
-
 @Component({
   selector: 'app-portfolio',
   standalone: true,
-  imports: [CommonModule, StockSearchComponent, StockChartComponent, BuyComponent, FormsModule],
+  imports: [
+    CommonModule,
+    StockSearchComponent,
+    StockChartComponent,
+    BuyComponent,
+    CartComponent,
+    FormsModule,
+  ],
   templateUrl: './portfolio.html',
   styleUrl: './portfolio.css',
 })
