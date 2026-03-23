@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../services/api.services';
 
@@ -7,6 +7,7 @@ import { ApiService } from '../services/api.services';
 // Loads all symbols from stock_cache on init
 // Emits the selected symbol to the parent component
 // Example: <app-stock-search (symbolSelected)="onSymbolSelected($event)"></app-stock-search>
+// With default: <app-stock-search [defaultSymbol]="'TSLA'" (symbolSelected)="onSymbolSelected($event)"></app-stock-search>
 @Component({
   selector: 'app-stock-search',
   standalone: true,
@@ -15,8 +16,10 @@ import { ApiService } from '../services/api.services';
   styleUrls: ['stock-search-component.css'],
 })
 export class StockSearchComponent implements OnInit {
-  // Emits the selected symbol string to the parent
   @Output() symbolSelected = new EventEmitter<string>();
+
+  // Optional default symbol to pre-populate the search input
+  @Input() defaultSymbol: string = '';
 
   searchQuery = '';
   allStocks: any[] = [];
@@ -30,17 +33,26 @@ export class StockSearchComponent implements OnInit {
     this.loadStocks();
   }
 
-  // Load all cached stocks from stock_cache table
   loadStocks(): void {
     this.api.get<any[]>('/api/market/cached').subscribe({
       next: (stocks: any[]) => {
         this.allStocks = stocks;
+        // Pre-populate with default symbol once stocks are loaded
+        if (this.defaultSymbol) {
+          const match = stocks.find((s) => s.symbol === this.defaultSymbol.toUpperCase());
+          if (match) {
+            this.searchQuery = match.symbol;
+            this.selectedStock = match;
+          } else {
+            // If not in cache yet just show the symbol text
+            this.searchQuery = this.defaultSymbol.toUpperCase();
+          }
+        }
       },
       error: (err) => console.error('Failed to load stocks:', err),
     });
   }
 
-  // Filter stocks by symbol as user types
   onSearch(): void {
     const query = this.searchQuery.toLowerCase().trim();
     if (!query) {
@@ -58,17 +70,13 @@ export class StockSearchComponent implements OnInit {
     this.showDropdown = this.filteredStocks.length > 0;
   }
 
-  // Select a stock from the dropdown
   selectStock(stock: any) {
     this.selectedStock = stock;
     this.searchQuery = stock.symbol;
     this.showDropdown = false;
-
-    // 🔥 Emit only
     this.symbolSelected.emit(stock.symbol);
   }
 
-  // Close dropdown when input loses focus
   onBlur(): void {
     setTimeout(() => (this.showDropdown = false), 200);
   }
