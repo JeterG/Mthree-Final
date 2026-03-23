@@ -1,4 +1,4 @@
-/* 🔥 LOGO */
+/*  LOGO */
 .logo-wrapper-home {
   display: flex;
   justify-content: center;
@@ -11,7 +11,7 @@
   filter: drop-shadow(0 0 8px rgba(255, 165, 0, 0.3));
 }
 
-/* 📦 LAYOUT */
+/* LAYOUT */
 .container {
   padding-top: 30px;
   padding-bottom: 40px;
@@ -23,7 +23,7 @@
 }
 
 /* =========================
-   🔥 MARKET SECTION
+    MARKET SECTION
 ========================= */
 .market-section {
   display: flex;
@@ -33,7 +33,7 @@
 }
 
 /* =========================
-   📊 LEFT SIDE (CHART)
+   LEFT SIDE (CHART)
 ========================= */
 .chart-area {
   flex: 2;
@@ -42,7 +42,7 @@
   display: flex;
 }
 
-/* 🔥 LEFT CARD WRAPPER */
+/*  LEFT CARD WRAPPER */
 .card-wrapper {
   background: inherit;
   border-radius: 12px;
@@ -66,7 +66,7 @@
 }
 
 /* =========================
-   📈 RIGHT SIDE (MOVERS)
+   RIGHT SIDE (MOVERS)
 ========================= */
 .movers-card {
   flex: 1;
@@ -82,7 +82,7 @@
 }
 
 /* =========================
-   🔘 TOGGLE
+   TOGGLE
 ========================= */
 .toggle {
   display: flex;
@@ -105,7 +105,7 @@
 }
 
 /* =========================
-   📊 MOVERS LIST
+   MOVERS LIST
 ========================= */
 .mover-header {
   display: flex;
@@ -144,7 +144,7 @@
 }
 
 /* =========================
-   ⚡ GET STARTED
+   GET STARTED
 ========================= */
 .get-started {
   background: #1c1c1c;
@@ -188,7 +188,7 @@
 }
 
 /* =========================
-   🎯 FEATURES
+   FEATURES
 ========================= */
 .row.text-center {
   margin-top: 70px !important;
@@ -221,11 +221,13 @@
 }
 
 /* =========================
-   📦 GENERIC CARDS
+   GENERIC CARDS
 ========================= */
 .card {
   margin-top: 30px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .card:hover {
@@ -253,16 +255,16 @@
 }
 
 /* =========================
-   📋 TEXT
+   TEXT
 ========================= */
 ul li {
   line-height: 1.6;
 }
 
-h5, h6 {
+h5,
+h6 {
   margin-bottom: 10px;
 }
 .chart-card-inner app-stock-chart {
-  height: 50px; /* 🔥 key control */
+  height: 50px; /*  key control */
 }
-

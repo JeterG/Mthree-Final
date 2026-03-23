@@ -8,7 +8,7 @@
   overflow: visible;
 }
 
-/* 🔥 LOGO */
+/*  LOGO */
 .logo {
   display: flex;
   align-items: center;
@@ -22,30 +22,30 @@
   object-fit: contain;
 }
 
-/* 🔥 NAV LINKS (LEFT SIDE) */
+/*  NAV LINKS (LEFT SIDE) */
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 40px;        /* 🔥 more spacing between items */
-  margin-left: 40px;/* 🔥 moves links closer to logo */
-  flex: 1;          /* 🔥 pushes user section to the right */
+  gap: 40px; /*  more spacing between items */
+  margin-left: 40px; /*  moves links closer to logo */
+  flex: 1; /*  pushes user section to the right */
 }
 
 .nav-links a {
   text-decoration: none;
   color: #aaa;
   font-size: 14px;
-  padding: 6px 10px;        /* 🔥 gives clickable area */
-  border-radius: 6px;       /* 🔥 makes it pill-like */
+  padding: 6px 10px; /*  gives clickable area */
+  border-radius: 6px; /*  makes it pill-like */
   transition: all 0.2s ease;
 }
 
 .nav-links a:hover {
   color: #ff9800;
 
-  background-color: rgba(255, 152, 0, 0.12); /* 🔥 subtle orange tint */
+  background-color: rgba(255, 152, 0, 0.12); /*  subtle orange tint */
 
-  box-shadow: 0 0 8px rgba(255, 152, 0, 0.25); /* 🔥 soft glow */
+  box-shadow: 0 0 8px rgba(255, 152, 0, 0.25); /*  soft glow */
 }
 
 .nav-links a.active {
@@ -55,12 +55,12 @@
   background-color: rgba(255, 152, 0, 0.15);
 }
 
-/* 🔥 USER SECTION (RIGHT LOCKED) */
+/*  USER SECTION (RIGHT LOCKED) */
 .user-wrapper {
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: auto; /* 🔥 locks to far right */
+  margin-left: auto; /*  locks to far right */
 }
 
 .user-section {
@@ -71,7 +71,9 @@
   font-weight: 500;
   padding: 6px 8px;
   border-radius: 6px;
-  transition: background-color 0.2s ease, opacity 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .user-section:hover {
@@ -93,7 +95,7 @@
   transform: rotate(180deg);
 }
 
-/* 🔥 DROPDOWN */
+/*  DROPDOWN */
 .user-dropdown {
   position: absolute;
   top: calc(100% + 8px);

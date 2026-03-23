@@ -1,38 +1,33 @@
 <div class="container py-4">
-
-  <!-- 🔍 SEARCH -->
+  <!-- SEARCH -->
   <h2 class="mt-4 text-center">Search Stocks</h2>
 
-  <!-- 🔥 WRAPPED SEARCH -->
+  <!-- WRAPPED SEARCH -->
   <div class="search-wrapper">
-
-    <!-- 🔍 ICON -->
+    <!-- ICON -->
     <span class="search-icon">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#111"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <circle cx="11" cy="11" r="8"></circle>
-    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-  </svg>
-</span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#111"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </span>
 
     <!-- SEARCH COMPONENT -->
-    <app-stock-search
-      class="search-input"
-      (symbolSelected)="onSymbolSelected($event)">
+    <app-stock-search class="search-input" (symbolSelected)="onSymbolSelected($event)">
     </app-stock-search>
-
   </div>
 
-  <!-- 💡 SUGGESTED SEARCHES -->
+  <!-- SUGGESTED SEARCHES -->
   <div class="suggestions">
     <span>Try:</span>
 
@@ -42,12 +37,10 @@
     <button (click)="onSymbolSelected('MSFT')">MSFT</button>
   </div>
 
-  <!-- 🔥 SIDE-BY-SIDE SECTION -->
+  <!-- SIDE-BY-SIDE SECTION -->
   <div class="content-row">
-
-    <!-- 📘 INFO PANEL -->
+    <!-- INFO PANEL -->
     <div class="info-panel">
-
       <h4>How to Use Search</h4>
 
       <p>This page helps you explore stocks easily.</p>
@@ -59,18 +52,12 @@
         <li>Use charts to understand stock movement</li>
       </ul>
 
-      <p class="tip">
-        Tip: Start with popular stocks if you're new to investing.
-      </p>
-
+      <p class="tip">Tip: Start with popular stocks if you're new to investing.</p>
     </div>
 
-    <!-- 📈 POPULAR STOCKS -->
+    <!-- POPULAR STOCKS -->
     <div class="chart-container">
-
-      <h5 class="fw-bold mb-3 text-center">
-        Popular Stocks (AAPL, NVDA, MSFT)
-      </h5>
+      <h5 class="fw-bold mb-3 text-center">Popular Stocks (AAPL, NVDA, MSFT)</h5>
 
       <div class="d-flex justify-content-center gap-2 mb-3">
         <button
@@ -87,9 +74,6 @@
       <div class="card custom-card shadow-sm p-3">
         <app-stock-chart [symbol]="selectedSymbol"></app-stock-chart>
       </div>
-
     </div>
-
   </div>
-
 </div>

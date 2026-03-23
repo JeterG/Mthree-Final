@@ -1,15 +1,15 @@
 /* =========================
-   📦 PAGE WRAPPER
+   PAGE WRAPPER
 ========================= */
 .stock-page {
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px;
-  color: #111; /* 🔥 FIX: default text black */
+  color: #111; /* FIX: default text black */
 }
 
 /* =========================
-   🔥 HEADER
+   HEADER
 ========================= */
 .stock-header {
   width: 100%;
@@ -30,7 +30,7 @@
 .stock-title {
   margin: 0 0 8px 0;
   font-size: 2.2rem;
-  color: #111 !important; /* 🔥 FORCE BLACK */
+  color: #111 !important; /*  FORCE BLACK */
 }
 
 .sub {
@@ -40,7 +40,7 @@
 }
 
 /* =========================
-   📊 CHART
+    CHART
 ========================= */
 .chart-card {
   margin-top: 16px;
@@ -48,7 +48,7 @@
 }
 
 /* =========================
-   📊 GRID
+    GRID
 ========================= */
 .stats-grid {
   display: grid;
@@ -64,11 +64,11 @@
 }
 
 /* =========================
-   📦 SECTIONS (CARDS)
+   SECTIONS (CARDS)
 ========================= */
 .section {
-  background: #ffffff !important;  /* 🔥 FIX: WHITE CARD */
-  color: #111 !important;          /* 🔥 FIX: BLACK TEXT */
+  background: #ffffff !important; /*  FIX: WHITE CARD */
+  color: #111 !important; /*  FIX: BLACK TEXT */
 
   padding: 20px;
   border-radius: 12px;
@@ -84,7 +84,7 @@
   color: #111;
 }
 
-/* 🔥 SECTION TITLES (Company Info, Key Statistics, Daily Stats) */
+/* SECTION TITLES (Company Info, Key Statistics, Daily Stats) */
 .section h3 {
   color: #ff9800;
   border-bottom: 2px solid rgba(255, 152, 0, 0.4);
@@ -93,7 +93,7 @@
 }
 
 /* =========================
-   📝 ABOUT
+   ABOUT
 ========================= */
 .about {
   margin-top: 8px;
@@ -101,46 +101,46 @@
 
 .about p {
   line-height: 1.6;
-  color: #333 !important; /* 🔥 readable */
+  color: #333 !important; /*  readable */
 }
 
 /* =========================
-   ⏳ LOADING
+   LOADING
 ========================= */
 .loading {
   text-align: center;
   padding: 40px;
 }
 
-/* 🌙 DARK MODE TITLE FIX */
+/* DARK MODE TITLE FIX */
 :host-context(.dark-mode) .stock-title {
   color: #ffffff !important;
 }
 
-/* 🌙 DARK MODE — ALL SECTION CARDS */
+/* DARK MODE — ALL SECTION CARDS */
 :host-context(.dark-mode) .section {
-  background: #1e1e1e !important;   /* dark card */
-  color: #ffffff !important;        /* main text */
+  background: #1e1e1e !important; /* dark card */
+  color: #ffffff !important; /* main text */
 }
 
-/* 🔥 HEADINGS (Company Info, Key Stats, etc.) */
+/* HEADINGS (Company Info, Key Stats, etc.) */
 :host-context(.dark-mode) .section h3 {
-  color: orange !important;         /* keep your orange theme */
+  color: orange !important; /* keep your orange theme */
 }
 
-/* 🔥 BODY TEXT */
+/* BODY TEXT */
 :host-context(.dark-mode) .section p,
 :host-context(.dark-mode) .section b {
   color: #ffffff !important;
 }
 
-/* 🔥 OPTIONAL: softer secondary text */
+/* OPTIONAL: softer secondary text */
 :host-context(.dark-mode) .section p {
   color: #dddddd !important;
 }
 
 /* =========================
-   📱 MOBILE
+   MOBILE
 ========================= */
 @media (max-width: 768px) {
   .stats-grid {
@@ -156,4 +156,3 @@
     font-size: 1.8rem;
   }
 }
-

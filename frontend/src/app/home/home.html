@@ -1,12 +1,8 @@
 <div class="container py-4">
-
-  <!-- 🔥 MARKET TIMER -->
+  <!--  MARKET TIMER -->
   <div class="market-wrapper">
     <div class="card custom-card market-card shadow-sm p-3 text-center">
-      <h5
-        class="fw-bold mb-1"
-        [ngClass]="isMarketOpen ? 'text-success' : 'text-danger'"
-      >
+      <h5 class="fw-bold mb-1" [ngClass]="isMarketOpen ? 'text-success' : 'text-danger'">
         {{ isMarketOpen ? 'Market is OPEN' : 'Market is CLOSED' }}
       </h5>
 
@@ -21,36 +17,30 @@
 
   <!-- 📊 MARKET SECTION -->
   <div class="market-section">
-
     <!-- LEFT: CHART -->
-<!-- LEFT: CHART -->
-<div class="chart-area card-wrapper">
+    <!-- LEFT: CHART -->
+    <div class="chart-area card-wrapper">
+      <div class="chart-card-inner">
+        <h4 class="fw-bold mb-3 text-center">Market Overview</h4>
 
-  <div class="chart-card-inner">
+        <div class="d-flex gap-2 mb-3">
+          <button
+            *ngFor="let s of symbols"
+            type="button"
+            class="btn"
+            [ngClass]="selectedSymbol === s.symbol ? 'btn-secondary' : 'btn-light'"
+            (click)="selectSymbol(s.symbol)"
+          >
+            {{ s.name }}
+          </button>
+        </div>
 
-    <h4 class="fw-bold mb-3 text-center">Market Overview</h4>
-
-    <div class="d-flex gap-2 mb-3">
-      <button
-        *ngFor="let s of symbols"
-        type="button"
-        class="btn"
-        [ngClass]="selectedSymbol === s.symbol ? 'btn-secondary' : 'btn-light'"
-        (click)="selectSymbol(s.symbol)"
-      >
-        {{ s.name }}
-      </button>
+        <app-stock-chart [symbol]="selectedSymbol"></app-stock-chart>
+      </div>
     </div>
-
-    <app-stock-chart [symbol]="selectedSymbol"></app-stock-chart>
-
-  </div>
-
-</div>
 
     <!-- RIGHT: TOP MOVERS -->
     <div class="movers-card">
-
       <h5 class="fw-bold">Top Movers</h5>
       <p class="text-muted small">This Week</p>
 
@@ -77,49 +67,41 @@
       </div>
 
       <!-- LIST -->
-<div
-  *ngFor="let stock of (selectedMoverType === 'winners' ? topWinners : topLosers)"
-  class="mover-item"
->
-
-  <!-- SYMBOL -->
-<div class="mover-header">
-  <span>{{ stock.symbol }}</span>
-  <span class="percent" [ngClass]="stock.change > 0 ? 'green' : 'red'">
-    {{ stock.change | number:'1.1-2' }}%
-  </span>
-</div>
-
-  <!-- BAR + % INLINE -->
-  <div class="bar-row">
-
-    <div class="bar-fill-container">
       <div
-        class="bar"
-        [ngClass]="stock.change > 0 ? 'bar-green' : 'bar-red'"
-        [style.width.%]="getBarWidth(stock.change)"
-      ></div>
+        *ngFor="let stock of selectedMoverType === 'winners' ? topWinners : topLosers"
+        class="mover-item"
+      >
+        <!-- SYMBOL -->
+        <div class="mover-header">
+          <span>{{ stock.symbol }}</span>
+          <span class="percent" [ngClass]="stock.change > 0 ? 'green' : 'red'">
+            {{ stock.change | number: '1.1-2' }}%
+          </span>
+        </div>
+
+        <!-- BAR + % INLINE -->
+        <div class="bar-row">
+          <div class="bar-fill-container">
+            <div
+              class="bar"
+              [ngClass]="stock.change > 0 ? 'bar-green' : 'bar-red'"
+              [style.width.%]="getBarWidth(stock.change)"
+            ></div>
+          </div>
+
+          <span class="percent" [ngClass]="stock.change > 0 ? 'green' : 'red'">
+            {{ stock.change | number: '1.1-2' }}%
+          </span>
+        </div>
+      </div>
     </div>
-
-    <span class="percent" [ngClass]="stock.change > 0 ? 'green' : 'red'">
-      {{ stock.change | number:'1.1-2' }}%
-    </span>
-
-  </div>
-
-</div>
-      
-    </div>
-
   </div>
 
   <!-- ⚡ QUICK START -->
   <div class="get-started">
-
     <h3>Get Started</h3>
 
     <div class="steps">
-
       <div class="step">
         <div class="step-number">1</div>
         <div>
@@ -151,59 +133,68 @@
           <p>Monitor your portfolio over time.</p>
         </div>
       </div>
-
     </div>
-
   </div>
 
-  <!-- 💡 FEATURES -->
+  <!-- FEATURES -->
   <div class="row mt-4 text-center">
     <div class="col-md-4 clickable-emoji" (click)="increaseInvesting()">
       <h6 class="fw-bold">📈 Practice Investing</h6>
-      <p class="text-muted small">
-        Trade stocks with real data using virtual money.
-      </p>
+      <p class="text-muted small">Trade stocks with real data using virtual money.</p>
     </div>
 
     <div class="col-md-4 clickable-emoji" (click)="increaseLearning()">
       <h6 class="fw-bold">🧠 Learn the Market</h6>
-      <p class="text-muted small">
-        Understand trends, charts, and strategies.
-      </p>
+      <p class="text-muted small">Understand trends, charts, and strategies.</p>
     </div>
 
     <div class="col-md-4 clickable-emoji" (click)="increaseWealth()">
       <h6 class="fw-bold">💰 No Risk</h6>
-      <p class="text-muted small">
-        Build confidence without losing real money.
-      </p>
+      <p class="text-muted small">Build confidence without losing real money.</p>
     </div>
   </div>
 
-  <!-- 🧠 BEGINNER TIPS -->
+  <!-- BEGINNER TIPS -->
   <div class="card orange-card shadow-sm p-4 mt-4">
     <h5 class="fw-bold mb-3">Beginner Tips</h5>
     <ul class="text-muted mb-0 ps-3">
-      <li class="mb-2">Start with well-known companies and focus on long-term growth rather than short-term price changes.</li>
-      <li class="mb-2">Don’t invest all your money in one stock, diversifying helps reduce risk.</li>
-      <li class="mb-2">Avoid making decisions based on hype or news alone, always look at the data and trends.</li>
-      <li class="mb-2">Be patient because successful investing is about consistency over time, not quick wins.</li>
-      <li class="mb-0">Use this platform to experiment and learn from mistakes without any financial risk.</li>
+      <li class="mb-2">
+        Start with well-known companies and focus on long-term growth rather than short-term price
+        changes.
+      </li>
+      <li class="mb-2">
+        Don’t invest all your money in one stock, diversifying helps reduce risk.
+      </li>
+      <li class="mb-2">
+        Avoid making decisions based on hype or news alone, always look at the data and trends.
+      </li>
+      <li class="mb-2">
+        Be patient because successful investing is about consistency over time, not quick wins.
+      </li>
+      <li class="mb-0">
+        Use this platform to experiment and learn from mistakes without any financial risk.
+      </li>
     </ul>
   </div>
 
-  <!-- 📘 ABOUT US -->
-<div class="card orange-card shadow-sm p-4 mt-5">
-  <h4 class="fw-bold mb-3">About StockQuik</h4>
-  <p class="text-muted mb-3"> StockQuik is a paper trading platform built for beginners who want to learn how the stock
-    market works without risking real money. Investing can feel overwhelming at first, so we provide a simple and
-    intuitive environment where users can practice with real market data. </p>
-  <p class="text-muted mb-3"> With StockQuik, you can simulate buying and selling stocks, track your portfolio, and
-    explore different strategies, all in a completely risk-free setting. Whether you're just starting out or testing new
-    ideas, our goal is to help you build confidence and develop smart investing habits. </p>
-  <p class="text-muted mb-0"> By learning through experience, users can better understand market behavior and make more
-    informed financial decisions in the future. Let's use this application as practice before we actually hit the market
-    and stock up quick with StockQuik! </p>
-</div>
-
+  <!-- ABOUT US -->
+  <div class="card orange-card shadow-sm p-4 mt-5">
+    <h4 class="fw-bold mb-3">About StockQuik</h4>
+    <p class="text-muted mb-3">
+      StockQuik is a paper trading platform built for beginners who want to learn how the stock
+      market works without risking real money. Investing can feel overwhelming at first, so we
+      provide a simple and intuitive environment where users can practice with real market data.
+    </p>
+    <p class="text-muted mb-3">
+      With StockQuik, you can simulate buying and selling stocks, track your portfolio, and explore
+      different strategies, all in a completely risk-free setting. Whether you're just starting out
+      or testing new ideas, our goal is to help you build confidence and develop smart investing
+      habits.
+    </p>
+    <p class="text-muted mb-0">
+      By learning through experience, users can better understand market behavior and make more
+      informed financial decisions in the future. Let's use this application as practice before we
+      actually hit the market and stock up quick with StockQuik!
+    </p>
+  </div>
 </div>

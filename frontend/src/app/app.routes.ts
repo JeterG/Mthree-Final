@@ -1,15 +1,15 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './auth-guard/auth.guard'; // 🔥 ADD THIS
+import { authGuard } from './auth-guard/auth.guard'; //  ADD THIS
 
 import { DiagramsComponent } from './assets/diagrams/diagrams';
 import { HomeComponent } from './home/home';
 import { LoginComponent } from './login/login';
 import { Portfolio } from './portfolio/portfolio';
+import { ProfileComponent } from './profile/profile';
 import { Search } from './search/search';
 import { SettingsComponent } from './settings/settings';
 import { SignupComponent } from './signup/signup';
 import { SwaggerComponent } from './swagger/swagger';
-import { ProfileComponent } from './profile/profile';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -30,7 +30,7 @@ export const routes: Routes = [
 
   {
     path: 'stock/:symbol',
-    loadComponent: () => import('./stock-page/stock-page').then(m => m.StockPageComponent),
-    canActivate: [authGuard]
+    loadComponent: () => import('./stock-page/stock-page').then((m) => m.StockPageComponent),
+    canActivate: [authGuard],
   },
 ];

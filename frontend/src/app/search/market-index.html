@@ -1,6 +1,5 @@
 <div class="chart-container market-page">
-
-  <!-- 🔥 INDEX SELECTOR -->
+  <!--  INDEX SELECTOR -->
   <div class="d-flex gap-2 mb-3">
     <button
       *ngFor="let index of indexes"
@@ -13,15 +12,14 @@
     </button>
   </div>
 
-  <!-- 🔥 CARD -->
+  <!--  CARD -->
   <div class="card custom-card shadow-sm p-3">
-
-    <!-- 🔥 TITLE -->
+    <!--  TITLE -->
     <h5 class="fw-bold mb-2 text-center chart-title">
       {{ indexes.find(i => i.symbol === selectedSymbol)?.name }}
     </h5>
 
-    <!-- 🔥 RANGE BUTTONS -->
+    <!--  RANGE BUTTONS -->
     <div class="w-100 d-flex justify-content-start mb-3">
       <div class="btn-group" role="group">
         <button
@@ -36,11 +34,9 @@
       </div>
     </div>
 
-    <!-- 🔥 CHART -->
+    <!--  CHART -->
     <div class="chart-wrapper">
       <canvas id="mainChart"></canvas>
     </div>
-
   </div>
-
 </div>

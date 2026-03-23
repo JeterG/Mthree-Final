@@ -10,7 +10,7 @@
 /* CARD */
 .login-card {
   background: #121212;
-  padding: 40px 35px; /* 🔥 reduced vertical padding */
+  padding: 40px 35px;
   border-radius: 14px;
 
   width: 420px;
@@ -19,7 +19,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  justify-content: flex-start; /* 🔥 FIX: removes vertical centering */
+  justify-content: flex-start;
 
   box-shadow:
     0 0 40px rgba(255, 165, 0, 0.08),
@@ -33,7 +33,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* 🔥 keeps everything stacked naturally */
+  justify-content: flex-start;
 }
 
 /* LOGO */
@@ -66,7 +66,7 @@
 .login-card input {
   width: 100%;
   padding: 12px;
-  margin-bottom: 4px; /* 🔥 slightly tighter */
+  margin-bottom: 4px; /*  slightly tighter */
   border-radius: 6px;
   border: 1px solid #333;
   background-color: #0d0d0d;
@@ -85,7 +85,7 @@
 .login-card button {
   width: 100%;
   padding: 12px;
-  margin-top: 6px; /* 🔥 closer to inputs */
+  margin-top: 6px; /*  closer to inputs */
   background: linear-gradient(90deg, orange, #ff9800);
   color: black;
   border: none;
@@ -129,7 +129,7 @@
 .error {
   color: #ff6b6b;
   font-size: 12px;
-  min-height: 14px; /* 🔥 slightly smaller reserved space */
+  min-height: 14px;
   margin-bottom: 2px;
 }
 
@@ -144,10 +144,10 @@
 
 /* FORM GROUP */
 .form-group {
-  margin-bottom: 6px; /* 🔥 tighter spacing between inputs */
+  margin-bottom: 6px;
 }
 
 .message-area {
-  min-height: 0; /* 🔥 no forced empty space */
+  min-height: 0;
   margin-bottom: 6px;
 }

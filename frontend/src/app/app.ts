@@ -1,15 +1,15 @@
-import { Component, signal, OnInit } from '@angular/core';
-import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
-import { Navbar } from './navbar/navbar';
-import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { Navbar } from './navbar/navbar';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, Navbar, CommonModule],
   templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  styleUrls: ['./app.css'],
 })
 export class App implements OnInit {
   protected readonly title = signal('frontend');
@@ -22,7 +22,7 @@ export class App implements OnInit {
     this.applyTheme(theme);
 
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+      .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: any) => {
         this.updateNavbar(event.urlAfterRedirects);
       });

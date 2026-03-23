@@ -1,8 +1,7 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-
-  // 🔥 SKIP market endpoints
+  //  SKIP market endpoints
   if (req.url.includes('/api/market')) {
     return next(req);
   }
@@ -12,8 +11,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (token) {
     const cloned = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     return next(cloned);

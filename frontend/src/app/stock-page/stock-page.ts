@@ -6,12 +6,9 @@ import { StockChartComponent } from '../stock-chart.component/stock-chart.compon
 @Component({
   selector: 'app-stock-page',
   standalone: true,
-  imports: [
-    CommonModule,
-    StockChartComponent
-  ],
+  imports: [CommonModule, StockChartComponent],
   templateUrl: './stock-page.html',
-  styleUrls: ['./stock-page.css'] // 🔥 ADD THIS
+  styleUrls: ['./stock-page.css'],
 })
 export class StockPageComponent implements OnInit {
   symbol: string = '';
@@ -20,7 +17,7 @@ export class StockPageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
-    private cd: ChangeDetectorRef, // 🔥 ADD THIS
+    private cd: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -37,14 +34,14 @@ export class StockPageComponent implements OnInit {
 
         this.data = res;
 
-        this.cd.detectChanges(); // 🔥 FORCE UI UPDATE
+        this.cd.detectChanges(); // FORCE UI UPDATE
       },
       error: (err) => {
         console.error('API ERROR:', err);
 
         this.data = {};
 
-        this.cd.detectChanges(); // 🔥 ALSO HERE
+        this.cd.detectChanges(); // ALSO HERE
       },
     });
   }

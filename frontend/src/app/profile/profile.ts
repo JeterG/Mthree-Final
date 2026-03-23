@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../services/api.services';
 
@@ -8,82 +8,81 @@ import { ApiService } from '../services/api.services';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './profile.html',
-  styleUrls: ['./profile.css']
+  styleUrls: ['./profile.css'],
 })
 export class ProfileComponent implements OnInit {
-
-  // 🔥 USER INFO
+  //  USER INFO
   firstName: string = '';
   lastName: string = '';
   email: string = '';
 
-  // 🔥 SEPARATE SUCCESS MESSAGES
+  //  SEPARATE SUCCESS MESSAGES
   nameSuccessMessage: string = '';
   onboardingSuccessMessage: string = '';
 
-  // 🔥 MODAL STATE
+  //  MODAL STATE
   showOnboardingModal: boolean = false;
   currentStep: number = 0;
-showNameSuccess = false;
-nameSuccessTimeout: any;
-showOnboardingSuccess = false;
-onboardingSuccessTimeout: any;
-selectedEmoji = '🙂';   // saved (real)
-tempEmoji = '🙂';       // preview
-emojis = ['🙂','😎','🔥','🚀','💰','📈','📊','🐂','🐻','🧠','💡'];
+  showNameSuccess = false;
+  nameSuccessTimeout: any;
+  showOnboardingSuccess = false;
+  onboardingSuccessTimeout: any;
+  selectedEmoji = '🙂'; // saved (real)
+  tempEmoji = '🙂'; // preview
+  emojis = ['🙂', '😎', '', '🚀', '💰', '📈', '📊', '🐂', '🐻', '🧠', '💡'];
 
-showEmojiSuccess = false;
-emojiTimeout: any;
+  showEmojiSuccess = false;
+  emojiTimeout: any;
 
-  // 🔥 OPTIONS
+  //  OPTIONS
   experienceOptions: string[] = [
     'Beginner (just getting started)',
     'Intermediate (some experience)',
-    'Advanced (active trader)'
+    'Advanced (active trader)',
   ];
 
   tradingStyleOptions: string[] = [
     'Long-term investor',
     'Swing trader',
     'Day trader',
-    'Just exploring'
+    'Just exploring',
   ];
 
   marketPreferenceOptions: string[] = [
     'Real-time (fast refresh)',
     'Balanced',
-    'Battery saver (slower updates)'
+    'Battery saver (slower updates)',
   ];
 
   goalOptions: string[] = [
     'Learn how to invest',
     'Practice trading strategies',
     'Track the market',
-    'Explore and experiment'
+    'Explore and experiment',
   ];
 
-  // 🔥 USER RESPONSES
+  //  USER RESPONSES
   onboardingData = {
     experienceLevel: '',
     tradingStyle: '',
     marketPreference: '',
-    goal: ''
+    goal: '',
   };
 
   constructor(
     private api: ApiService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
-ngOnInit() {
-  const savedEmoji = localStorage.getItem('userEmoji');
-  if (savedEmoji) {
-    this.selectedEmoji = savedEmoji;
-    this.tempEmoji = savedEmoji;
-  }
+  ngOnInit() {
+    const savedEmoji = localStorage.getItem('userEmoji');
+    if (savedEmoji) {
+      this.selectedEmoji = savedEmoji;
+      this.tempEmoji = savedEmoji;
+    }
 
-  this.loadProfile();
-}
+    this.loadProfile();
+  }
 
   loadProfile() {
     this.api.get<any>('/api/account/me').subscribe({
@@ -95,53 +94,54 @@ ngOnInit() {
       },
       error: (err) => {
         console.error('Failed to load profile:', err);
-      }
+      },
     });
 
     this.email = localStorage.getItem('email') || '';
   }
 
+  updateName() {
+    this.showNameSuccess = false;
 
-updateName() {
-  this.showNameSuccess = false;
+    this.api
+      .put('/api/account/update-name', {
+        firstName: this.firstName,
+        lastName: this.lastName,
+      })
+      .subscribe({
+        next: () => {
+          this.showNameSuccess = true;
 
-  this.api.put('/api/account/update-name', {
-    firstName: this.firstName,
-    lastName: this.lastName
-  }).subscribe({
-    next: () => {
-      this.showNameSuccess = true;
+          if (this.nameSuccessTimeout) {
+            clearTimeout(this.nameSuccessTimeout);
+          }
 
-      if (this.nameSuccessTimeout) {
-        clearTimeout(this.nameSuccessTimeout);
-      }
+          this.cdr.detectChanges();
 
-      this.cdr.detectChanges();
+          this.nameSuccessTimeout = setTimeout(() => {
+            this.showNameSuccess = false;
+            this.cdr.detectChanges();
+          }, 1500);
+        },
+        error: (err) => {
+          console.error('Failed to update name:', err);
+        },
+      });
+  }
 
-      this.nameSuccessTimeout = setTimeout(() => {
-        this.showNameSuccess = false;
-        this.cdr.detectChanges();
-      }, 1500);
-    },
-    error: (err) => {
-      console.error('Failed to update name:', err);
-    }
-  });
-}
-
-  // 🔥 OPEN MODAL
+  //  OPEN MODAL
   openOnboarding() {
     this.onboardingSuccessMessage = ''; // clear old message
     this.showOnboardingModal = true;
     this.currentStep = 0;
   }
 
-  // 🔥 CLOSE MODAL
+  //  CLOSE MODAL
   closeOnboarding() {
     this.showOnboardingModal = false;
   }
 
-  // 🔥 NAVIGATION
+  //  NAVIGATION
   nextStep() {
     if (this.currentStep < 5) {
       this.currentStep++;
@@ -154,52 +154,52 @@ updateName() {
     }
   }
 
-  // 🔥 FINISH ONBOARDING
-finishOnboarding() {
-  // whatever logic you already have (saving data, etc.)
+  //  FINISH ONBOARDING
+  finishOnboarding() {
+    // whatever logic you already have (saving data, etc.)
 
-  this.showOnboardingModal = false; // 🔥 CLOSE MODAL
+    this.showOnboardingModal = false; //  CLOSE MODAL
 
-  // success message logic
-  this.showOnboardingSuccess = true;
+    // success message logic
+    this.showOnboardingSuccess = true;
 
-  if (this.onboardingSuccessTimeout) {
-    clearTimeout(this.onboardingSuccessTimeout);
-  }
+    if (this.onboardingSuccessTimeout) {
+      clearTimeout(this.onboardingSuccessTimeout);
+    }
 
-  this.cdr.detectChanges();
-
-  this.onboardingSuccessTimeout = setTimeout(() => {
-    this.showOnboardingSuccess = false;
     this.cdr.detectChanges();
-  }, 1500);
-}
+
+    this.onboardingSuccessTimeout = setTimeout(() => {
+      this.showOnboardingSuccess = false;
+      this.cdr.detectChanges();
+    }, 1500);
+  }
 
   clearMessages() {
     this.nameSuccessMessage = '';
     this.onboardingSuccessMessage = '';
   }
 
-selectEmoji(emoji: string) {
-  this.tempEmoji = emoji; // 🔥 ONLY preview
-}
-
-saveEmoji() {
-  this.selectedEmoji = this.tempEmoji; // 🔥 APPLY change
-
-  localStorage.setItem('userEmoji', this.selectedEmoji);
-
-  this.showEmojiSuccess = true;
-
-  if (this.emojiTimeout) {
-    clearTimeout(this.emojiTimeout);
+  selectEmoji(emoji: string) {
+    this.tempEmoji = emoji; //  ONLY preview
   }
 
-  this.cdr.detectChanges();
+  saveEmoji() {
+    this.selectedEmoji = this.tempEmoji; //  APPLY change
 
-  this.emojiTimeout = setTimeout(() => {
-    this.showEmojiSuccess = false;
+    localStorage.setItem('userEmoji', this.selectedEmoji);
+
+    this.showEmojiSuccess = true;
+
+    if (this.emojiTimeout) {
+      clearTimeout(this.emojiTimeout);
+    }
+
     this.cdr.detectChanges();
-  }, 1500);
-}
+
+    this.emojiTimeout = setTimeout(() => {
+      this.showEmojiSuccess = false;
+      this.cdr.detectChanges();
+    }, 1500);
+  }
 }

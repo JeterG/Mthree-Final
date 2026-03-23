@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../services/api.services';
@@ -19,7 +19,7 @@ export class LoginComponent {
   constructor(
     private api: ApiService,
     private router: Router,
-    private cdr: ChangeDetectorRef // 🔥 ADD THIS
+    private cdr: ChangeDetectorRef, //  ADD THIS
   ) {}
 
   login() {
@@ -32,15 +32,14 @@ export class LoginComponent {
       })
       .subscribe({
         next: (res: any) => {
-
-          // 🔥 HANDLE FAILED LOGIN EVEN IF 200 RESPONSE
+          //  HANDLE FAILED LOGIN EVEN IF 200 RESPONSE
           if (!res || !res.token) {
             this.errorMessage = 'Invalid email or password';
-            this.cdr.detectChanges(); // 🔥 FORCE UI UPDATE
+            this.cdr.detectChanges(); //  FORCE UI UPDATE
             return;
           }
 
-          // ✅ SUCCESS
+          // SUCCESS
           localStorage.setItem('token', res.token);
           localStorage.setItem('userId', res.userId.toString());
           localStorage.setItem('email', res.email);
@@ -51,10 +50,10 @@ export class LoginComponent {
         error: (err) => {
           console.log('ERROR TRIGGERED:', err);
 
-          // 🔥 ALWAYS SHOW MESSAGE
+          //  ALWAYS SHOW MESSAGE
           this.errorMessage = 'Invalid email or password';
 
-          // 🔥 FORCE UI UPDATE (CRITICAL FIX)
+          //  FORCE UI UPDATE (CRITICAL FIX)
           this.cdr.detectChanges();
         },
       });

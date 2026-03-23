@@ -1,22 +1,19 @@
 <div class="profile-page">
   <!-- HEADER -->
   <div class="profile-header">
-    <div class="avatar">
-      {{ firstName.charAt(0) }}{{ lastName.charAt(0) }}
-    </div>
+    <div class="avatar">{{ firstName.charAt(0) }}{{ lastName.charAt(0) }}</div>
 
     <div class="user-info">
       <h2>
-  {{ firstName }} {{ lastName }}
-  <span class="profile-emoji">{{ selectedEmoji }}</span>
-</h2>
+        {{ firstName }} {{ lastName }}
+        <span class="profile-emoji">{{ selectedEmoji }}</span>
+      </h2>
       <p>{{ email }}</p>
     </div>
   </div>
 
   <!-- ACCOUNT DETAILS CARD -->
   <div class="profile-card">
-
     <h3>Account Details</h3>
 
     <div class="form-group">
@@ -31,9 +28,9 @@
 
     <button (click)="updateName()">Save Changes</button>
 
-<div class="success-message" [class.show]="showNameSuccess">
-  {{ showNameSuccess ? 'Name updated successfully' : '' }}
-</div>
+    <div class="success-message" [class.show]="showNameSuccess">
+      {{ showNameSuccess ? 'Name updated successfully' : '' }}
+    </div>
   </div>
 
   <!-- NEW PREFERENCES CARD -->
@@ -43,47 +40,40 @@
       Personalize your StockQuik experience with a quick onboarding form.
     </p>
 
-    <button class="open-onboarding-btn" (click)="openOnboarding()">
-      Open Onboarding Form
-    </button>
-<p class="success-message" [class.show]="showOnboardingSuccess">
-  {{ showOnboardingSuccess ? 'Onboarding completed successfully' : '' }}
-</p>
+    <button class="open-onboarding-btn" (click)="openOnboarding()">Open Onboarding Form</button>
+    <p class="success-message" [class.show]="showOnboardingSuccess">
+      {{ showOnboardingSuccess ? 'Onboarding completed successfully' : '' }}
+    </p>
   </div>
-<div class="profile-card">
+  <div class="profile-card">
+    <h3>Customize Emoji</h3>
+    <p class="card-description">Choose an emoji to represent your profile.</p>
 
-  <h3>Customize Emoji</h3>
-  <p class="card-description">
-    Choose an emoji to represent your profile.
-  </p>
+    <!-- Emoji Preview -->
+    <div class="emoji-preview">
+      {{ selectedEmoji }}
+    </div>
 
-  <!-- Emoji Preview -->
-  <div class="emoji-preview">
-    {{ selectedEmoji }}
+    <!-- Emoji Picker -->
+    <div class="emoji-grid">
+      <span
+        *ngFor="let emoji of emojis"
+        (click)="selectEmoji(emoji)"
+        [class.active]="tempEmoji === emoji"
+      >
+        {{ emoji }}
+      </span>
+    </div>
+
+    <button (click)="saveEmoji()">Save Emoji</button>
+
+    <p class="success-message" [class.show]="showEmojiSuccess">
+      {{ showEmojiSuccess ? 'Emoji updated successfully' : '' }}
+    </p>
   </div>
-
-  <!-- Emoji Picker -->
-  <div class="emoji-grid">
-    <span
-      *ngFor="let emoji of emojis"
-      (click)="selectEmoji(emoji)"
-      [class.active]="tempEmoji === emoji"
-    >
-      {{ emoji }}
-    </span>
-  </div>
-
-  <button (click)="saveEmoji()">Save Emoji</button>
-
-  <p class="success-message" [class.show]="showEmojiSuccess">
-    {{ showEmojiSuccess ? 'Emoji updated successfully' : '' }}
-  </p>
-
-</div>
   <!-- MODAL -->
   <div class="modal-overlay" *ngIf="showOnboardingModal" (click)="closeOnboarding()">
     <div class="modal-box" (click)="$event.stopPropagation()">
-
       <!-- STEP 1 -->
       <div *ngIf="currentStep === 0" class="modal-step">
         <div class="step-icon">🚀</div>
@@ -175,12 +165,7 @@
 
         <div class="option-list">
           <label class="option-item" *ngFor="let option of goalOptions">
-            <input
-              type="radio"
-              name="goal"
-              [value]="option"
-              [(ngModel)]="onboardingData.goal"
-            />
+            <input type="radio" name="goal" [value]="option" [(ngModel)]="onboardingData.goal" />
             <span>{{ option }}</span>
           </label>
         </div>
@@ -206,14 +191,11 @@
 
         <div class="modal-actions">
           <button class="secondary-btn" (click)="prevStep()">Back</button>
-          <button (click)="finishOnboarding(); $event.stopPropagation()">
-  Finish
-</button>
+          <button (click)="finishOnboarding(); $event.stopPropagation()">Finish</button>
         </div>
       </div>
 
       <button class="close-modal-btn" (click)="closeOnboarding()">×</button>
     </div>
   </div>
-
 </div>

@@ -10,6 +10,6 @@ export const authGuard: CanActivateFn = () => {
     return true;
   }
 
-  // 🔥 BLOCK ACCESS
+  //  BLOCK ACCESS
   return router.createUrlTree(['/login']);
 };

@@ -20,7 +20,7 @@ export class MarketIndexComponent implements OnInit {
   selectedSymbol: string = '^GSPC';
   chart: any;
 
-  // 🔥 RANGE SUPPORT
+  // RANGE SUPPORT
   activeRange: string = '1Y';
   ranges = ['1D', '1W', '1M', '3M', '1Y'];
 
@@ -33,14 +33,14 @@ export class MarketIndexComponent implements OnInit {
     this.loadChart(this.selectedSymbol);
   }
 
-  // 🔹 Switch index (tabs)
+  // Switch index (tabs)
   selectIndex(symbol: string) {
     this.selectedSymbol = symbol;
     this.activeRange = '1Y'; // reset range when switching
     this.loadChart(symbol);
   }
 
-  // 🔹 Load history ONCE
+  // Load history ONCE
   loadChart(symbol: string) {
     this.api.get<any[]>(`/api/market/history/${symbol}`).subscribe({
       next: (data) => {
@@ -51,13 +51,13 @@ export class MarketIndexComponent implements OnInit {
     });
   }
 
-  // 🔹 Change range (NO API CALL)
+  // Change range (NO API CALL)
   selectRange(range: string) {
     this.activeRange = range;
     this.renderChart(this.filterByRange(this.allHistory, range));
   }
 
-  // 🔹 Filter data client-side
+  // Filter data client-side
   filterByRange(data: any[], range: string): any[] {
     if (!data.length) return [];
 
@@ -84,7 +84,7 @@ export class MarketIndexComponent implements OnInit {
     return data.filter((s) => new Date(s.date) >= cutoff);
   }
 
-  // 🔹 Render chart
+  // Render chart
   renderChart(data: any[]) {
     if (!data || data.length === 0) return;
 
