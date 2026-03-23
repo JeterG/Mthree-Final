@@ -628,36 +628,54 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
 
     const labels = data.map((s) => s.date.split('T')[0]);
     const prices = data.map((s) => s.close);
-    const isGreen = prices[prices.length - 1] >= prices[0];
-    const color = isGreen ? 'green' : 'red';
-    const bgColor = isGreen ? 'rgba(0,200,0,0.1)' : 'rgba(255,0,0,0.1)';
+    const volumes = data.map((s) => s.volume ?? 0);
+    const hasVolume = volumes.some((v: number) => v > 0);
 
+    const isGreen = prices[prices.length - 1] >= prices[0];
+    const color = isGreen ? '#43a047' : '#e53935';
+    const bgColor = isGreen ? 'rgba(67,160,71,0.1)' : 'rgba(229,57,53,0.1)';
+    const volColor = isGreen ? 'rgba(67,160,71,0.25)' : 'rgba(229,57,53,0.25)';
+
+    // Rebuild chart if it already exists — handles range switching
     if (this.chart) {
-      this.chart.data.labels = labels;
-      this.chart.data.datasets[0].data = prices;
-      this.chart.data.datasets[0].borderColor = color;
-      this.chart.data.datasets[0].backgroundColor = bgColor;
-      this.chart.update();
-      return;
+      this.destroyChart();
     }
 
-    this.chart = new Chart(this.chartRef.nativeElement, {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          {
-            data: prices,
-            borderColor: color,
-            backgroundColor: bgColor,
-            fill: true,
-            tension: 0.3,
-            pointRadius: 0,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: color,
-          },
-        ],
+    const datasets: any[] = [
+      {
+        type: 'line',
+        label: 'Price',
+        data: prices,
+        borderColor: color,
+        backgroundColor: bgColor,
+        fill: true,
+        tension: 0.3,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: color,
+        yAxisID: 'yPrice',
+        order: 1,
       },
+    ];
+
+    if (hasVolume) {
+      datasets.push({
+        type: 'bar',
+        label: 'Volume',
+        data: volumes,
+        backgroundColor: volColor,
+        borderColor: 'transparent',
+        yAxisID: 'yVolume',
+        order: 2,
+        barPercentage: 0.8,
+      });
+    }
+
+    const maxVol = hasVolume ? Math.max(...volumes.filter((v: number) => v > 0)) : 1;
+
+    this.chart = new Chart(this.chartRef.nativeElement, {
+      type: 'bar',
+      data: { labels, datasets },
       options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -667,13 +685,30 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
           tooltip: {
             enabled: true,
             callbacks: {
-              label: (ctx) => `$${(ctx.parsed?.y ?? 0).toFixed(2)}`,
+              label: (ctx: any) => {
+                if (ctx.dataset.label === 'Volume') {
+                  const v = ctx.parsed?.y ?? 0;
+                  if (v >= 1_000_000) return `Vol: ${(v / 1_000_000).toFixed(1)}M`;
+                  if (v >= 1_000) return `Vol: ${(v / 1_000).toFixed(0)}K`;
+                  return `Vol: ${v}`;
+                }
+                return `$${(ctx.parsed?.y ?? 0).toFixed(2)}`;
+              },
             },
           },
         },
         scales: {
-          x: { ticks: { maxTicksLimit: 6 } },
-          y: { display: false },
+          x: { ticks: { maxTicksLimit: 6 }, grid: { display: false } },
+          yPrice: {
+            display: false,
+            position: 'right',
+          },
+          yVolume: {
+            display: false,
+            position: 'left',
+            // Cap volume bars at 20% of chart height
+            max: maxVol * 5,
+          },
         },
       },
     });

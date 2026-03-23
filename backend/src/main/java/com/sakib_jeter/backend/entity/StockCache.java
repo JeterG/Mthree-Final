@@ -19,7 +19,6 @@ public class StockCache {
     @Id
     private String symbol;
 
-    // 🔥 NEW FIELD (company name like "Apple Inc.")
     @Column(name = "company_name")
     private String companyName;
 
@@ -38,7 +37,10 @@ public class StockCache {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // Required for JPA
+    // Daily volume from Finnhub quote (field "v")
+    @Column(name = "volume")
+    private Long volume;
+
     public StockCache() {
     }
 }

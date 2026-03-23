@@ -11,9 +11,6 @@ import org.springframework.web.client.RestTemplate;
 import com.sakib_jeter.backend.entity.StockCache;
 import com.sakib_jeter.backend.repository.StockCacheRepository;
 
-// Seeds stock_cache and stock_history_cache tables
-// stock_cache         — live prices via Finnhub API (docs: https://finnhub.io/docs/api/quote)
-// stock_history_cache — 1 year daily OHLC data via Yahoo Finance
 @Service
 public class StockDataSeeder {
 
@@ -26,12 +23,7 @@ public class StockDataSeeder {
     private final StockCacheRepository stockCacheRepository;
     private final YahooFinanceService yahooFinanceService;
     private final RestTemplate restTemplate = new RestTemplate();
-    // public void init() {
-    // System.out.println("Seeding stock data...");
-    // seedAll();
-    // seedHistory(); // optional
-    // }
-    // All symbols seeded into both tables
+
     private static final String[] SYMBOLS = {
             "AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "META", "TSLA", "ORCL",
             "INTC", "AMD", "QCOM", "ADBE", "CRM", "NFLX", "UBER", "PYPL",
@@ -61,9 +53,6 @@ public class StockDataSeeder {
         this.yahooFinanceService = yahooFinanceService;
     }
 
-    // Seed live prices into stock_cache via Finnhub
-    // Free tier rate limit is 60 requests per minute so we sleep 1100ms between
-    // calls
     public int seedAll() {
         int count = 0;
         for (String symbol : SYMBOLS) {
@@ -85,8 +74,6 @@ public class StockDataSeeder {
         return count;
     }
 
-    // Seed yearly history into stock_history_cache via Yahoo Finance
-    // Runs in a background thread so it does not block HTTP requests
     public void seedHistory() {
         new Thread(() -> {
             for (String symbol : SYMBOLS) {
@@ -102,9 +89,6 @@ public class StockDataSeeder {
         }).start();
     }
 
-    // Fetch a single quote from Finnhub
-    // Finnhub returns 0 for current price (c) when market is closed
-    // so we fall back to previous close (pc) in that case
     public StockCache fetchQuote(String symbol) {
         try {
             String url = finnhubUrl + "/quote?symbol=" + symbol + "&token=" + finnhubKey;
@@ -115,7 +99,6 @@ public class StockDataSeeder {
             BigDecimal current = toBD(r.get("c"));
             BigDecimal prevClose = toBD(r.get("pc"));
 
-            // Fall back to previous close if market is closed
             if (current.compareTo(BigDecimal.ZERO) == 0)
                 current = prevClose;
             if (current.compareTo(BigDecimal.ZERO) == 0)
@@ -125,10 +108,11 @@ public class StockDataSeeder {
             if (open.compareTo(BigDecimal.ZERO) == 0)
                 open = prevClose;
 
-            // 🔥 GET COMPANY NAME FIRST
+            // Finnhub "v" = current day volume
+            Long volume = toLong(r.get("v"));
+
             String companyName = getCompanyName(symbol);
 
-            // 🔥 USE NEW CONSTRUCTOR (MATCHES StockCache)
             return new StockCache(
                     symbol,
                     companyName,
@@ -136,7 +120,8 @@ public class StockDataSeeder {
                     open,
                     toBD(r.get("h")),
                     toBD(r.get("l")),
-                    LocalDateTime.now());
+                    LocalDateTime.now(),
+                    volume);
 
         } catch (Exception e) {
             System.err.println("Finnhub seed failed for " + symbol + ": " + e.getMessage());
@@ -144,9 +129,6 @@ public class StockDataSeeder {
         }
     }
 
-    // Safely convert Finnhub response value to BigDecimal
-    // Finnhub returns numbers as Double — BigDecimal is needed for financial
-    // precision
     private BigDecimal toBD(Object v) {
         if (v == null)
             return BigDecimal.ZERO;
@@ -157,20 +139,26 @@ public class StockDataSeeder {
         }
     }
 
+    private Long toLong(Object v) {
+        if (v == null)
+            return 0L;
+        try {
+            return ((Number) v).longValue();
+        } catch (Exception e) {
+            return 0L;
+        }
+    }
+
     private String getCompanyName(String symbol) {
         try {
             String url = finnhubUrl + "/stock/profile2?symbol=" + symbol + "&token=" + finnhubKey;
-
             Map<String, Object> response = restTemplate.getForObject(url, Map.class);
-
             if (response != null && response.get("name") != null) {
                 return response.get("name").toString();
             }
-
         } catch (Exception e) {
             System.out.println("Failed to fetch name for " + symbol);
         }
-
-        return symbol; // fallback if API fails
+        return symbol;
     }
 }
