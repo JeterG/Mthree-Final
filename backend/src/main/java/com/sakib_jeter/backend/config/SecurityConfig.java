@@ -66,18 +66,15 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Use pattern matching to allow any Cloudflare tunnel URL (changes every run)
-        // plus the fixed ngrok URL and localhost
-        config.setAllowedOriginPatterns(List.of(
-                "http://localhost:4200",
-                "http://localhost:*",
+        // ✅ Explicitly allow your static ngrok domain and localhost
+        config.setAllowedOrigins(List.of(
                 "https://unflecked-rhamnaceous-lynne.ngrok-free.dev",
-                "https://*.trycloudflare.com",
-                "https://*.ngrok-free.dev",
-                "https://*.ngrok.io"));
+                "http://localhost:4200"));
 
-        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // ✅ MUST be true to allow the Authorization header to pass through
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
