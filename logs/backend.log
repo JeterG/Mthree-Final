@@ -9,3 +9,4 @@ backend  |
 backend  |  :: Spring Boot ::                (v4.0.3)
 backend  | 
 backend  | Database already contains data. Skipping seeding.
+[Kbackend exited with code 143

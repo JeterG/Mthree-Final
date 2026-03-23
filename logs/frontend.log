@@ -26,3 +26,9 @@ frontend  | NOTE: Raw file sizes do not reflect development server per-request t
 frontend  | 4:46:44 PM [vite] (client) Re-optimizing dependencies because vite config has changed
 frontend  |   ➜  Local:   http://localhost:4200/
 frontend  |   ➜  Network: http://172.18.0.4:4200/
+frontend  | npm error path /app
+frontend  | npm error command failed
+frontend  | npm error signal SIGTERM
+frontend  | npm error command sh -c ng serve --host=0.0.0.0
+frontend  | npm error A complete log of this run can be found in: /root/.npm/_logs/2026-03-23T16_46_41_505Z-debug-0.log
+[Kfrontend exited with code 1
