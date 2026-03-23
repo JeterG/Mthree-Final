@@ -15,8 +15,11 @@ import { StockSearchComponent } from '../stock-search-component/stock-search-com
 })
 export class Portfolio implements OnInit {
   Math = Math;
-  selectedSymbol = 'TSLA'; // default stock
-  activeTab: 'holdings' | 'transactions' | 'watchlist' = 'holdings';
+  selectedSymbol = 'TSLA';
+  activeTab: 'holdings' | 'transactions' | 'watchlist' | 'analytics' = 'holdings';
+  refreshTrigger = 0; // increments to force buy component to refresh
+  holdingsReady = false;
+  transactionsReady = false;
 
   cashBalance = 0;
   holdingsValue = 0;
@@ -37,7 +40,6 @@ export class Portfolio implements OnInit {
     this.loadPortfolio();
     this.loadTransactions();
     this.loadWatchlist();
-
     setTimeout(() => this.loadPortfolio(), 1000);
     setTimeout(() => this.loadTransactions(), 1000);
     setTimeout(() => this.loadWatchlist(), 1000);
@@ -74,6 +76,7 @@ export class Portfolio implements OnInit {
             this.holdingsValue = 0;
             this.totalGainLoss = 0;
             this.totalPortfolioValue = 0;
+            this.computeAnalytics();
             this.cdr.detectChanges();
           });
           return;
@@ -91,13 +94,10 @@ export class Portfolio implements OnInit {
               const currentValue = currentPrice * +h.quantity;
               const costBasis = +h.avgBuyPrice * +h.quantity;
               const gainLoss = currentValue - costBasis;
-
               totalValue += currentValue;
               totalGain += gainLoss;
-
               enriched[index] = { ...h, currentPrice, currentValue, gainLoss };
               completed++;
-
               if (completed === holdings.length) {
                 this.ngZone.run(() => {
                   this.holdings = [...enriched];
@@ -105,6 +105,8 @@ export class Portfolio implements OnInit {
                   this.holdingsValue = totalValue;
                   this.totalGainLoss = totalGain;
                   this.totalPortfolioValue = totalValue;
+                  this.holdingsReady = true;
+                  if (this.transactionsReady) this.computeAnalytics();
                   this.cdr.detectChanges();
                 });
               }
@@ -124,6 +126,8 @@ export class Portfolio implements OnInit {
                   this.holdingsValue = totalValue;
                   this.totalGainLoss = totalGain;
                   this.totalPortfolioValue = totalValue;
+                  this.holdingsReady = true;
+                  if (this.transactionsReady) this.computeAnalytics();
                   this.cdr.detectChanges();
                 });
               }
@@ -142,6 +146,8 @@ export class Portfolio implements OnInit {
           this.transactions = transactions.sort(
             (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           );
+          this.transactionsReady = true;
+          if (this.holdingsReady) this.computeAnalytics();
           this.cdr.detectChanges();
         });
       },
@@ -159,10 +165,8 @@ export class Portfolio implements OnInit {
           });
           return;
         }
-
         const enriched: any[] = new Array(watchlist.length);
         let completed = 0;
-
         watchlist.forEach((w, index) => {
           this.api.get<any>(`/api/market/quote/${w.stockSymbol}`).subscribe({
             next: (stock) => {
@@ -204,20 +208,48 @@ export class Portfolio implements OnInit {
     });
   }
 
+  onBuyComplete(): void {
+    this.holdingsReady = false;
+    this.transactionsReady = false;
+    this.loadPortfolio();
+    this.loadTransactions();
+    this.loadWatchlist();
+    this.refreshTrigger++;
+  }
+
+  sell(holding: any): void {
+    const quantity = holding.sellQuantity || holding.quantity;
+    if (!quantity || quantity <= 0) return;
+    this.api
+      .post<any>('/api/holdings/sell', { stockSymbol: holding.stockSymbol, quantity })
+      .subscribe({
+        next: () => {
+          this.ngZone.run(() => {
+            this.holdingsReady = false;
+            this.transactionsReady = false;
+            this.loadPortfolio();
+            this.loadTransactions();
+            this.refreshTrigger++;
+            this.cdr.detectChanges();
+          });
+        },
+        error: (err) => console.error('Sell error:', err),
+      });
+  }
+
+  isPositive(value: number): boolean {
+    return value >= 0;
+  }
+
   get transactionsForChart(): any[] {
     const sorted = [...this.transactions].sort(
       (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
-
     let runningBalance = 0;
-
     return sorted.map((t) => {
       const amount = +t.totalAmount;
-      if (t.type === 'BUY') {
-        runningBalance += amount;
-      } else {
-        runningBalance -= amount;
-      }
+      if (t.type === 'BUY') runningBalance += amount;
+      else runningBalance -= amount;
       return {
         date: t.createdAt,
         close: +runningBalance.toFixed(2),
@@ -228,28 +260,90 @@ export class Portfolio implements OnInit {
     });
   }
 
-  sell(holding: any): void {
-    const quantity = holding.sellQuantity || holding.quantity;
-    if (!quantity || quantity <= 0) return;
+  // ── Analytics ─────────────────────────────────────────────────
+  // Stored as a plain object so it can be updated imperatively after each load
+  analyticsData: any = null;
 
-    this.api
-      .post<any>('/api/holdings/sell', {
-        stockSymbol: holding.stockSymbol,
-        quantity: quantity,
-      })
-      .subscribe({
-        next: () => {
-          this.ngZone.run(() => {
-            this.loadPortfolio();
-            this.loadTransactions();
-            this.cdr.detectChanges();
-          });
-        },
-        error: (err) => console.error('Sell error:', err),
-      });
-  }
+  computeAnalytics(): void {
+    if (!this.holdings.length && !this.transactions.length) {
+      this.analyticsData = null;
+      return;
+    }
 
-  isPositive(value: number): boolean {
-    return value >= 0;
+    const transactions = [...this.transactions];
+    const buys = transactions.filter((t) => t.type === 'BUY');
+    const sells = transactions.filter((t) => t.type === 'SELL');
+
+    // ── Use already-computed portfolio values ──────────────────
+    // These are set by loadHoldings() + loadAccount() and are correct
+    const currentHoldingsValue = this.holdingsValue; // sum(currentPrice * qty)
+    const totalGainLoss = this.totalGainLoss; // sum(gainLoss) per holding
+    const costBasis = currentHoldingsValue - totalGainLoss; // what you paid for current holdings
+
+    // Return % based on cost basis of current holdings
+    const totalReturnPct = costBasis > 0 ? (totalGainLoss / costBasis) * 100 : 0;
+
+    // Best and worst by gainLoss (already on each holding from loadHoldings)
+    const withGain = this.holdings.filter((h) => h.gainLoss !== undefined);
+    const bestHolding = withGain.length
+      ? withGain.reduce((a, b) => (b.gainLoss > a.gainLoss ? b : a))
+      : null;
+    const worstHolding = withGain.length
+      ? withGain.reduce((a, b) => (b.gainLoss < a.gainLoss ? b : a))
+      : null;
+
+    // Trade activity from transactions
+    const sellsWithGain = sells.filter((t) => {
+      const matchingBuys = buys.filter((b) => b.stockSymbol === t.stockSymbol);
+      if (!matchingBuys.length) return false;
+      const avgBuyPrice = matchingBuys.reduce((s, b) => s + +b.price, 0) / matchingBuys.length;
+      return +t.price > avgBuyPrice;
+    });
+
+    const symbolCounts: { [sym: string]: number } = {};
+    transactions.forEach((t) => {
+      symbolCounts[t.stockSymbol] = (symbolCounts[t.stockSymbol] || 0) + 1;
+    });
+    const mostTraded = Object.entries(symbolCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '—';
+
+    // Max drawdown from transaction history (portfolio cost basis over time)
+    const sorted = [...transactions].sort(
+      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    );
+    let running = 0;
+    const portfolioValues = sorted.map((t) => {
+      if (t.type === 'BUY') running += +t.totalAmount;
+      else running -= +t.totalAmount;
+      return running;
+    });
+    let maxDrawdown = 0;
+    let peak = portfolioValues[0] ?? 0;
+    for (const val of portfolioValues) {
+      if (val > peak) peak = val;
+      const dd = peak > 0 ? ((peak - val) / peak) * 100 : 0;
+      if (dd > maxDrawdown) maxDrawdown = dd;
+    }
+
+    this.analyticsData = {
+      // Holdings-based (accurate, from loadHoldings)
+      currentHoldingsValue,
+      costBasis,
+      totalGainLoss,
+      totalReturnPct,
+      cashBalance: this.cashBalance,
+      totalPortfolioValue: this.totalPortfolioValue,
+      // Trade activity
+      totalTransactions: transactions.length,
+      buyCount: buys.length,
+      sellCount: sells.length,
+      sellsWithGain: sellsWithGain.length,
+      sellsWithLoss: sells.length - sellsWithGain.length,
+      mostTraded,
+      // Holdings performance
+      bestHolding,
+      worstHolding,
+      // Risk
+      maxDrawdown,
+    };
   }
 }

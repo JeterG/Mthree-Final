@@ -21,6 +21,7 @@ import { ApiService } from '../services/api.services';
 })
 export class BuyComponent implements OnInit, OnChanges {
   @Input() symbol = 'TSLA';
+  @Input() refreshTrigger = 0; // increments from parent to force cash balance refresh
   @Output() buyComplete = new EventEmitter<void>();
   @Output() watchlistComplete = new EventEmitter<void>();
 
@@ -52,6 +53,13 @@ export class BuyComponent implements OnInit, OnChanges {
       this.resetMessages();
       this.quantity = 1;
       this.loadPrice(this.symbol);
+      this.loadCashBalance();
+      this.loadWatchlist();
+    }
+    // Refresh cash balance whenever parent signals a portfolio change
+    if (changes['refreshTrigger'] && !changes['refreshTrigger'].firstChange) {
+      this.loadCashBalance();
+      this.loadWatchlist();
     }
   }
 
