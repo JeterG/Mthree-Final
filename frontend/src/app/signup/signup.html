@@ -59,7 +59,7 @@
         #confirmPasswordInput="ngModel"
       />
       <div class="error">
-        <span *ngIf="confirmPasswordInput.touched && password !== confirmPassword">
+        <span *ngIf="!hasSubmitted && confirmPasswordInput.touched && password !== confirmPassword">
           Passwords do not match
         </span>
       </div>

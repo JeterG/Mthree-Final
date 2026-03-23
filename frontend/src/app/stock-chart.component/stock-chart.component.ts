@@ -76,6 +76,12 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
     if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(2)}M`;
     return `$${n.toLocaleString()}`;
   }
+  get displayPrice(): number {
+  if (this.allHistory.length > 0) {
+    return this.allHistory[this.allHistory.length - 1].close;
+  }
+  return this.quoteData?.currentPrice || 0;
+}
 
   get todayVolume(): string {
     const v = this.quoteData?.volume;
@@ -244,6 +250,8 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
       this.holdings.some((h) => h.stockSymbol === t.symbol),
     );
   }
+
+  
 
   toggleHolding(toggle: HoldingToggle): void {
     toggle.enabled = !toggle.enabled;

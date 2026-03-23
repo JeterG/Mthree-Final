@@ -20,10 +20,11 @@ export class SignupComponent {
   successMessage: string = '';
 
   isSubmitting: boolean = false;
+  hasSubmitted: boolean = false; // 🔥 NEW FLAG
 
   constructor(
     private api: ApiService,
-    private cd: ChangeDetectorRef // 🔥 added
+    private cd: ChangeDetectorRef
   ) {}
 
   signup() {
@@ -32,39 +33,34 @@ export class SignupComponent {
     if (this.isSubmitting) return;
     this.isSubmitting = true;
 
+    this.hasSubmitted = true; // 🔥 mark submission attempt
+
     this.errorMessage = '';
     this.successMessage = '';
 
-    // password check
+    // ❌ do NOT show password mismatch message globally
     if (this.password !== this.confirmPassword) {
-      this.errorMessage = 'Passwords do not match';
+      this.errorMessage = 'Signup failed, recheck your fields'; // 🔥 ALWAYS same message
       this.isSubmitting = false;
+      this.cd.detectChanges();
       return;
     }
 
     this.api
-      .post(
-        '/api/auth/signup',
-        {
-          email: this.email,
-          password: this.password,
-        },
-        {
-          responseType: 'text',
-        }
-      )
+      .post('/api/auth/signup', {
+        email: this.email,
+        password: this.password,
+      })
       .subscribe({
         next: (res: any) => {
           console.log('SUCCESS HIT');
           console.log(res);
 
-          // ✅ set message
-          this.successMessage = 'Account created successfully! You can now log in.';
+          this.successMessage =
+            'Account created successfully! You can now log in.';
 
-          // 🔥 FORCE Angular to update UI immediately
           this.cd.detectChanges();
 
-          // reset fields
           this.email = '';
           this.password = '';
           this.confirmPassword = '';
@@ -72,19 +68,23 @@ export class SignupComponent {
           this.isSubmitting = false;
         },
 
-        error: (err) => {
-          console.log(err);
+error: (err) => {
+  console.log('FULL ERROR:', err);
 
-          this.errorMessage =
-            typeof err.error === 'string'
-              ? err.error
-              : 'Signup failed (maybe email already exists)';
+  const msg =
+    err?.error?.message ||
+    err?.error?.error?.message ||
+    '';
 
-          this.isSubmitting = false;
+  if (msg.toLowerCase().includes('exist')) {
+    this.errorMessage = 'User already exists';
+  } else {
+    this.errorMessage = 'Signup failed, recheck your fields';
+  }
 
-          // 🔥 also update UI on error
-          this.cd.detectChanges();
-        },
+  this.isSubmitting = false;
+  this.cd.detectChanges();
+},
       });
   }
 }

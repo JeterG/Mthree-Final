@@ -188,16 +188,18 @@
     <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
       <div class="d-flex align-items-center gap-3 flex-wrap">
         <h5 class="mb-0 fw-bold">{{ symbol }}</h5>
-        <span class="fs-5 fw-semibold">${{ quoteData?.currentPrice || '--' }}</span>
+        <span class="fs-5 fw-semibold">
+  ${{ displayPrice | number: '1.2-2' }}
+</span>
         <span
           [ngClass]="
-            quoteData?.currentPrice - quoteData?.openPrice >= 0 ? 'text-success' : 'text-danger'
+            displayPrice - (quoteData?.openPrice || displayPrice) >= 0 ? 'text-success' : 'text-danger'
           "
         >
           {{
             quoteData?.openPrice
               ? (
-                  ((quoteData.currentPrice - quoteData.openPrice) / quoteData.openPrice) *
+                  ((displayPrice - quoteData.openPrice) / quoteData.openPrice) *
                   100
                 ).toFixed(2)
               : '--'
