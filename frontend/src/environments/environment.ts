@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://leu-mounts-blanket-occasionally.trycloudflare.com',
+  apiUrl: 'https://resolve-exciting-subscribers-hollywood.trycloudflare.com',
 };
