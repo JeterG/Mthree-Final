@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TimezoneService } from '../home/timezone.service';
+import { ApiService } from '../services/api.services';
 import { StockChartComponent } from '../stock-chart.component/stock-chart.component';
 
 @Component({
@@ -52,15 +53,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   marketStatus: string = '';
   countdown: string = '';
 
-  marketTimeDisplay: string = ''; // time
-  marketDayDisplay: string = ''; // day
+  marketTimeDisplay: string = '';
+  marketDayDisplay: string = '';
 
   intervalId: any;
 
   currentTimezone: string = 'America/New_York';
   timezoneSub!: Subscription;
 
-  //  NEW: Gamification Levels
   investingLevel: number = 0;
   learningLevel: number = 0;
   wealthLevel: number = 0;
@@ -68,6 +68,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private cdr: ChangeDetectorRef,
     private timezoneService: TimezoneService,
+    private api: ApiService,
   ) {}
 
   selectSymbol(symbol: string) {
@@ -75,16 +76,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    //  Load saved levels (optional but recommended)
     this.investingLevel = Number(localStorage.getItem('investing')) || 0;
     this.learningLevel = Number(localStorage.getItem('learning')) || 0;
     this.wealthLevel = Number(localStorage.getItem('wealth')) || 0;
 
-    //  Timezone subscription
     this.timezoneSub = this.timezoneService.timezone$.subscribe((tz) => {
-      console.log('timezone updated:', tz);
       this.currentTimezone = tz;
-
       this.updateMarketTime(this.currentTimezone);
       this.cdr.detectChanges();
     });
@@ -94,31 +91,23 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
+    if (this.intervalId) clearInterval(this.intervalId);
     this.timezoneSub?.unsubscribe();
   }
 
   startMarketTimer() {
     this.updateMarketTime(this.currentTimezone);
-
     this.intervalId = setInterval(() => {
       this.updateMarketTime(this.currentTimezone);
       this.cdr.detectChanges();
     }, 1000);
   }
+
   async loadTopMovers() {
     const cached = localStorage.getItem('topMovers');
-
     if (cached) {
       const parsed = JSON.parse(cached);
-
-      const now = Date.now();
-      const cacheAge = now - parsed.timestamp;
-
-      // ✅ 48 HOURS CACHE
-      if (cacheAge < 48 * 60 * 60 * 1000) {
+      if (Date.now() - parsed.timestamp < 48 * 60 * 60 * 1000) {
         this.topWinners = parsed.winners;
         this.topLosers = parsed.losers;
         return;
@@ -128,29 +117,26 @@ export class HomeComponent implements OnInit, OnDestroy {
     const results: any[] = [];
 
     for (const symbol of this.topMoverSymbols) {
-      const res = await fetch(`http://localhost:8080/api/market/history/${symbol}`);
-      const data = await res.json();
+      try {
+        const data = await this.api.get<any[]>(`/api/market/history/${symbol}`).toPromise();
+        if (!data || data.length < 2) continue;
 
-      if (data.length < 2) continue;
+        const recent = data.slice(-28);
+        if (recent.length < 2) continue;
 
-      const recent = data.slice(-28);
-
-      if (recent.length < 2) continue;
-
-      const start = recent[0].close;
-      const end = recent[recent.length - 1].close;
-
-      const change = ((end - start) / start) * 100;
-
-      results.push({ symbol, change });
+        const start = recent[0].close;
+        const end = recent[recent.length - 1].close;
+        const change = ((end - start) / start) * 100;
+        results.push({ symbol, change });
+      } catch {
+        // skip failed symbols
+      }
     }
 
     results.sort((a, b) => b.change - a.change);
-
     this.topWinners = results.slice(0, 5);
     this.topLosers = results.slice(-5).reverse();
 
-    // SAVE WITH TIMESTAMP
     localStorage.setItem(
       'topMovers',
       JSON.stringify({
@@ -159,32 +145,25 @@ export class HomeComponent implements OnInit, OnDestroy {
         timestamp: Date.now(),
       }),
     );
+
+    this.cdr.detectChanges();
   }
 
   updateMarketTime(userTimezone: string) {
     const now = new Date();
-
-    // Always calculate market logic in ET
     const nowET = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-
     const day = nowET.getDay();
-
     let targetTime: Date;
 
-    // WEEKEND
     if (day === 0 || day === 6) {
       this.isMarketOpen = false;
-
       const nextMonday = new Date(nowET);
-      const daysUntilMonday = (8 - day) % 7;
-      nextMonday.setDate(nowET.getDate() + daysUntilMonday);
+      nextMonday.setDate(nowET.getDate() + ((8 - day) % 7));
       nextMonday.setHours(9, 30, 0, 0);
-
       targetTime = nextMonday;
     } else {
       const openET = new Date(nowET);
       openET.setHours(9, 30, 0, 0);
-
       const closeET = new Date(nowET);
       closeET.setHours(16, 0, 0, 0);
 
@@ -196,26 +175,16 @@ export class HomeComponent implements OnInit, OnDestroy {
         targetTime = closeET;
       } else {
         this.isMarketOpen = false;
-
         const nextOpen = new Date(openET);
         nextOpen.setDate(nextOpen.getDate() + 1);
         targetTime = nextOpen;
       }
     }
 
-    // ⏱ Countdown
-    const diff = targetTime.getTime() - nowET.getTime();
-    this.countdown = this.formatTime(diff);
+    this.countdown = this.formatTime(targetTime.getTime() - nowET.getTime());
 
-    // Convert to USER timezone
     const targetUser = new Date(targetTime.toLocaleString('en-US', { timeZone: userTimezone }));
-
-    // Day
-    this.marketDayDisplay = targetUser.toLocaleDateString('en-US', {
-      weekday: 'long',
-    });
-
-    // Time
+    this.marketDayDisplay = targetUser.toLocaleDateString('en-US', { weekday: 'long' });
     this.marketTimeDisplay = targetUser.toLocaleTimeString([], {
       hour: '2-digit',
       minute: '2-digit',
@@ -223,42 +192,32 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   formatTime(ms: number): string {
-    const totalSeconds = Math.floor(ms / 1000);
-
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-
-    return `${hours}h ${minutes}m ${seconds}s`;
+    const total = Math.floor(ms / 1000);
+    const h = Math.floor(total / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = total % 60;
+    return `${h}h ${m}m ${s}s`;
   }
-
-  //  NEW: Click Handlers
 
   increaseInvesting() {
     this.investingLevel++;
     localStorage.setItem('investing', this.investingLevel.toString());
-
     alert(`📈 Investing level +1!\nCurrent investing level: ${this.investingLevel}`);
   }
 
   increaseLearning() {
     this.learningLevel++;
     localStorage.setItem('learning', this.learningLevel.toString());
-
     alert(`🧠 Market knowledge level +1!\nCurrent market knowledge level: ${this.learningLevel}`);
   }
 
   increaseWealth() {
     this.wealthLevel++;
     localStorage.setItem('wealth', this.wealthLevel.toString());
-
     alert(`💰 Confidence boost level +1!\nCurrent confidence level: ${this.wealthLevel}`);
   }
-  getBarWidth(change: number): number {
-    const max = 50; // max expected % range
-    const normalized = Math.min(Math.abs(change), max);
 
-    return (normalized / max) * 85;
-    //  85% instead of 100% → leaves space for %
+  getBarWidth(change: number): number {
+    return (Math.min(Math.abs(change), 50) / 50) * 85;
   }
 }

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TimezoneService } from '../home/timezone.service';
+import { ApiService } from '../services/api.services';
 
 @Component({
   selector: 'app-settings',
@@ -14,6 +15,7 @@ export class SettingsComponent implements OnInit {
   constructor(
     private timezoneService: TimezoneService,
     private cd: ChangeDetectorRef,
+    private api: ApiService,
   ) {}
 
   isDarkMode = false;
@@ -35,11 +37,13 @@ export class SettingsComponent implements OnInit {
     { label: 'Alaska (AKT)', value: 'America/Anchorage' },
     { label: 'Hawaii (HST)', value: 'Pacific/Honolulu' },
   ];
+
   trading = {
     confirmTrade: true,
     autoRefresh: true,
     refreshSpeed: 'medium',
   };
+
   notifications = {
     priceAlerts: true,
     tradeConfirmations: true,
@@ -56,34 +60,21 @@ export class SettingsComponent implements OnInit {
     this.selectedTimezone = this.timezoneService.getTimezone();
 
     const savedNotifications = localStorage.getItem('notifications');
-    if (savedNotifications) {
-      this.notifications = JSON.parse(savedNotifications);
-    }
+    if (savedNotifications) this.notifications = JSON.parse(savedNotifications);
+
     const savedTrading = localStorage.getItem('tradingPreferences');
-    if (savedTrading) {
-      this.trading = JSON.parse(savedTrading);
-    }
+    if (savedTrading) this.trading = JSON.parse(savedTrading);
   }
 
   saveNotifications() {
     localStorage.setItem('notifications', JSON.stringify(this.notifications));
-    console.log('Notification preferences updated');
-
-    if (this.notifications.tradeConfirmations) {
-      console.log('Trade confirmations enabled');
-    }
   }
 
   applyChanges() {
     this.saveNotifications();
     this.showSuccessMessage = true;
-
-    if (this.successTimeout) {
-      clearTimeout(this.successTimeout);
-    }
-
+    if (this.successTimeout) clearTimeout(this.successTimeout);
     this.cd.detectChanges();
-
     this.successTimeout = setTimeout(() => {
       this.showSuccessMessage = false;
       this.cd.detectChanges();
@@ -91,20 +82,17 @@ export class SettingsComponent implements OnInit {
   }
 
   toggleTheme() {
-    const theme = this.isDarkMode ? 'dark' : 'light';
-    localStorage.setItem('theme', theme);
+    localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
     this.applyTheme();
   }
 
   saveTradingPreferences() {
     localStorage.setItem('tradingPreferences', JSON.stringify(this.trading));
-    console.log('Trading preferences updated');
   }
 
   applyTheme() {
     const root = document.documentElement;
     const body = document.body;
-
     if (this.isDarkMode) {
       root.classList.add('dark-mode');
       body.classList.add('dark-mode');
@@ -134,29 +122,27 @@ export class SettingsComponent implements OnInit {
 
     const token = localStorage.getItem('token');
 
-    fetch('http://localhost:8080/api/auth/change-password', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        currentPassword: this.currentPassword,
-        newPassword: this.newPassword,
-      }),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Failed');
-        }
-        return res.text();
-      })
-      .then(() => {
-        alert('Password updated successfully');
-        this.closeModal();
-      })
-      .catch(() => {
-        this.passwordError = 'Current password is incorrect';
+    this.api
+      .postWithOptions(
+        '/api/auth/change-password',
+        {
+          currentPassword: this.currentPassword,
+          newPassword: this.newPassword,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      )
+      .subscribe({
+        next: () => {
+          alert('Password updated successfully');
+          this.closeModal();
+        },
+        error: (err: any) => {
+          this.passwordError =
+            err.error?.userMessage || err.error?.message || 'Current password is incorrect';
+          this.cd.detectChanges();
+        },
       });
   }
 }
