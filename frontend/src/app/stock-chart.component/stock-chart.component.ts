@@ -369,20 +369,69 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
     }
 
     // Left side: scale transaction history so it ends at currentHoldingsValue
-    // This keeps the left line shape but joins correctly with the projection
     const rawLastHist = histValues.length ? histValues[histValues.length - 1] : 0;
     const histScale = rawLastHist > 0 ? currentHoldingsValue / rawLastHist : 1;
     const scaledHistValues = histValues.map((v) => +(v * histScale).toFixed(2));
 
     const lastHist = currentHoldingsValue;
     const lastProj = projValues[projValues.length - 1] ?? lastHist;
-    const isGrowth = lastProj >= lastHist;
-    const color = isGrowth ? '#43a047' : '#e53935';
-    const bgColor = isGrowth ? 'rgba(67,160,71,0.08)' : 'rgba(229,57,53,0.08)';
+
+    // Colors for individual stock lines
+    const stockColors = [
+      '#1e88e5', // blue
+      '#e53935', // red
+      '#fb8c00', // orange
+      '#8e24aa', // purple
+      '#00897b', // teal
+      '#f4511e', // deep orange
+      '#6d4c41', // brown
+      '#546e7a', // blue-grey
+    ];
 
     const allLabels = [...histLabels, ...projLabels];
+
+    // Solid portfolio history dataset
     const solidData: (number | null)[] = [...scaledHistValues, ...projLabels.map(() => null)];
-    const dashedData: (number | null)[] = [
+
+    // Per-symbol projected dashed lines
+    const perSymbolDatasets = symbolData.map((s, idx) => {
+      const color = stockColors[idx % stockColors.length];
+      // Project this symbol's value (price * quantity) forward
+      const symLastPrices = { [s.symbol]: s.lastPrice };
+      const symProjValues: (number | null)[] = [];
+      for (let i = 0; i < futureBuckets; i++) {
+        symLastPrices[s.symbol] = symLastPrices[s.symbol] * (1 + s.avgGrowthRate);
+        symProjValues.push(+(symLastPrices[s.symbol] * s.quantity).toFixed(2));
+      }
+      // Anchor to proportional share of lastHist
+      const symCurrentValue = s.lastPrice * s.quantity;
+      const symScale = currentHoldingsValue > 0 ? symCurrentValue / currentHoldingsValue : 1;
+      const symAnchor = +(lastHist * symScale).toFixed(2);
+      const symRawStart = symProjValues[0] ?? symCurrentValue;
+      const symAnchored = symProjValues.map((v) =>
+        v != null && symRawStart > 0 ? +(symAnchor * (v / symRawStart)).toFixed(2) : null,
+      );
+      return {
+        label: `${s.symbol} (×${s.quantity})`,
+        data: [
+          ...scaledHistValues.map((_, i) => (i === scaledHistValues.length - 1 ? symAnchor : null)),
+          ...symAnchored,
+        ] as (number | null)[],
+        borderColor: color,
+        backgroundColor: 'transparent',
+        fill: false,
+        tension: 0.3,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: color,
+        borderWidth: 1.5,
+        borderDash: [4, 4],
+        spanGaps: false,
+      };
+    });
+
+    // Combined green dashed projection
+    const combinedDashed: (number | null)[] = [
       ...scaledHistValues.map((v, i) => (i === scaledHistValues.length - 1 ? v : null)),
       ...projValues,
     ];
@@ -413,31 +462,35 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
       data: {
         labels: allLabels,
         datasets: [
+          // Solid: transaction history
           {
-            label: 'Portfolio',
+            label: 'Portfolio History',
             data: solidData,
-            borderColor: color,
-            backgroundColor: bgColor,
+            borderColor: '#43a047',
+            backgroundColor: 'rgba(67,160,71,0.08)',
             fill: true,
             tension: 0.3,
             pointRadius: 0,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: color,
+            pointHoverRadius: 4,
+            pointHoverBackgroundColor: '#9e9e9e',
             borderWidth: 2,
             spanGaps: false,
           },
+          // Per-symbol dashed lines
+          ...perSymbolDatasets,
+          // Combined green dashed projection
           {
-            label: 'Projected',
-            data: dashedData,
-            borderColor: color,
-            backgroundColor: 'transparent',
+            label: 'Total Projection',
+            data: combinedDashed,
+            borderColor: '#43a047',
+            backgroundColor: 'rgba(67,160,71,0.06)',
             fill: false,
             tension: 0.3,
             pointRadius: 0,
             pointHoverRadius: 5,
-            pointHoverBackgroundColor: color,
-            borderWidth: 2,
-            borderDash: [6, 4],
+            pointHoverBackgroundColor: '#43a047',
+            borderWidth: 2.5,
+            borderDash: [8, 3],
             spanGaps: false,
           },
         ],
@@ -446,19 +499,29 @@ export class StockChartComponent implements OnChanges, OnDestroy, AfterViewInit 
         responsive: true,
         maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
+        onClick: () => {},
         plugins: {
-          legend: { display: false },
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              boxWidth: 20,
+              font: { size: 10 },
+              padding: 8,
+              usePointStyle: true,
+              pointStyle: 'line',
+            },
+          },
           tooltip: {
             callbacks: {
               label: (ctx) => {
                 const val = ctx.parsed?.y;
                 if (val == null) return '';
-                return `${ctx.datasetIndex === 0 ? 'Portfolio' : 'Projected'}: $${val.toFixed(2)}`;
+                return `${ctx.dataset.label}: $${Number(val).toFixed(2)}`;
               },
             },
           },
         },
-        onClick: () => {},
         scales: {
           x: { ticks: { maxTicksLimit: 10, font: { size: 10 }, maxRotation: 30 } },
           y: {
