@@ -29,8 +29,3 @@ yarn-error.log*
 .vscode/settings.json
 
 .env
-
-backend.log
-cloudflare.log
-frontend.log
-ngrok.log
