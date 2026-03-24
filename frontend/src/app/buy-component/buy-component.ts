@@ -12,6 +12,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../cart/cart.service';
 import { ApiService } from '../services/api.services';
+import { ToastService } from '../toast/toast.service';
 
 @Component({
   selector: 'app-buy',
@@ -22,43 +23,42 @@ import { ApiService } from '../services/api.services';
 })
 export class BuyComponent implements OnInit, OnChanges {
   @Input() symbol = 'TSLA';
-  @Input() refreshTrigger = 0; // increments from parent to force cash balance refresh
+  @Input() refreshTrigger = 0;
   @Output() buyComplete = new EventEmitter<void>();
   @Output() watchlistComplete = new EventEmitter<void>();
 
   currentPrice: number | null = null;
   cashBalance: number | null = null;
-  watchlistMap: { [symbol: string]: number } = {}; // symbol -> watchlist entry id
+  watchlistMap: { [symbol: string]: number } = {};
   action: 'buy' | 'cart' | 'watchlist' = 'buy';
   quantity = 1;
   loading = false;
   submitting = false;
-  successMessage = '';
+
+  // Keep errorMessage for inline display only (below the button)
   errorMessage = '';
 
   constructor(
     private api: ApiService,
     private cdr: ChangeDetectorRef,
     private cartService: CartService,
+    private toast: ToastService,
   ) {}
 
   ngOnInit(): void {
     this.loadCashBalance();
     this.loadWatchlist();
-    if (this.symbol) {
-      this.loadPrice(this.symbol);
-    }
+    if (this.symbol) this.loadPrice(this.symbol);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['symbol'] && this.symbol) {
-      this.resetMessages();
+      this.errorMessage = '';
       this.quantity = 1;
       this.loadPrice(this.symbol);
       this.loadCashBalance();
       this.loadWatchlist();
     }
-    // Refresh cash balance whenever parent signals a portfolio change
     if (changes['refreshTrigger'] && !changes['refreshTrigger'].firstChange) {
       this.loadCashBalance();
       this.loadWatchlist();
@@ -103,11 +103,9 @@ export class BuyComponent implements OnInit, OnChanges {
     });
   }
 
-  // Set quantity to max affordable shares based on cash balance
   setMaxQuantity(): void {
     if (this.currentPrice && this.currentPrice > 0 && this.cashBalance !== null) {
-      this.quantity = Math.floor(this.cashBalance / this.currentPrice);
-      if (this.quantity < 1) this.quantity = 1;
+      this.quantity = Math.max(1, Math.floor(this.cashBalance / this.currentPrice));
       this.cdr.detectChanges();
     }
   }
@@ -115,33 +113,26 @@ export class BuyComponent implements OnInit, OnChanges {
   get totalCost(): number {
     return (this.currentPrice ?? 0) * this.quantity;
   }
-
   get maxAffordable(): number {
     if (!this.currentPrice || this.currentPrice <= 0 || this.cashBalance === null) return 0;
     return Math.floor(this.cashBalance / this.currentPrice);
   }
-
   get isAlreadyWatched(): boolean {
     return this.symbol in this.watchlistMap;
   }
-
   get watchlistEntryId(): number | null {
     return this.watchlistMap[this.symbol] ?? null;
   }
-
   get cannotAffordOne(): boolean {
     if (!this.currentPrice || this.currentPrice <= 0 || this.cashBalance === null) return false;
     return this.cashBalance < this.currentPrice;
   }
-
   get buyDisabled(): boolean {
     return this.submitting || this.loading || this.currentPrice === null || this.cannotAffordOne;
   }
-
   get watchlistDisabled(): boolean {
     return this.submitting;
   }
-
   get buttonLabel(): string {
     if (this.submitting) return '';
     switch (this.action) {
@@ -157,27 +148,23 @@ export class BuyComponent implements OnInit, OnChanges {
   }
 
   submit(): void {
-    if (!this.symbol || !this.symbol.trim()) return;
+    if (!this.symbol?.trim()) return;
     if ((this.action === 'buy' || this.action === 'cart') && this.quantity <= 0) return;
 
     this.submitting = true;
-    this.resetMessages();
+    this.errorMessage = '';
 
     if (this.action === 'cart') {
-      // Add to cart locally — no API call
       this.cartService.addItem(this.symbol, this.quantity, this.currentPrice ?? 0);
-      this.successMessage = `${this.quantity} share(s) of ${this.symbol} added to cart`;
+      this.toast.info(`${this.quantity} share(s) of ${this.symbol} added to cart 🛒`);
       this.submitting = false;
       this.cdr.detectChanges();
     } else if (this.action === 'buy') {
       this.api
-        .post<any>('/api/holdings/buy', {
-          stockSymbol: this.symbol,
-          quantity: this.quantity,
-        })
+        .post<any>('/api/holdings/buy', { stockSymbol: this.symbol, quantity: this.quantity })
         .subscribe({
           next: () => {
-            this.successMessage = `Bought ${this.quantity} share(s) of ${this.symbol}`;
+            this.toast.success(`✓ Bought ${this.quantity} share(s) of ${this.symbol}`);
             this.submitting = false;
             this.loadCashBalance();
             this.buyComplete.emit();
@@ -185,16 +172,16 @@ export class BuyComponent implements OnInit, OnChanges {
           },
           error: (err) => {
             this.errorMessage = err.error?.userMessage || err.error?.message || 'Purchase failed';
+            this.toast.error(this.errorMessage);
             this.submitting = false;
             this.cdr.detectChanges();
           },
         });
     } else {
       if (this.isAlreadyWatched && this.watchlistEntryId !== null) {
-        // Remove from watchlist
         this.api.delete(`/api/watchlist/${this.watchlistEntryId}`).subscribe({
           next: () => {
-            this.successMessage = `${this.symbol} removed from watchlist`;
+            this.toast.info(`${this.symbol} removed from watchlist`);
             this.submitting = false;
             this.loadWatchlist();
             this.watchlistComplete.emit();
@@ -207,34 +194,24 @@ export class BuyComponent implements OnInit, OnChanges {
           },
         });
       } else {
-        // Add to watchlist
-        this.api
-          .post<any>('/api/watchlist', {
-            stockSymbol: this.symbol,
-          })
-          .subscribe({
-            next: () => {
-              this.successMessage = `${this.symbol} added to watchlist`;
-              this.submitting = false;
-              this.loadWatchlist();
-              this.watchlistComplete.emit();
-              this.cdr.detectChanges();
-            },
-            error: (err) => {
-              this.errorMessage =
-                err.status === 400
-                  ? `${this.symbol} is already in your watchlist`
-                  : 'Failed to add to watchlist';
-              this.submitting = false;
-              this.cdr.detectChanges();
-            },
-          });
+        this.api.post<any>('/api/watchlist', { stockSymbol: this.symbol }).subscribe({
+          next: () => {
+            this.toast.success(`${this.symbol} added to watchlist ★`);
+            this.submitting = false;
+            this.loadWatchlist();
+            this.watchlistComplete.emit();
+            this.cdr.detectChanges();
+          },
+          error: (err) => {
+            this.errorMessage =
+              err.status === 400
+                ? `${this.symbol} is already in your watchlist`
+                : 'Failed to add to watchlist';
+            this.submitting = false;
+            this.cdr.detectChanges();
+          },
+        });
       }
     }
-  }
-
-  private resetMessages(): void {
-    this.successMessage = '';
-    this.errorMessage = '';
   }
 }

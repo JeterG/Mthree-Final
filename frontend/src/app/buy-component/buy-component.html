@@ -1,4 +1,3 @@
-<!-- Buy Component -->
 <div class="card border-0 shadow-sm p-3">
   <div *ngIf="!symbol" class="text-muted small">Select a stock to buy or add to watchlist</div>
 
@@ -55,16 +54,16 @@
         </button>
       </div>
       <div class="mt-2 small" *ngIf="currentPrice !== null">
-        <span class="text-muted"
-          >Total: <strong>${{ totalCost | number: '1.2-2' }}</strong></span
-        >
+        <span class="text-muted">
+          Total: <strong>${{ totalCost | number: '1.2-2' }}</strong>
+        </span>
         <span *ngIf="cashBalance !== null && totalCost > cashBalance" class="text-danger ms-2">
           Exceeds balance
         </span>
       </div>
     </div>
 
-    <!-- Watchlist status indicator -->
+    <!-- Watchlist status -->
     <div *ngIf="action === 'watchlist'" class="mb-3">
       <span *ngIf="isAlreadyWatched" class="badge bg-success py-2 px-3">
         ★ Currently watching {{ symbol }}
@@ -74,13 +73,12 @@
       </span>
     </div>
 
-    <!-- Success / error -->
-    <div class="alert alert-success py-2 small mb-3" *ngIf="successMessage">
-      {{ successMessage }}
+    <!-- Inline error only — success is handled by toast -->
+    <div class="alert alert-danger py-2 small mb-3" *ngIf="errorMessage">
+      {{ errorMessage }}
     </div>
-    <div class="alert alert-danger py-2 small mb-3" *ngIf="errorMessage">{{ errorMessage }}</div>
 
-    <!-- Submit button — red outline when removing from watchlist, dark otherwise -->
+    <!-- Submit button -->
     <button
       class="btn w-100"
       (click)="submit()"
