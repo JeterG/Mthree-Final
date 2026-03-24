@@ -3,6 +3,14 @@
   background: #f4f4f4;
   min-height: 100vh;
   font-family: Arial, sans-serif;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Force diagram cards to never exceed viewport */
+.diagrams-wrapper .diagram-card {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .diagrams-wrapper section {
@@ -30,23 +38,18 @@
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   padding: 24px;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: visible;
 }
 
+/* SVG scales with its container — viewBox handles the internal layout */
 .diagrams-wrapper svg {
   display: block;
-  min-width: 900px;
-  height: auto;
-  max-width: none;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
 }
 
-@media (max-width: 1000px) {
-  .diagrams-wrapper svg {
-    min-width: 1000px;
-  }
-}
-
+/* Text classes */
 .diagrams-wrapper .lb {
   font-family: Arial, sans-serif;
   font-size: 12px;
