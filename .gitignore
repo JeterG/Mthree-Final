@@ -29,3 +29,5 @@ yarn-error.log*
 .vscode/settings.json
 
 .env
+backend.log
+frontend.log
