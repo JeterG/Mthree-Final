@@ -31,3 +31,5 @@ yarn-error.log*
 .env
 backend.log
 frontend.log
+cloudflare.log
+ngrok.log
