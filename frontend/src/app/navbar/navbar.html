@@ -1,34 +1,48 @@
 <nav class="navbar">
-  <!--  LOGO -->
+  <!-- LOGO -->
   <div class="logo">
     <a routerLink="/home">
       <img src="assets/logo.png" alt="Logo" class="logo-img" />
     </a>
   </div>
 
-  <!--  NAV LINKS (LEFT SIDE) -->
-  <div class="nav-links">
-    <a routerLink="/home" routerLinkActive="active">Home</a>
-    <a routerLink="/portfolio" routerLinkActive="active">Portfolio</a>
-    <a routerLink="/search" routerLinkActive="active">Search</a>
-    <a routerLink="/settings" routerLinkActive="active">Settings</a>
-    <a routerLink="/docs" routerLinkActive="active">API Docs</a>
-    <a routerLink="/diagrams" routerLinkActive="active">Diagrams</a>
+  <!-- NAV LINKS — hidden on mobile, shown via hamburger -->
+  <div class="nav-links" [class.open]="isMobileMenuOpen">
+    <a routerLink="/home" routerLinkActive="active" (click)="closeMobileMenu()">Home</a>
+    <a routerLink="/portfolio" routerLinkActive="active" (click)="closeMobileMenu()">Portfolio</a>
+    <a routerLink="/search" routerLinkActive="active" (click)="closeMobileMenu()">Search</a>
+    <a routerLink="/settings" routerLinkActive="active" (click)="closeMobileMenu()">Settings</a>
+    <a routerLink="/docs" routerLinkActive="active" (click)="closeMobileMenu()">API Docs</a>
+    <a routerLink="/diagrams" routerLinkActive="active" (click)="closeMobileMenu()">Diagrams</a>
+
+    <!-- User section inside mobile menu -->
+    <div class="mobile-user" *ngIf="isLoggedIn()">
+      <span class="user-email-mobile">{{ email }}</span>
+      <button class="mobile-menu-btn" (click)="goToProfile()">Profile</button>
+      <button class="mobile-menu-btn danger" (click)="logout()">Logout</button>
+    </div>
   </div>
 
-  <!--  USER (RIGHT SIDE LOCKED) -->
-  <div class="user-wrapper" *ngIf="isLoggedIn()">
-    <div class="user-section" [class.open]="isDropdownOpen" (click)="toggleDropdown($event)">
-      <span class="user-email">{{ email }}</span>
-      <span class="dropdown-arrow">▼</span>
+  <!-- RIGHT SIDE: user dropdown (desktop) + hamburger (mobile) -->
+  <div class="nav-right">
+    <!-- Desktop user dropdown -->
+    <div class="user-wrapper" *ngIf="isLoggedIn()">
+      <div class="user-section" [class.open]="isDropdownOpen" (click)="toggleDropdown($event)">
+        <span class="user-email">{{ email }}</span>
+        <span class="dropdown-arrow">▼</span>
+      </div>
+      <div *ngIf="isDropdownOpen" class="user-dropdown">
+        <button class="user-dropdown-item" (click)="goToProfile()">Profile</button>
+        <div class="dropdown-divider"></div>
+        <button class="user-dropdown-item" (click)="logout()">Logout</button>
+      </div>
     </div>
 
-    <div *ngIf="isDropdownOpen" class="user-dropdown">
-      <button class="user-dropdown-item" (click)="goToProfile()">Profile</button>
-
-      <div class="dropdown-divider"></div>
-
-      <button class="user-dropdown-item" (click)="logout()">Logout</button>
-    </div>
+    <!-- Hamburger button — only visible on mobile -->
+    <button class="hamburger" (click)="toggleMobileMenu()" [class.open]="isMobileMenuOpen">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
 </nav>

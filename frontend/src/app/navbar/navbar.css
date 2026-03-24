@@ -6,14 +6,17 @@
   background-color: #111;
   border-bottom: 1px solid #222;
   overflow: visible;
+  position: relative;
+  z-index: 100;
 }
 
-/*  LOGO */
+/* LOGO */
 .logo {
   display: flex;
   align-items: center;
   width: 120px;
   margin-left: 16px;
+  flex-shrink: 0;
 }
 
 .logo-img {
@@ -22,45 +25,50 @@
   object-fit: contain;
 }
 
-/*  NAV LINKS (LEFT SIDE) */
+/* NAV LINKS */
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 40px; /*  more spacing between items */
-  margin-left: 40px; /*  moves links closer to logo */
-  flex: 1; /*  pushes user section to the right */
+  gap: 40px;
+  margin-left: 40px;
+  flex: 1;
 }
 
 .nav-links a {
   text-decoration: none;
   color: #aaa;
   font-size: 14px;
-  padding: 6px 10px; /*  gives clickable area */
-  border-radius: 6px; /*  makes it pill-like */
+  padding: 6px 10px;
+  border-radius: 6px;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .nav-links a:hover {
   color: #ff9800;
-
-  background-color: rgba(255, 152, 0, 0.12); /*  subtle orange tint */
-
-  box-shadow: 0 0 8px rgba(255, 152, 0, 0.25); /*  soft glow */
+  background-color: rgba(255, 152, 0, 0.12);
+  box-shadow: 0 0 8px rgba(255, 152, 0, 0.25);
 }
 
 .nav-links a.active {
   color: #ff9800;
   font-weight: 500;
-
   background-color: rgba(255, 152, 0, 0.15);
 }
 
-/*  USER SECTION (RIGHT LOCKED) */
+/* RIGHT SIDE WRAPPER */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+/* USER SECTION */
 .user-wrapper {
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: auto; /*  locks to far right */
 }
 
 .user-section {
@@ -71,9 +79,7 @@
   font-weight: 500;
   padding: 6px 8px;
   border-radius: 6px;
-  transition:
-    background-color 0.2s ease,
-    opacity 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .user-section:hover {
@@ -95,7 +101,6 @@
   transform: rotate(180deg);
 }
 
-/*  DROPDOWN */
 .user-dropdown {
   position: absolute;
   top: calc(100% + 8px);
@@ -122,4 +127,133 @@
 
 .user-dropdown-item:hover {
   background: #2a2a2a;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #2a2a2a;
+}
+
+/* HAMBURGER BUTTON */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.hamburger span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: #aaa;
+  border-radius: 2px;
+  transition: all 0.25s ease;
+  transform-origin: center;
+}
+
+/* Animate to X when open */
+.hamburger.open span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+  background: #ff9800;
+}
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+  background: #ff9800;
+}
+
+/* MOBILE MENU items inside nav-links */
+.mobile-user {
+  display: none;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  .hamburger {
+    display: flex;
+  }
+
+  /* Hide desktop user dropdown on mobile */
+  .user-wrapper {
+    display: none;
+  }
+
+  /* Nav links become vertical dropdown */
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    margin: 0;
+    padding: 8px 0 16px;
+    background: #111;
+    border-bottom: 1px solid #222;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links a {
+    width: 100%;
+    padding: 12px 24px;
+    border-radius: 0;
+    font-size: 15px;
+  }
+
+  .nav-links a:hover {
+    background-color: rgba(255, 152, 0, 0.1);
+    box-shadow: none;
+  }
+
+  /* Show user section inside mobile menu */
+  .mobile-user {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-top: 1px solid #222;
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+
+  .user-email-mobile {
+    color: #aaa;
+    font-size: 13px;
+    padding: 8px 24px;
+  }
+
+  .mobile-menu-btn {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 15px;
+    padding: 12px 24px;
+    cursor: pointer;
+  }
+
+  .mobile-menu-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .mobile-menu-btn.danger {
+    color: #ff6b6b;
+  }
+  .mobile-menu-btn.danger:hover {
+    background: rgba(255, 107, 107, 0.08);
+  }
 }

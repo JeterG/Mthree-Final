@@ -12,6 +12,7 @@ import { Router, RouterModule } from '@angular/router';
 export class Navbar implements OnInit {
   email: string | null = null;
   isDropdownOpen = false;
+  isMobileMenuOpen = false;
 
   constructor(private router: Router) {}
 
@@ -28,24 +29,26 @@ export class Navbar implements OnInit {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  //  NEW: Navigate to profile properly
-  goToProfile(): void {
-    this.isDropdownOpen = false; // close dropdown FIRST
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
 
-    // small delay ensures UI updates before routing
-    setTimeout(() => {
-      this.router.navigate(['/profile']);
-    }, 0);
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
+  }
+
+  goToProfile(): void {
+    this.isDropdownOpen = false;
+    this.isMobileMenuOpen = false;
+    setTimeout(() => this.router.navigate(['/profile']), 0);
   }
 
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('email');
     localStorage.removeItem('userId');
-
     this.isDropdownOpen = false;
-
-    //  CRITICAL: replace history so back button can't return
+    this.isMobileMenuOpen = false;
     this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 
@@ -54,6 +57,9 @@ export class Navbar implements OnInit {
     const target = event.target as HTMLElement;
     if (!target.closest('.user-wrapper')) {
       this.isDropdownOpen = false;
+    }
+    if (!target.closest('.navbar')) {
+      this.isMobileMenuOpen = false;
     }
   }
 }
