@@ -1,12 +1,9 @@
 <div class="login-container">
   <div class="login-card">
-
-    <!-- LOGO -->
     <div class="logo-wrapper">
       <img src="assets/logo.png" class="logo-img" alt="Logo" />
     </div>
 
-    <!-- TITLE -->
     <h2>Create Account</h2>
     <p class="subtitle">Start paper trading today! 😀</p>
 
@@ -22,15 +19,11 @@
         (focusout)="checkEmailExists()"
         (input)="emailExists = false"
       />
-
       <div class="error">
-        <span *ngIf="emailInput.invalid && emailInput.touched">
-          Valid email is required
-        </span>
-
-        <span *ngIf="emailExists && emailInput.valid">
-          User already exists
-        </span>
+        <span *ngIf="emailInput.invalid && emailInput.touched">Valid email is required</span>
+        <span *ngIf="emailExists && emailInput.valid"
+          >An account with this email already exists</span
+        >
       </div>
     </div>
 
@@ -49,7 +42,7 @@
         <span *ngIf="passwordInput.touched && passwordInput.invalid">
           <span *ngIf="passwordInput.errors?.['required']">Password is required</span>
           <span *ngIf="passwordInput.errors?.['minlength']">Must be at least 6 characters</span>
-          <span *ngIf="passwordInput.errors?.['pattern']">
+          <span *ngIf="passwordInput.errors?.['pattern'] && !passwordInput.errors?.['minlength']">
             Must contain 1 uppercase letter and 1 number
           </span>
         </span>
@@ -66,39 +59,26 @@
         #confirmPasswordInput="ngModel"
       />
       <div class="error">
-        <span *ngIf="!hasSubmitted && confirmPasswordInput.touched && password !== confirmPassword">
+        <span
+          *ngIf="
+            confirmPasswordInput.touched &&
+            confirmPasswordInput.dirty &&
+            password !== confirmPassword
+          "
+        >
           Passwords do not match
         </span>
       </div>
     </div>
 
-    <!-- MESSAGES -->
-    <div class="message-area">
-      <div class="error" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
+    <!-- No message-area divs — all server feedback via toast -->
 
-      <div class="success" *ngIf="successMessage">
-        {{ successMessage }}
-      </div>
-    </div>
-
-    <!-- BUTTON -->
-    <button
-      type="button"
-      (click)="signup()"
-      [disabled]="isSubmitting || emailExists">
-      Sign Up
+    <button type="button" (click)="signup()" [disabled]="isSubmitting || emailExists">
+      {{ isSubmitting ? 'Creating account...' : 'Sign Up' }}
     </button>
 
-    <!-- LOGIN LINK -->
-    <p class="signup-link">
-      Already have an account?
-      <a routerLink="/login">Login</a>
-    </p>
+    <p class="signup-link">Already have an account? <a routerLink="/login">Login</a></p>
 
-    <!-- FOOTER -->
     <p class="footer">Paper trading. Zero risk. Real experience.</p>
-
   </div>
 </div>
