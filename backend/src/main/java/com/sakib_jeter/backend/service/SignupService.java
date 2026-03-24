@@ -74,4 +74,7 @@ public class SignupService {
 
         System.out.println("Password updated for: " + email);
     }
+    public boolean emailExists(String email) {
+    return repo.existsByEmail(email);
+}
 }
