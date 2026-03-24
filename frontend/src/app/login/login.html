@@ -1,41 +1,36 @@
 <div class="login-container">
   <div class="login-card">
-    <!-- LOGO -->
     <div class="logo-wrapper">
       <img src="assets/logo.png" class="logo-img" alt="Logo" />
     </div>
 
-    <!-- TITLE -->
     <h2>Welcome Back</h2>
     <p class="subtitle">Sign in to your StockQuik account!</p>
 
-    <form #loginForm="ngForm" (ngSubmit)="login()">
-      <!-- EMAIL -->
+    <form (ngSubmit)="login()">
       <div class="form-group">
-        <input type="email" placeholder="Email" name="email" [(ngModel)]="email" />
+        <input type="email" placeholder="Email" name="email" [(ngModel)]="email" required />
       </div>
 
-      <!-- PASSWORD -->
       <div class="form-group">
-        <input type="password" placeholder="Password" name="password" [(ngModel)]="password" />
+        <input
+          type="password"
+          placeholder="Password"
+          name="password"
+          [(ngModel)]="password"
+          required
+        />
       </div>
 
-      <!--  ERROR MESSAGE (ONLY AFTER FAILED LOGIN) -->
-      <div *ngIf="errorMessage" class="error-message">
-        {{ errorMessage }}
-      </div>
+      <!-- No error divs — all feedback via toast -->
 
-      <!-- BUTTON -->
-      <button type="submit">Login</button>
-
-      <!-- LINK -->
-      <p class="signup-link">
-        Don’t have an account?
-        <a routerLink="/signup">Sign up</a>
-      </p>
+      <button type="submit" [disabled]="loading">
+        {{ loading ? 'Signing in...' : 'Login' }}
+      </button>
     </form>
 
-    <!-- FOOTER -->
+    <p class="signup-link">Don't have an account? <a routerLink="/signup">Sign up</a></p>
+
     <p class="footer">Paper trading. Zero risk. Real experience.</p>
   </div>
 </div>

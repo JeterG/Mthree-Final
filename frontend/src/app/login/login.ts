@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../services/api.services';
+import { ToastService } from '../toast/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -12,18 +13,31 @@ import { ApiService } from '../services/api.services';
   styleUrl: './login.css',
 })
 export class LoginComponent {
-  email: string = '';
-  password: string = '';
-  errorMessage: string = '';
+  email = '';
+  password = '';
+  loading = false;
 
   constructor(
     private api: ApiService,
     private router: Router,
-    private cdr: ChangeDetectorRef, //  ADD THIS
+    private cdr: ChangeDetectorRef,
+    private toast: ToastService,
   ) {}
 
   login() {
-    this.errorMessage = '';
+    if (this.loading) return;
+
+    if (!this.email.trim()) {
+      this.toast.error('Please enter your email');
+      return;
+    }
+    if (!this.password) {
+      this.toast.error('Please enter your password');
+      return;
+    }
+
+    this.loading = true;
+    this.cdr.detectChanges();
 
     this.api
       .post<any>('/api/auth/login', {
@@ -32,28 +46,32 @@ export class LoginComponent {
       })
       .subscribe({
         next: (res: any) => {
-          //  HANDLE FAILED LOGIN EVEN IF 200 RESPONSE
-          if (!res || !res.token) {
-            this.errorMessage = 'Invalid email or password';
-            this.cdr.detectChanges(); //  FORCE UI UPDATE
+          this.loading = false;
+          if (!res?.token) {
+            this.toast.error('Invalid email or password');
+            this.cdr.detectChanges();
             return;
           }
-
-          // SUCCESS
           localStorage.setItem('token', res.token);
           localStorage.setItem('userId', res.userId.toString());
           localStorage.setItem('email', res.email);
-
+          this.toast.success('Welcome back!');
           this.router.navigate(['/home']);
         },
-
         error: (err) => {
-          console.log('ERROR TRIGGERED:', err);
-
-          //  ALWAYS SHOW MESSAGE
-          this.errorMessage = 'Invalid email or password';
-
-          //  FORCE UI UPDATE (CRITICAL FIX)
+          this.loading = false;
+          const msg = (err?.error?.message || err?.error?.userMessage || '').toLowerCase();
+          if (msg.includes('not found') || msg.includes('no such')) {
+            this.toast.error('No account found with that email');
+          } else if (
+            msg.includes('password') ||
+            msg.includes('credential') ||
+            msg.includes('invalid')
+          ) {
+            this.toast.error('Wrong password — please try again');
+          } else {
+            this.toast.error('Invalid email or password');
+          }
           this.cdr.detectChanges();
         },
       });

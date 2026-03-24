@@ -1,0 +1,12 @@
+<div class="toast-container">
+  <div
+    *ngFor="let t of toasts"
+    class="toast-item toast-{{ t.type }}"
+    (click)="toastService.dismiss(t.id)"
+  >
+    <span class="toast-icon">
+      {{ t.type === 'success' ? '✓' : t.type === 'error' ? '✕' : 'ℹ' }}
+    </span>
+    {{ t.message }}
+  </div>
+</div>
