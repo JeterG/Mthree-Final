@@ -45,8 +45,11 @@
           stroke-width="1"
         />
         <text x="550" y="43" text-anchor="middle" class="lh">Angular 21 Frontend</text>
-        <text x="550" y="60" text-anchor="middle" class="ls">
-          Home · Portfolio · Search · Settings — standalone components, Bootstrap 5, Chart.js
+        <text x="550" y="57" text-anchor="middle" class="ls">
+          Home · Portfolio · Search · Settings
+        </text>
+        <text x="550" y="69" text-anchor="middle" class="ls">
+          Standalone components · Bootstrap 5 · Chart.js
         </text>
         <line
           x1="550"
@@ -232,22 +235,26 @@
           stroke="#1e88e5"
           stroke-width="0.5"
         />
-        <text x="938" y="230" text-anchor="middle" class="lb">YahooFinanceService</text>
+        <text x="938" y="230" text-anchor="middle" class="lb" style="font-size: 11px">
+          YahooFinanceService
+        </text>
         <text x="938" y="243" text-anchor="middle" class="ls">1yr OHLC history</text>
         <rect
           x="70"
           y="278"
           width="960"
-          height="48"
+          height="64"
           rx="8"
           fill="#fff8e1"
           stroke="#f9a825"
           stroke-width="0.5"
         />
         <text x="550" y="298" text-anchor="middle" class="lb">StockDataSeeder</text>
-        <text x="550" y="313" text-anchor="middle" class="ls">
-          GET /market/seed — Finnhub x 131 symbols · GET /market/seed/history — Yahoo Finance x 131
-          symbols
+        <text x="550" y="311" text-anchor="middle" class="ls">
+          GET /market/seed — Finnhub ×131 symbols (1100ms delay)
+        </text>
+        <text x="550" y="326" text-anchor="middle" class="ls">
+          GET /market/seed/history — Yahoo Finance ×131 symbols (1000ms delay)
         </text>
         <line
           x1="550"
@@ -557,7 +564,7 @@
           stroke="#ef6c00"
           stroke-width="0.5"
         />
-        <text x="962" y="103" text-anchor="middle" class="lb">
+        <text x="962" y="103" text-anchor="middle" class="lb" style="font-size: 10px">
           SELECT * FROM users WHERE email=?
         </text>
         <line
@@ -2277,7 +2284,12 @@
           stroke="#26a69a"
           stroke-width="0.5"
         />
-        <text x="550" y="1564" text-anchor="middle" class="lb">StockDataSeeder.seedHistory()</text>
+        <text x="550" y="1560" text-anchor="middle" class="lb" style="font-size: 10px">
+          StockDataSeeder
+        </text>
+        <text x="550" y="1574" text-anchor="middle" class="lb" style="font-size: 10px">
+          .seedHistory()
+        </text>
         <line
           x1="650"
           y1="1564"
@@ -2297,7 +2309,9 @@
           stroke="#f9a825"
           stroke-width="0.5"
         />
-        <text x="770" y="1564" text-anchor="middle" class="lb">Yahoo Finance x 131 symbols</text>
+        <text x="770" y="1564" text-anchor="middle" class="lb" style="font-size: 10px">
+          Yahoo Finance ×131 symbols
+        </text>
         <line x1="770" y1="1580" x2="770" y2="1596" stroke="#555" stroke-width="1.5" />
         <line
           x1="770"
@@ -2469,7 +2483,9 @@
         <text x="32" y="566" class="ls">stock_symbol : VARCHAR(10) NOT NULL</text>
         <text x="32" y="582" class="ls">price : DECIMAL(10,2) NOT NULL</text>
         <text x="32" y="598" class="ls">quantity : DECIMAL(10,4) NOT NULL</text>
-        <text x="32" y="614" class="ls">total_amount : DECIMAL(10,2) (@PrePersist)</text>
+        <text x="32" y="614" class="ls" style="font-size: 9px">
+          total_amount : DECIMAL(10,2) (@PrePersist)
+        </text>
         <text x="32" y="630" class="ls">type : ENUM(BUY, SELL) NOT NULL</text>
         <text x="32" y="646" class="ls">created_at : DATETIME (@PrePersist)</text>
         <rect
@@ -2505,7 +2521,7 @@
         />
         <rect x="800" y="480" width="280" height="28" rx="8" fill="#f9a825" />
         <rect x="800" y="496" width="280" height="12" fill="#f9a825" />
-        <text x="940" y="498" text-anchor="middle" class="lb" style="fill: white; font-size: 13px">
+        <text x="940" y="498" text-anchor="middle" class="lb" style="fill: white; font-size: 11px">
           STOCK_HISTORY_CACHE
         </text>
         <text x="812" y="524" class="ls">id : BIGINT PK</text>

@@ -8,5 +8,6 @@ import { Component, ViewEncapsulation } from '@angular/core';
   templateUrl: './diagrams.html',
   styleUrls: ['./diagrams.css'],
   encapsulation: ViewEncapsulation.None,
+  host: { style: 'display: block; width: 100%;' },
 })
 export class DiagramsComponent {}
