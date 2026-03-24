@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ApiService } from '../services/api.services';
+import { ToastService } from '../toast/toast.service';
 
 @Component({
   selector: 'app-signup',
@@ -12,39 +13,49 @@ import { ApiService } from '../services/api.services';
   styleUrl: './signup.css',
 })
 export class SignupComponent {
-  email: string = '';
-  password: string = '';
-  confirmPassword: string = '';
-
-  errorMessage: string = '';
-  successMessage: string = '';
-
-  isSubmitting: boolean = false;
-  hasSubmitted: boolean = false; // 🔥 NEW FLAG
+  email = '';
+  password = '';
+  confirmPassword = '';
+  isSubmitting = false;
 
   constructor(
     private api: ApiService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private router: Router,
+    private toast: ToastService,
   ) {}
 
   signup() {
-    console.log('SIGNUP CALLED');
-
     if (this.isSubmitting) return;
-    this.isSubmitting = true;
 
-    this.hasSubmitted = true; // 🔥 mark submission attempt
-
-    this.errorMessage = '';
-    this.successMessage = '';
-
-    // ❌ do NOT show password mismatch message globally
-    if (this.password !== this.confirmPassword) {
-      this.errorMessage = 'Signup failed, recheck your fields'; // 🔥 ALWAYS same message
-      this.isSubmitting = false;
-      this.cd.detectChanges();
+    // Client-side validation via toasts
+    if (!this.email.trim()) {
+      this.toast.error('Please enter your email');
       return;
     }
+    if (!this.password) {
+      this.toast.error('Please enter a password');
+      return;
+    }
+    if (this.password.length < 6) {
+      this.toast.error('Password must be at least 6 characters');
+      return;
+    }
+    if (!/[A-Z]/.test(this.password)) {
+      this.toast.error('Password must contain at least 1 uppercase letter');
+      return;
+    }
+    if (!/[0-9]/.test(this.password)) {
+      this.toast.error('Password must contain at least 1 number');
+      return;
+    }
+    if (this.password !== this.confirmPassword) {
+      this.toast.error('Passwords do not match');
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.cd.detectChanges();
 
     this.api
       .post('/api/auth/signup', {
@@ -52,39 +63,21 @@ export class SignupComponent {
         password: this.password,
       })
       .subscribe({
-        next: (res: any) => {
-          console.log('SUCCESS HIT');
-          console.log(res);
-
-          this.successMessage =
-            'Account created successfully! You can now log in.';
-
-          this.cd.detectChanges();
-
-          this.email = '';
-          this.password = '';
-          this.confirmPassword = '';
-
+        next: () => {
           this.isSubmitting = false;
+          this.toast.success('Account created! You can now log in.');
+          this.router.navigate(['/login']);
         },
-
-error: (err) => {
-  console.log('FULL ERROR:', err);
-
-  const msg =
-    err?.error?.message ||
-    err?.error?.error?.message ||
-    '';
-
-  if (msg.toLowerCase().includes('exist')) {
-    this.errorMessage = 'User already exists';
-  } else {
-    this.errorMessage = 'Signup failed, recheck your fields';
-  }
-
-  this.isSubmitting = false;
-  this.cd.detectChanges();
-},
+        error: (err) => {
+          this.isSubmitting = false;
+          const msg = (err?.error?.message || err?.error?.userMessage || '').toLowerCase();
+          if (msg.includes('exist') || msg.includes('duplicate') || msg.includes('already')) {
+            this.toast.error('An account with this email already exists');
+          } else {
+            this.toast.error('Signup failed — please check your details');
+          }
+          this.cd.detectChanges();
+        },
       });
   }
 }

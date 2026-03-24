@@ -1,97 +1,46 @@
 <div class="login-container">
   <div class="login-card">
-
-    <!-- LOGO -->
     <div class="logo-wrapper">
       <img src="assets/logo.png" class="logo-img" alt="Logo" />
     </div>
 
-    <!-- TITLE -->
     <h2>Create Account</h2>
     <p class="subtitle">Start paper trading today! 😀</p>
 
-    <!-- EMAIL -->
-    <div class="form-group">
-      <input
-        type="email"
-        placeholder="Email"
-        [(ngModel)]="email"
-        required
-        email
-        #emailInput="ngModel"
-      />
-      <div class="error">
-        <span *ngIf="emailInput.invalid && emailInput.touched">
-          Valid email is required
-        </span>
-      </div>
-    </div>
-
-    <!-- PASSWORD -->
-    <div class="form-group">
-      <input
-        type="password"
-        placeholder="Password"
-        [(ngModel)]="password"
-        required
-        minlength="6"
-        pattern="^(?=.*[A-Z])(?=.*[0-9]).{6,}$"
-        #passwordInput="ngModel"
-      />
-      <div class="error">
-        <span *ngIf="passwordInput.touched && passwordInput.invalid">
-          <span *ngIf="passwordInput.errors?.['required']">Password is required</span>
-          <span *ngIf="passwordInput.errors?.['minlength']">Must be at least 6 characters</span>
-          <span *ngIf="passwordInput.errors?.['pattern']">
-            Must contain 1 uppercase letter and 1 number
-          </span>
-        </span>
-      </div>
-    </div>
-
-    <!-- CONFIRM PASSWORD -->
-    <div class="form-group">
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        [(ngModel)]="confirmPassword"
-        required
-        #confirmPasswordInput="ngModel"
-      />
-      <div class="error">
-        <span *ngIf="!hasSubmitted && confirmPasswordInput.touched && password !== confirmPassword">
-          Passwords do not match
-        </span>
-      </div>
-    </div>
-
-    <!-- MESSAGES -->
-    <div class="message-area">
-      <div class="error" *ngIf="errorMessage">
-        {{ errorMessage }}
+    <form (ngSubmit)="signup()">
+      <div class="form-group">
+        <input type="email" placeholder="Email" name="email" [(ngModel)]="email" required />
       </div>
 
-      <div class="success" *ngIf="successMessage">
-        {{ successMessage }}
+      <div class="form-group">
+        <input
+          type="password"
+          placeholder="Password"
+          name="password"
+          [(ngModel)]="password"
+          required
+        />
       </div>
-    </div>
 
-    <!-- ✅ ONLY BUTTON -->
-    <button
-      type="button"
-      (click)="signup()"
-      [disabled]="isSubmitting">
-      Sign Up
-    </button>
+      <div class="form-group">
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          required
+        />
+      </div>
 
-    <!-- LOGIN LINK -->
-    <p class="signup-link">
-      Already have an account?
-      <a routerLink="/login">Login</a>
-    </p>
+      <!-- No error divs — all feedback via toast -->
 
-    <!-- FOOTER -->
+      <button type="submit" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Creating account...' : 'Sign Up' }}
+      </button>
+    </form>
+
+    <p class="signup-link">Already have an account? <a routerLink="/login">Login</a></p>
+
     <p class="footer">Paper trading. Zero risk. Real experience.</p>
-
   </div>
 </div>

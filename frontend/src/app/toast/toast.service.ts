@@ -13,10 +13,14 @@ export class ToastService {
   private toastsSubject = new BehaviorSubject<Toast[]>([]);
   toasts$ = this.toastsSubject.asObservable();
 
-  show(message: string, type: Toast['type'] = 'success', duration = 3500): void {
+  show(message: string, type: Toast['type'] = 'success', duration = 2500): void {
     const id = ++this.idCounter;
     const toast: Toast = { id, message, type };
-    this.toastsSubject.next([...this.toastsSubject.value, toast]);
+    // Use setTimeout(0) to push outside the current change detection cycle
+    // so toasts appear instantly even on pages with OnPush or standalone routing
+    setTimeout(() => {
+      this.toastsSubject.next([...this.toastsSubject.value, toast]);
+    }, 0);
     setTimeout(() => this.dismiss(id), duration);
   }
 
@@ -28,7 +32,7 @@ export class ToastService {
     this.show(message, 'success');
   }
   error(message: string): void {
-    this.show(message, 'error', 5000);
+    this.show(message, 'error', 3500);
   }
   info(message: string): void {
     this.show(message, 'info');

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Toast, ToastService } from './toast.service';
 
@@ -25,12 +25,12 @@ import { Toast, ToastService } from './toast.service';
     `
       .toast-container {
         position: fixed;
-        bottom: 24px;
+        top: 64px;
         right: 24px;
         z-index: 9999;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
         pointer-events: none;
       }
       .toast-item {
@@ -51,27 +51,27 @@ import { Toast, ToastService } from './toast.service';
       }
       @keyframes slideIn {
         from {
-          transform: translateX(40px);
+          transform: translateY(-10px);
           opacity: 0;
         }
         to {
-          transform: translateX(0);
+          transform: translateY(0);
           opacity: 1;
         }
       }
       .toast-success {
-        background: #e8f5e9;
-        color: #1b5e20;
+        background: #1a2e1a;
+        color: #69f0ae;
         border-left: 4px solid #43a047;
       }
       .toast-error {
-        background: #ffebee;
-        color: #b71c1c;
+        background: #2e1a1a;
+        color: #ff8a80;
         border-left: 4px solid #e53935;
       }
       .toast-info {
-        background: #e3f2fd;
-        color: #0d47a1;
+        background: #1a1e2e;
+        color: #82b1ff;
         border-left: 4px solid #1e88e5;
       }
       .toast-icon {
@@ -85,10 +85,16 @@ export class ToastComponent implements OnInit, OnDestroy {
   toasts: Toast[] = [];
   private sub!: Subscription;
 
-  constructor(public toastService: ToastService) {}
+  constructor(
+    public toastService: ToastService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
-    this.sub = this.toastService.toasts$.subscribe((t) => (this.toasts = t));
+    this.sub = this.toastService.toasts$.subscribe((t) => {
+      this.toasts = t;
+      this.cdr.detectChanges();
+    });
   }
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
