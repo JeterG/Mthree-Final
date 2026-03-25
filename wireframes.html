@@ -1,0 +1,2425 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PaperTrade — Wireframes</title>
+    <style>
+      /* ── Tokens ── */
+      :root {
+        --bg: #f7f8fc;
+        --surface: #ffffff;
+        --surface2: #f0f1f7;
+        --border: #dde0f0;
+        --border2: #c8cce8;
+        --purple: #6c5ce7;
+        --purple-l: #ede9fc;
+        --blue: #0984e3;
+        --blue-l: #e8f4fd;
+        --green: #00b894;
+        --green-l: #e6f9f5;
+        --red: #d63031;
+        --red-l: #fdecea;
+        --gray: #636e72;
+        --gray-l: #eceff1;
+        --text: #2d3436;
+        --muted: #8a9bb0;
+        --label: #5a6a7e;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      /* ── Cover page ── */
+      .cover {
+        background: var(--surface);
+        border-bottom: 2px solid var(--border);
+        padding: 48px 60px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+      .cover-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--purple);
+        letter-spacing: -1px;
+      }
+      .cover-sub {
+        font-size: 14px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      .cover-meta {
+        text-align: right;
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 2;
+      }
+      .cover-meta strong {
+        color: var(--text);
+      }
+
+      /* ── TOC nav ── */
+      .toc {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 12px 60px;
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .toc a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 12px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        border: 1px solid transparent;
+        transition: all 0.15s;
+      }
+      .toc a:hover {
+        background: var(--purple-l);
+        color: var(--purple);
+        border-color: var(--purple);
+      }
+
+      /* ── Page layout ── */
+      .page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 60px 80px;
+      }
+
+      /* ── Section header ── */
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 2px solid var(--border);
+        scroll-margin-top: 80px;
+      }
+      .section-num {
+        width: 32px;
+        height: 32px;
+        background: var(--purple);
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .section-note {
+        font-size: 12px;
+        color: var(--muted);
+        margin-left: auto;
+        font-style: italic;
+      }
+
+      /* ── Section wrapper ── */
+      .section {
+        margin-bottom: 64px;
+      }
+
+      /* ── Screen grid ── */
+      .screen-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 20px;
+      }
+      .screen-grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+      .screen-grid-1 {
+        grid-template-columns: 1fr;
+      }
+
+      /* ── Screen card ── */
+      .screen-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      .screen-card-header {
+        background: var(--surface2);
+        border-bottom: 1px solid var(--border);
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .screen-card-header .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+      .screen-name {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--label);
+        margin-left: 4px;
+      }
+      .screen-route {
+        font-size: 11px;
+        color: var(--muted);
+        font-family: monospace;
+        margin-left: auto;
+      }
+      .screen-body {
+        padding: 16px;
+      }
+
+      /* ── Wireframe primitives ── */
+
+      /* Navbar bar */
+      .wf-navbar {
+        height: 36px;
+        background: #1e1e2e;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        padding: 0 12px;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .wf-navbar .logo-block {
+        width: 52px;
+        height: 18px;
+        background: var(--purple);
+        border-radius: 3px;
+        opacity: 0.7;
+      }
+      .wf-navbar .nav-link {
+        width: 32px;
+        height: 8px;
+        background: #444;
+        border-radius: 2px;
+      }
+      .wf-navbar .spacer {
+        flex: 1;
+      }
+      .wf-navbar .user-dot {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #555;
+      }
+
+      /* Generic blocks */
+      .wf-block {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+      }
+      .wf-block.purple {
+        background: var(--purple-l);
+        border-color: var(--purple);
+      }
+      .wf-block.blue {
+        background: var(--blue-l);
+        border-color: var(--blue);
+      }
+      .wf-block.green {
+        background: var(--green-l);
+        border-color: var(--green);
+      }
+      .wf-block.red {
+        background: var(--red-l);
+        border-color: var(--red);
+      }
+
+      /* Input field */
+      .wf-input {
+        height: 28px;
+        background: var(--gray-l);
+        border: 1px solid var(--border2);
+        border-radius: 5px;
+        width: 100%;
+      }
+      .wf-input.sm {
+        height: 22px;
+      }
+
+      /* Button */
+      .wf-btn {
+        height: 30px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+      }
+      .wf-btn.primary {
+        background: var(--purple);
+        color: #fff;
+      }
+      .wf-btn.secondary {
+        background: var(--gray-l);
+        color: var(--label);
+        border: 1px solid var(--border);
+      }
+      .wf-btn.danger {
+        background: var(--red-l);
+        color: var(--red);
+        border: 1px solid var(--red);
+      }
+      .wf-btn.success {
+        background: var(--green-l);
+        color: var(--green);
+        border: 1px solid var(--green);
+      }
+
+      /* Label */
+      .wf-label {
+        font-size: 9px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+
+      /* Line placeholder */
+      .wf-line {
+        height: 8px;
+        background: var(--border);
+        border-radius: 3px;
+        margin-bottom: 6px;
+      }
+      .wf-line.sm {
+        height: 6px;
+      }
+      .wf-line.lg {
+        height: 12px;
+      }
+      .wf-line.purple {
+        background: #c5bcf7;
+      }
+      .wf-line.green {
+        background: #a0e8d8;
+      }
+      .wf-line.red {
+        background: #f5b7b7;
+      }
+      .wf-line.blue {
+        background: #a6d4f5;
+      }
+
+      /* Metric card */
+      .wf-metric {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 12px;
+        flex: 1;
+      }
+      .wf-metric .m-label {
+        font-size: 9px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        margin-bottom: 6px;
+      }
+      .wf-metric .m-value {
+        height: 14px;
+        background: var(--border2);
+        border-radius: 3px;
+        width: 70%;
+      }
+      .wf-metric .m-value.green {
+        background: #a0e8d8;
+      }
+      .wf-metric .m-value.red {
+        background: #f5b7b7;
+      }
+
+      /* Chart area */
+      .wf-chart {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px;
+        display: flex;
+        align-items: flex-end;
+        gap: 3px;
+      }
+      .wf-chart .bar {
+        flex: 1;
+        border-radius: 2px 2px 0 0;
+        background: var(--border2);
+      }
+      .wf-chart.purple .bar {
+        background: #c5bcf7;
+      }
+      .wf-chart.blue .bar {
+        background: #a6d4f5;
+      }
+      .wf-chart.green .bar {
+        background: #a0e8d8;
+      }
+
+      /* Table */
+      .wf-table {
+        width: 100%;
+      }
+      .wf-table .thead {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 6px;
+      }
+      .wf-table .thead .th {
+        height: 8px;
+        background: var(--border2);
+        border-radius: 2px;
+        flex: 1;
+      }
+      .wf-table .tbody .tr {
+        display: flex;
+        gap: 6px;
+        padding: 6px 0;
+        border-bottom: 1px solid var(--border);
+        align-items: center;
+      }
+      .wf-table .tbody .td {
+        height: 8px;
+        background: var(--border);
+        border-radius: 2px;
+        flex: 1;
+      }
+      .wf-table .tbody .td.green {
+        background: #a0e8d8;
+      }
+      .wf-table .tbody .td.red {
+        background: #f5b7b7;
+      }
+      .wf-table .tbody .td.purple {
+        background: #c5bcf7;
+      }
+
+      /* Tab bar */
+      .wf-tabs {
+        display: flex;
+        border-bottom: 2px solid var(--border);
+        margin-bottom: 12px;
+      }
+      .wf-tab {
+        padding: 6px 14px;
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--muted);
+        border-bottom: 2px solid transparent;
+        margin-bottom: -2px;
+      }
+      .wf-tab.active {
+        color: var(--purple);
+        border-bottom-color: var(--purple);
+      }
+
+      /* Toast */
+      .wf-toast {
+        border-radius: 6px;
+        padding: 7px 10px;
+        font-size: 10px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 6px;
+      }
+      .wf-toast .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .wf-toast.success {
+        background: var(--green-l);
+        color: var(--green);
+      }
+      .wf-toast.success .dot {
+        background: var(--green);
+      }
+      .wf-toast.error {
+        background: var(--red-l);
+        color: var(--red);
+      }
+      .wf-toast.error .dot {
+        background: var(--red);
+      }
+      .wf-toast.info {
+        background: var(--blue-l);
+        color: var(--blue);
+      }
+      .wf-toast.info .dot {
+        background: var(--blue);
+      }
+
+      /* Auth dark card container */
+      .wf-auth-card {
+        background: #18192a;
+        border-radius: 10px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .wf-auth-card .logo {
+        width: 72px;
+        height: 36px;
+        background: var(--purple);
+        opacity: 0.6;
+        border-radius: 4px;
+        margin: 0 auto;
+      }
+      .wf-auth-card .title {
+        height: 14px;
+        background: #fff3;
+        border-radius: 3px;
+        width: 60%;
+        margin: 0 auto;
+      }
+      .wf-auth-card .sub {
+        height: 8px;
+        background: #fff1;
+        border-radius: 3px;
+        width: 75%;
+        margin: 0 auto;
+      }
+      .wf-auth-input {
+        height: 30px;
+        background: #0d0e1e;
+        border: 1px solid #333;
+        border-radius: 5px;
+        width: 100%;
+      }
+      .wf-auth-btn {
+        height: 32px;
+        background: var(--purple);
+        border-radius: 5px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 600;
+        color: #fff;
+        letter-spacing: 0.3px;
+      }
+      .wf-auth-link {
+        height: 8px;
+        background: #ff9500;
+        opacity: 0.5;
+        border-radius: 2px;
+        width: 60%;
+        margin: 0 auto;
+      }
+
+      /* Annotation callout */
+      .wf-anno {
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        border-radius: 5px;
+        padding: 6px 10px;
+        font-size: 10px;
+        color: #92400e;
+        margin-top: 10px;
+      }
+      .wf-anno::before {
+        content: "↳ ";
+        font-weight: 700;
+      }
+
+      /* Badge pill */
+      .wf-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 9px;
+        font-weight: 700;
+      }
+      .wf-badge.buy {
+        background: var(--green-l);
+        color: var(--green);
+      }
+      .wf-badge.sell {
+        background: var(--red-l);
+        color: var(--red);
+      }
+      .wf-badge.cart {
+        background: var(--blue-l);
+        color: var(--blue);
+      }
+
+      /* Toggle switch shape */
+      .wf-switch {
+        width: 32px;
+        height: 16px;
+        border-radius: 8px;
+        background: var(--border2);
+        flex-shrink: 0;
+      }
+      .wf-switch.on {
+        background: var(--green);
+      }
+
+      /* Cart badge overlay */
+      .cart-wrap {
+        position: relative;
+        display: inline-block;
+      }
+      .cart-badge {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--red);
+        color: #fff;
+        font-size: 8px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* ── Page divider ── */
+      .page-break {
+        border: none;
+        border-top: 2px dashed var(--border);
+        margin: 48px 0;
+      }
+
+      /* ── Footer ── */
+      footer {
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        padding: 16px 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      footer strong {
+        color: var(--purple);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ══ COVER ══ -->
+    <div class="cover">
+      <div>
+        <div class="cover-title">PaperTrade</div>
+        <div class="cover-sub">
+          UI Wireframes — Initial Design Specification
+        </div>
+        <div
+          style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap"
+        >
+          <span
+            style="
+              background: var(--purple-l);
+              color: var(--purple);
+              padding: 4px 12px;
+              border-radius: 12px;
+              font-size: 11px;
+              font-weight: 600;
+            "
+            >Angular 21</span
+          >
+          <span
+            style="
+              background: var(--green-l);
+              color: var(--green);
+              padding: 4px 12px;
+              border-radius: 12px;
+              font-size: 11px;
+              font-weight: 600;
+            "
+            >Spring Boot 4</span
+          >
+          <span
+            style="
+              background: var(--blue-l);
+              color: var(--blue);
+              padding: 4px 12px;
+              border-radius: 12px;
+              font-size: 11px;
+              font-weight: 600;
+            "
+            >MySQL</span
+          >
+        </div>
+      </div>
+      <div class="cover-meta">
+        <div><strong>Team</strong> — Sakib Khan &amp; Jeter Gutierrez</div>
+        <div><strong>Program</strong> — Mthree Capstone</div>
+        <div><strong>Screens</strong> — 7 views</div>
+        <div><strong>Status</strong> — Initial wireframe</div>
+      </div>
+    </div>
+
+    <nav class="toc">
+      <a href="#login">Login</a>
+      <a href="#signup">Signup</a>
+      <a href="#home">Home</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#chart">Stock chart</a>
+      <a href="#settings">Settings</a>
+      <a href="#diagrams">Diagrams</a>
+    </nav>
+
+    <div class="page">
+      <!-- ══ 1. LOGIN ══ -->
+      <section class="section" id="login">
+        <div class="section-header">
+          <div class="section-num">1</div>
+          <div class="section-title">Login page</div>
+          <div class="section-note">/login — public route</div>
+        </div>
+        <div class="screen-grid screen-grid-2">
+          <div class="screen-card">
+            <div class="screen-card-header">
+              <div class="dot" style="background: #e74c3c"></div>
+              <div class="dot" style="background: #f39c12"></div>
+              <div class="dot" style="background: #2ecc71"></div>
+              <span class="screen-name">Default state</span>
+              <span class="screen-route">/login</span>
+            </div>
+            <div class="screen-body">
+              <div class="wf-auth-card">
+                <div class="logo"></div>
+                <div class="title"></div>
+                <div class="sub"></div>
+                <div style="height: 8px"></div>
+                <div>
+                  <div
+                    style="
+                      height: 7px;
+                      width: 30px;
+                      background: #fff2;
+                      border-radius: 2px;
+                      margin-bottom: 5px;
+                    "
+                  ></div>
+                  <div class="wf-auth-input"></div>
+                </div>
+                <div>
+                  <div
+                    style="
+                      height: 7px;
+                      width: 36px;
+                      background: #fff2;
+                      border-radius: 2px;
+                      margin-bottom: 5px;
+                    "
+                  ></div>
+                  <div class="wf-auth-input"></div>
+                </div>
+                <div class="wf-auth-btn">Login</div>
+                <div class="wf-auth-link"></div>
+              </div>
+              <div class="wf-anno">
+                No inline error divs — all feedback via toast (top-right)
+              </div>
+            </div>
+          </div>
+
+          <div class="screen-card">
+            <div class="screen-card-header">
+              <div class="dot" style="background: #e74c3c"></div>
+              <div class="dot" style="background: #f39c12"></div>
+              <div class="dot" style="background: #2ecc71"></div>
+              <span class="screen-name">Toast states</span>
+              <span class="screen-route">top-right overlay</span>
+            </div>
+            <div class="screen-body">
+              <div class="wf-label">Error toasts</div>
+              <div class="wf-toast error">
+                <div class="dot"></div>
+                No account found with that email
+              </div>
+              <div class="wf-toast error">
+                <div class="dot"></div>
+                Wrong password — please try again
+              </div>
+              <div class="wf-toast error">
+                <div class="dot"></div>
+                Please enter your email
+              </div>
+              <div class="wf-toast error">
+                <div class="dot"></div>
+                Please enter your password
+              </div>
+              <div style="height: 10px"></div>
+              <div class="wf-label">Success toast</div>
+              <div class="wf-toast success">
+                <div class="dot"></div>
+                Welcome back!
+              </div>
+              <div style="height: 10px"></div>
+              <div class="wf-label">Loading state</div>
+              <div class="wf-auth-card" style="padding: 12px">
+                <div
+                  class="wf-auth-btn"
+                  style="background: #4a3a9e; opacity: 0.7"
+                >
+                  Signing in...
+                </div>
+              </div>
+              <div class="wf-anno">
+                Button disabled + text changes while loading. Toast fires on
+                success then navigates to /home
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="page-break" />
+
+      <!-- ══ 2. SIGNUP ══ -->
+      <section class="section" id="signup">
+        <div class="section-header">
+          <div class="section-num">2</div>
+          <div class="section-title">Signup page</div>
+          <div class="section-note">/signup — public route</div>
+        </div>
+        <div class="screen-grid screen-grid-2">
+          <div class="screen-card">
+            <div class="screen-card-header">
+              <div class="dot" style="background: #e74c3c"></div>
+              <div class="dot" style="background: #f39c12"></div>
+              <div class="dot" style="background: #2ecc71"></div>
+              <span class="screen-name">Form with validation</span>
+              <span class="screen-route">/signup</span>
+            </div>
+            <div class="screen-body">
+              <div class="wf-auth-card">
+                <div class="logo"></div>
+                <div class="title"></div>
+                <div class="sub"></div>
+                <div style="height: 6px"></div>
+                <!-- Email field -->
+                <div>
+                  <div
+                    style="
+                      height: 7px;
+                      width: 26px;
+                      background: #fff2;
+                      border-radius: 2px;
+                      margin-bottom: 5px;
+                    "
+                  ></div>
+                  <div class="wf-auth-input"></div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 6px;
+                      margin-top: 4px;
+                    "
+                  >
+                    <div
+                      style="
+                        width: 8px;
+                        height: 8px;
+                        border-radius: 50%;
+                        background: var(--green);
+                        flex-shrink: 0;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 6px;
+                        width: 80px;
+                        background: #0b4;
+                        opacity: 0.4;
+                        border-radius: 2px;
+                      "
+                    ></div>
+                  </div>
+                </div>
+                <!-- Password -->
+                <div>
+                  <div
+                    style="
+                      height: 7px;
+                      width: 38px;
+                      background: #fff2;
+                      border-radius: 2px;
+                      margin-bottom: 5px;
+                    "
+                  ></div>
+                  <div class="wf-auth-input"></div>
+                  <div
+                    style="
+                      height: 6px;
+                      width: 120px;
+                      background: #e55;
+                      opacity: 0.35;
+                      border-radius: 2px;
+                      margin-top: 4px;
+                    "
+                  ></div>
+                </div>
+                <!-- Confirm -->
+                <div>
+                  <div
+                    style="
+                      height: 7px;
+                      width: 60px;
+                      background: #fff2;
+                      border-radius: 2px;
+                      margin-bottom: 5px;
+                    "
+                  ></div>
+                  <div class="wf-auth-input"></div>
+                  <div
+                    style="
+                      height: 6px;
+                      width: 90px;
+                      background: #e55;
+                      opacity: 0.35;
+                      border-radius: 2px;
+                      margin-top: 4px;
+                    "
+                  ></div>
+                </div>
+                <div class="wf-auth-btn">Sign Up</div>
+                <div class="wf-auth-link"></div>
+              </div>
+              <div class="wf-anno">
+                Inline field errors shown below each input. Button disabled if
+                email exists.
+              </div>
+            </div>
+          </div>
+
+          <div class="screen-card">
+            <div class="screen-card-header">
+              <div class="dot" style="background: #e74c3c"></div>
+              <div class="dot" style="background: #f39c12"></div>
+              <div class="dot" style="background: #2ecc71"></div>
+              <span class="screen-name">Validation rules + toasts</span>
+            </div>
+            <div class="screen-body">
+              <div class="wf-label">Inline field rules (shown on touch)</div>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 6px;
+                  margin-bottom: 14px;
+                "
+              >
+                <div
+                  style="
+                    background: var(--red-l);
+                    border-radius: 4px;
+                    padding: 5px 8px;
+                    font-size: 10px;
+                    color: var(--red);
+                  "
+                >
+                  ✗ Valid email is required
+                </div>
+                <div
+                  style="
+                    background: var(--red-l);
+                    border-radius: 4px;
+                    padding: 5px 8px;
+                    font-size: 10px;
+                    color: var(--red);
+                  "
+                >
+                  ✗ An account with this email already exists
+                </div>
+                <div
+                  style="
+                    background: var(--red-l);
+                    border-radius: 4px;
+                    padding: 5px 8px;
+                    font-size: 10px;
+                    color: var(--red);
+                  "
+                >
+                  ✗ Must be at least 6 characters
+                </div>
+                <div
+                  style="
+                    background: var(--red-l);
+                    border-radius: 4px;
+                    padding: 5px 8px;
+                    font-size: 10px;
+                    color: var(--red);
+                  "
+                >
+                  ✗ Must contain 1 uppercase letter and 1 number
+                </div>
+                <div
+                  style="
+                    background: var(--red-l);
+                    border-radius: 4px;
+                    padding: 5px 8px;
+                    font-size: 10px;
+                    color: var(--red);
+                  "
+                >
+                  ✗ Passwords do not match
+                </div>
+              </div>
+              <div class="wf-label">Server-error toasts</div>
+              <div class="wf-toast error">
+                <div class="dot"></div>
+                An account with this email already exists
+              </div>
+              <div class="wf-toast error">
+                <div class="dot"></div>
+                Signup failed — please check your details
+              </div>
+              <div style="height: 8px"></div>
+              <div class="wf-label">
+                Success toast (then redirect to /login)
+              </div>
+              <div class="wf-toast success">
+                <div class="dot"></div>
+                Account created! You can now log in.
+              </div>
+              <div class="wf-anno">
+                Real-time email check on focusout. Client-side validation fires
+                before any API call.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="page-break" />
+
+      <!-- ══ 3. HOME ══ -->
+      <section class="section" id="home">
+        <div class="section-header">
+          <div class="section-num">3</div>
+          <div class="section-title">Home page</div>
+          <div class="section-note">/home — AuthGuard protected</div>
+        </div>
+        <div class="screen-grid screen-grid-1">
+          <div class="screen-card">
+            <div class="screen-card-header">
+              <div class="dot" style="background: #e74c3c"></div>
+              <div class="dot" style="background: #f39c12"></div>
+              <div class="dot" style="background: #2ecc71"></div>
+              <span class="screen-name">Home dashboard</span>
+              <span class="screen-route">/home</span>
+            </div>
+            <div class="screen-body">
+              <!-- Navbar -->
+              <div class="wf-navbar" style="margin-bottom: 14px">
+                <div class="logo-block"></div>
+                <div class="nav-link"></div>
+                <div class="nav-link"></div>
+                <div class="nav-link"></div>
+                <div class="nav-link"></div>
+                <div class="nav-link"></div>
+                <div class="nav-link"></div>
+                <div class="spacer"></div>
+                <div class="user-dot"></div>
+              </div>
+
+              <!-- Summary cards -->
+              <div style="display: flex; gap: 10px; margin-bottom: 14px">
+                <div class="wf-metric">
+                  <div class="m-label">Portfolio value</div>
+                  <div class="m-value"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Cash balance</div>
+                  <div class="m-value"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Total gain/loss</div>
+                  <div class="m-value green"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Holdings</div>
+                  <div class="m-value"></div>
+                </div>
+              </div>
+
+              <!-- Charts row -->
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 12px;
+                  margin-bottom: 14px;
+                "
+              >
+                <div>
+                  <div class="wf-label">Stock chart (selected symbol)</div>
+                  <div class="wf-chart purple" style="height: 80px">
+                    <div class="bar" style="height: 30%"></div>
+                    <div class="bar" style="height: 45%"></div>
+                    <div class="bar" style="height: 42%"></div>
+                    <div class="bar" style="height: 60%"></div>
+                    <div class="bar" style="height: 55%"></div>
+                    <div class="bar" style="height: 70%"></div>
+                    <div class="bar" style="height: 66%"></div>
+                    <div class="bar" style="height: 82%"></div>
+                    <div class="bar" style="height: 78%"></div>
+                    <div class="bar" style="height: 95%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="wf-label">Search + buy panel</div>
+                  <div class="wf-block" style="padding: 10px">
+                    <div class="wf-input" style="margin-bottom: 8px"></div>
+                    <div class="wf-input" style="margin-bottom: 6px"></div>
+                    <div style="display: flex; gap: 6px; margin-bottom: 8px">
+                      <div class="wf-input" style="flex: 1"></div>
+                      <div
+                        class="wf-btn secondary"
+                        style="width: 44px; font-size: 9px"
+                      >
+                        Max
+                      </div>
+                    </div>
+                    <div class="wf-btn primary" style="margin-bottom: 6px">
+                      Buy AAPL
+                    </div>
+                    <div style="display: flex; justify-content: flex-end">
+                      <div class="cart-wrap">
+                        <div
+                          class="wf-btn secondary"
+                          style="width: 64px; font-size: 9px"
+                        >
+                          Cart
+                        </div>
+                        <div class="cart-badge">3</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Top movers -->
+              <div class="wf-label">Top movers</div>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(4, 1fr);
+                  gap: 8px;
+                "
+              >
+                <div class="wf-block" style="padding: 8px">
+                  <div
+                    class="wf-line"
+                    style="width: 50%; margin-bottom: 4px"
+                  ></div>
+                  <div class="wf-line green" style="width: 40%"></div>
+                </div>
+                <div class="wf-block" style="padding: 8px">
+                  <div
+                    class="wf-line"
+                    style="width: 50%; margin-bottom: 4px"
+                  ></div>
+                  <div class="wf-line green" style="width: 40%"></div>
+                </div>
+                <div class="wf-block" style="padding: 8px">
+                  <div
+                    class="wf-line"
+                    style="width: 50%; margin-bottom: 4px"
+                  ></div>
+                  <div class="wf-line red" style="width: 40%"></div>
+                </div>
+                <div class="wf-block" style="padding: 8px">
+                  <div
+                    class="wf-line"
+                    style="width: 50%; margin-bottom: 4px"
+                  ></div>
+                  <div class="wf-line red" style="width: 40%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="page-break" />
+
+      <!-- ══ 4. PORTFOLIO ══ -->
+      <section class="section" id="portfolio">
+        <div class="section-header">
+          <div class="section-num">4</div>
+          <div class="section-title">Portfolio dashboard</div>
+          <div class="section-note">/portfolio — AuthGuard protected</div>
+        </div>
+        <div class="screen-grid screen-grid-1">
+          <div class="screen-card">
+            <div class="screen-card-header">
+              <div class="dot" style="background: #e74c3c"></div>
+              <div class="dot" style="background: #f39c12"></div>
+              <div class="dot" style="background: #2ecc71"></div>
+              <span class="screen-name">Portfolio — Holdings tab</span>
+              <span class="screen-route">/portfolio</span>
+            </div>
+            <div class="screen-body">
+              <!-- Metrics -->
+              <div style="display: flex; gap: 10px; margin-bottom: 14px">
+                <div class="wf-metric">
+                  <div class="m-label">Portfolio value</div>
+                  <div class="m-value"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Cash balance</div>
+                  <div class="m-value"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Total gain/loss</div>
+                  <div class="m-value green"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Shares held</div>
+                  <div class="m-value"></div>
+                </div>
+              </div>
+
+              <!-- Dual charts -->
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 12px;
+                  margin-bottom: 14px;
+                "
+              >
+                <div>
+                  <div class="wf-label">Symbol chart (live poll 20s)</div>
+                  <div class="wf-chart blue" style="height: 70px">
+                    <div class="bar" style="height: 40%"></div>
+                    <div class="bar" style="height: 55%"></div>
+                    <div class="bar" style="height: 50%"></div>
+                    <div class="bar" style="height: 70%"></div>
+                    <div class="bar" style="height: 65%"></div>
+                    <div class="bar" style="height: 80%"></div>
+                    <div class="bar" style="height: 75%"></div>
+                    <div class="bar" style="height: 95%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="wf-label">Portfolio history chart</div>
+                  <div class="wf-chart green" style="height: 70px">
+                    <div class="bar" style="height: 20%"></div>
+                    <div class="bar" style="height: 35%"></div>
+                    <div class="bar" style="height: 50%"></div>
+                    <div class="bar" style="height: 48%"></div>
+                    <div class="bar" style="height: 65%"></div>
+                    <div class="bar" style="height: 78%"></div>
+                    <div class="bar" style="height: 88%"></div>
+                    <div class="bar" style="height: 84%"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Search + buy + cart -->
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 12px;
+                  margin-bottom: 14px;
+                "
+              >
+                <div class="wf-block" style="padding: 10px">
+                  <div class="wf-label">Stock search</div>
+                  <div class="wf-input" style="margin-bottom: 8px"></div>
+                  <div class="wf-label">Action</div>
+                  <div class="wf-input" style="margin-bottom: 8px"></div>
+                  <div class="wf-label">Quantity</div>
+                  <div style="display: flex; gap: 6px; margin-bottom: 8px">
+                    <div class="wf-input" style="flex: 1"></div>
+                    <div
+                      class="wf-btn secondary"
+                      style="width: 44px; font-size: 9px"
+                    >
+                      Max
+                    </div>
+                  </div>
+                  <div class="wf-btn primary">Buy TSLA</div>
+                </div>
+                <div
+                  class="wf-block"
+                  style="padding: 10px; background: #18192a; border-color: #333"
+                >
+                  <div class="wf-label" style="color: #888">Cart (3 items)</div>
+                  <div
+                    style="
+                      display: flex;
+                      flex-direction: column;
+                      gap: 6px;
+                      margin-bottom: 8px;
+                    "
+                  >
+                    <div
+                      style="
+                        background: #252640;
+                        border-radius: 5px;
+                        padding: 7px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                      "
+                    >
+                      <div
+                        style="
+                          height: 8px;
+                          width: 32px;
+                          background: #555;
+                          border-radius: 2px;
+                        "
+                      ></div>
+                      <div style="display: flex; gap: 6px; align-items: center">
+                        <div
+                          style="
+                            width: 30px;
+                            height: 18px;
+                            background: #333;
+                            border-radius: 3px;
+                          "
+                        ></div>
+                        <div
+                          style="
+                            height: 8px;
+                            width: 32px;
+                            background: #444;
+                            border-radius: 2px;
+                          "
+                        ></div>
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        background: #252640;
+                        border-radius: 5px;
+                        padding: 7px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                      "
+                    >
+                      <div
+                        style="
+                          height: 8px;
+                          width: 28px;
+                          background: #555;
+                          border-radius: 2px;
+                        "
+                      ></div>
+                      <div style="display: flex; gap: 6px; align-items: center">
+                        <div
+                          style="
+                            width: 30px;
+                            height: 18px;
+                            background: #333;
+                            border-radius: 3px;
+                          "
+                        ></div>
+                        <div
+                          style="
+                            height: 8px;
+                            width: 32px;
+                            background: #444;
+                            border-radius: 2px;
+                          "
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      height: 28px;
+                      background: var(--green);
+                      border-radius: 5px;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-size: 10px;
+                      color: #fff;
+                      font-weight: 600;
+                    "
+                  >
+                    Checkout (3 items)
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tabs -->
+              <div class="wf-tabs">
+                <div class="wf-tab active">Holdings</div>
+                <div class="wf-tab">Transactions</div>
+                <div class="wf-tab">Watchlist</div>
+                <div class="wf-tab">Analytics</div>
+              </div>
+
+              <!-- Holdings table -->
+              <div class="wf-table">
+                <div class="thead">
+                  <div class="th"></div>
+                  <div class="th"></div>
+                  <div class="th"></div>
+                  <div class="th"></div>
+                  <div class="th"></div>
+                  <div class="th"></div>
+                </div>
+                <div class="tbody">
+                  <div class="tr">
+                    <div class="td purple"></div>
+                    <div class="td"></div>
+                    <div class="td"></div>
+                    <div class="td"></div>
+                    <div class="td green"></div>
+                    <div
+                      style="
+                        display: flex;
+                        gap: 4px;
+                        flex: 1;
+                        align-items: center;
+                      "
+                    >
+                      <div
+                        style="
+                          width: 30px;
+                          height: 18px;
+                          background: var(--border);
+                          border-radius: 3px;
+                          flex-shrink: 0;
+                        "
+                      ></div>
+                      <div
+                        class="wf-btn danger"
+                        style="width: 36px; height: 18px; font-size: 8px"
+                      >
+                        Sell
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tr">
+                    <div class="td purple"></div>
+                    <div class="td"></div>
+                    <div class="td"></div>
+                    <div class="td"></div>
+                    <div class="td red"></div>
+                    <div
+                      style="
+                        display: flex;
+                        gap: 4px;
+                        flex: 1;
+                        align-items: center;
+                      "
+                    >
+                      <div
+                        style="
+                          width: 30px;
+                          height: 18px;
+                          background: var(--border);
+                          border-radius: 3px;
+                          flex-shrink: 0;
+                        "
+                      ></div>
+                      <div
+                        class="wf-btn danger"
+                        style="width: 36px; height: 18px; font-size: 8px"
+                      >
+                        Sell
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tr">
+                    <div class="td purple"></div>
+                    <div class="td"></div>
+                    <div class="td"></div>
+                    <div class="td"></div>
+                    <div class="td green"></div>
+                    <div
+                      style="
+                        display: flex;
+                        gap: 4px;
+                        flex: 1;
+                        align-items: center;
+                      "
+                    >
+                      <div
+                        style="
+                          width: 30px;
+                          height: 18px;
+                          background: var(--border);
+                          border-radius: 3px;
+                          flex-shrink: 0;
+                        "
+                      ></div>
+                      <div
+                        class="wf-btn danger"
+                        style="width: 36px; height: 18px; font-size: 8px"
+                      >
+                        Sell
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="wf-anno">
+                Sell toast appears on success. Each row clickable to load that
+                symbol's chart.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analytics tab separate card -->
+        <div style="margin-top: 16px">
+          <div class="screen-card">
+            <div class="screen-card-header">
+              <div class="dot" style="background: #e74c3c"></div>
+              <div class="dot" style="background: #f39c12"></div>
+              <div class="dot" style="background: #2ecc71"></div>
+              <span class="screen-name">Portfolio — Analytics tab</span>
+            </div>
+            <div class="screen-body">
+              <div class="wf-tabs">
+                <div class="wf-tab">Holdings</div>
+                <div class="wf-tab">Transactions</div>
+                <div class="wf-tab">Watchlist</div>
+                <div class="wf-tab active">Analytics</div>
+              </div>
+              <!-- Row 1 -->
+              <div class="wf-label" style="margin-bottom: 8px">
+                Portfolio overview
+              </div>
+              <div style="display: flex; gap: 8px; margin-bottom: 14px">
+                <div class="wf-metric">
+                  <div class="m-label">Holdings value</div>
+                  <div class="m-value"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Cost basis</div>
+                  <div class="m-value"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Unrealized gain</div>
+                  <div class="m-value green"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Return %</div>
+                  <div class="m-value green"></div>
+                </div>
+              </div>
+              <!-- Row 2 -->
+              <div class="wf-label" style="margin-bottom: 8px">
+                Trade activity
+              </div>
+              <div style="display: flex; gap: 8px; margin-bottom: 14px">
+                <div class="wf-metric">
+                  <div class="m-label">Total trades</div>
+                  <div class="m-value"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Buys</div>
+                  <div class="m-value green"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Sells</div>
+                  <div class="m-value red"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">W / L record</div>
+                  <div style="display: flex; gap: 6px; margin-top: 6px">
+                    <div
+                      style="
+                        height: 8px;
+                        width: 24px;
+                        background: #a0e8d8;
+                        border-radius: 2px;
+                      "
+                    ></div>
+                    <div style="font-size: 9px; color: var(--muted)">W</div>
+                    <div
+                      style="
+                        height: 8px;
+                        width: 24px;
+                        background: #f5b7b7;
+                        border-radius: 2px;
+                      "
+                    ></div>
+                    <div style="font-size: 9px; color: var(--muted)">L</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Row 3 -->
+              <div class="wf-label" style="margin-bottom: 8px">
+                Holdings performance + risk
+              </div>
+              <div style="display: flex; gap: 8px">
+                <div class="wf-metric">
+                  <div class="m-label">Best holding</div>
+                  <div class="m-value green"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Worst holding</div>
+                  <div class="m-value red"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Most traded</div>
+                  <div class="m-value purple" style="background: #c5bcf7"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Max drawdown</div>
+                  <div class="m-value red"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="page-break" />
+
+      <!-- ══ 5. STOCK CHART ══ -->
+      <section class="section" id="chart">
+        <div class="section-header">
+          <div class="section-num">5</div>
+          <div class="section-title">Stock chart detail</div>
+          <div class="section-note">
+            Embedded in home + portfolio — symbol selected via search
+          </div>
+        </div>
+        <div class="screen-grid screen-grid-2">
+          <div class="screen-card">
+            <div class="screen-card-header">
+              <div class="dot" style="background: #e74c3c"></div>
+              <div class="dot" style="background: #f39c12"></div>
+              <div class="dot" style="background: #2ecc71"></div>
+              <span class="screen-name">Price chart view</span>
+            </div>
+            <div class="screen-body">
+              <!-- Header row -->
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: flex-start;
+                  margin-bottom: 10px;
+                "
+              >
+                <div>
+                  <div
+                    class="wf-line purple"
+                    style="width: 40px; height: 14px; margin-bottom: 4px"
+                  ></div>
+                  <div class="wf-line" style="width: 70px; height: 20px"></div>
+                </div>
+                <div style="text-align: right">
+                  <div
+                    class="wf-line"
+                    style="width: 70px; margin-bottom: 4px"
+                  ></div>
+                  <div class="wf-line" style="width: 55px"></div>
+                </div>
+              </div>
+              <!-- Toggles -->
+              <div style="display: flex; gap: 6px; margin-bottom: 10px">
+                <div
+                  class="wf-btn primary"
+                  style="padding: 0 10px; height: 22px; font-size: 9px"
+                >
+                  Price
+                </div>
+                <div
+                  class="wf-btn secondary"
+                  style="padding: 0 10px; height: 22px; font-size: 9px"
+                >
+                  Volume
+                </div>
+                <div
+                  class="wf-btn secondary"
+                  style="padding: 0 10px; height: 22px; font-size: 9px"
+                >
+                  1M
+                </div>
+                <div
+                  class="wf-btn secondary"
+                  style="padding: 0 10px; height: 22px; font-size: 9px"
+                >
+                  3M
+                </div>
+                <div
+                  class="wf-btn primary"
+                  style="padding: 0 10px; height: 22px; font-size: 9px"
+                >
+                  1Y
+                </div>
+              </div>
+              <!-- Price chart -->
+              <div
+                class="wf-chart purple"
+                style="height: 90px; margin-bottom: 8px"
+              >
+                <div class="bar" style="height: 28%"></div>
+                <div class="bar" style="height: 40%"></div>
+                <div class="bar" style="height: 38%"></div>
+                <div class="bar" style="height: 55%"></div>
+                <div class="bar" style="height: 52%"></div>
+                <div class="bar" style="height: 64%"></div>
+                <div class="bar" style="height: 60%"></div>
+                <div class="bar" style="height: 74%"></div>
+                <div class="bar" style="height: 82%"></div>
+                <div class="bar" style="height: 90%"></div>
+                <div class="bar" style="height: 84%"></div>
+                <div class="bar" style="height: 95%"></div>
+              </div>
+              <!-- Stat row -->
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(3, 1fr);
+                  gap: 8px;
+                "
+              >
+                <div class="wf-metric">
+                  <div class="m-label">Market cap</div>
+                  <div class="m-value"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Today vol.</div>
+                  <div class="m-value"></div>
+                </div>
+                <div class="wf-metric">
+                  <div class="m-label">Open price</div>
+                  <div class="m-value"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="screen-card">
+            <div class="screen-card-header">
+              <div class="dot" style="background: #e74c3c"></div>
+              <div class="dot" style="background: #f39c12"></div>
+              <div class="dot" style="background: #2ecc71"></div>
+              <span class="screen-name">Volume chart view</span>
+            </div>
+            <div class="screen-body">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: flex-start;
+                  margin-bottom: 10px;
+                "
+              >
+                <div>
+                  <div
+                    class="wf-line blue"
+                    style="width: 40px; height: 14px; margin-bottom: 4px"
+                  ></div>
+                  <div class="wf-line" style="width: 70px; height: 20px"></div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 6px; margin-bottom: 10px">
+                <div
+                  class="wf-btn secondary"
+                  style="padding: 0 10px; height: 22px; font-size: 9px"
+                >
+                  Price
+                </div>
+                <div
+                  class="wf-btn primary"
+                  style="padding: 0 10px; height: 22px; font-size: 9px"
+                >
+                  Volume
+                </div>
+                <div
+                  class="wf-btn secondary"
+                  style="padding: 0 10px; height: 22px; font-size: 9px"
+                >
+                  1M
+                </div>
+                <div
+                  class="wf-btn secondary"
+                  style="padding: 0 10px; height: 22px; font-size: 9px"
+                >
+                  3M
+                </div>
+                <div
+                  class="wf-btn primary"
+                  style="padding: 0 10px; height: 22px; font-size: 9px"
+                >
+                  1Y
+                </div>
+              </div>
+              <!-- Volume bars (cyan-ish) -->
+              <div class="wf-chart" style="height: 90px; margin-bottom: 8px">
+                <div class="bar" style="height: 35%; background: #a0e8d8"></div>
+                <div class="bar" style="height: 60%; background: #a0e8d8"></div>
+                <div class="bar" style="height: 50%; background: #a0e8d8"></div>
+                <div class="bar" style="height: 90%; background: #a0e8d8"></div>
+                <div class="bar" style="height: 70%; background: #a0e8d8"></div>
+                <div class="bar" style="height: 55%; background: #a0e8d8"></div>
+                <div class="bar" style="height: 80%; background: #a0e8d8"></div>
+                <div
+                  class="bar"
+                  style="height: 100%; background: #a0e8d8"
+                ></div>
+                <div class="bar" style="height: 65%; background: #a0e8d8"></div>
+                <div class="bar" style="height: 45%; background: #a0e8d8"></div>
+                <div class="bar" style="height: 75%; background: #a0e8d8"></div>
+                <div class="bar" style="height: 50%; background: #a0e8d8"></div>
+              </div>
+              <div class="wf-anno">
+                Price/Volume toggle. Live polling every 20s via setInterval.
+                Interval cleared on destroy.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="page-break" />
+
+      <!-- ══ 6. SETTINGS ══ -->
+      <section class="section" id="settings">
+        <div class="section-header">
+          <div class="section-num">6</div>
+          <div class="section-title">Settings page</div>
+          <div class="section-note">/settings — AuthGuard protected</div>
+        </div>
+        <div class="screen-grid screen-grid-2">
+          <div class="screen-card">
+            <div class="screen-card-header">
+              <div class="dot" style="background: #e74c3c"></div>
+              <div class="dot" style="background: #f39c12"></div>
+              <div class="dot" style="background: #2ecc71"></div>
+              <span class="screen-name">Settings</span>
+              <span class="screen-route">/settings</span>
+            </div>
+            <div class="screen-body">
+              <div style="display: flex; flex-direction: column; gap: 0">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 12px 0;
+                    border-bottom: 1px solid var(--border);
+                  "
+                >
+                  <div>
+                    <div
+                      class="wf-line"
+                      style="width: 100px; margin-bottom: 4px"
+                    ></div>
+                    <div class="wf-line sm" style="width: 140px"></div>
+                  </div>
+                  <div class="wf-input sm" style="width: 120px"></div>
+                </div>
+
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 12px 0;
+                    border-bottom: 1px solid var(--border);
+                  "
+                >
+                  <div>
+                    <div
+                      class="wf-line"
+                      style="width: 80px; margin-bottom: 4px"
+                    ></div>
+                    <div class="wf-line sm" style="width: 120px"></div>
+                  </div>
+                  <div class="wf-switch"></div>
+                </div>
+
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 12px 0;
+                    border-bottom: 1px solid var(--border);
+                  "
+                >
+                  <div>
+                    <div
+                      class="wf-line"
+                      style="width: 90px; margin-bottom: 4px"
+                    ></div>
+                    <div class="wf-line sm" style="width: 150px"></div>
+                  </div>
+                  <div class="wf-switch on"></div>
+                </div>
+
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 12px 0;
+                    border-bottom: 1px solid var(--border);
+                  "
+                >
+                  <div>
+                    <div
+                      class="wf-line"
+                      style="width: 110px; margin-bottom: 4px"
+                    ></div>
+                    <div class="wf-line sm" style="width: 180px"></div>
+                  </div>
+                  <div
+                    class="wf-btn danger"
+                    style="width: 90px; font-size: 9px"
+                  >
+                    Reset
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 12px 0;
+                  "
+                >
+                  <div>
+                    <div
+                      class="wf-line"
+                      style="width: 100px; margin-bottom: 4px"
+                    ></div>
+                    <div class="wf-line sm" style="width: 160px"></div>
+                  </div>
+                  <div
+                    class="wf-btn secondary"
+                    style="width: 90px; font-size: 9px"
+                  >
+                    Change
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="screen-card">
+            <div class="screen-card-header">
+              <div class="dot" style="background: #e74c3c"></div>
+              <div class="dot" style="background: #f39c12"></div>
+              <div class="dot" style="background: #2ecc71"></div>
+              <span class="screen-name">Settings — field labels</span>
+            </div>
+            <div class="screen-body">
+              <div style="display: flex; flex-direction: column; gap: 0">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 12px 0;
+                    border-bottom: 1px solid var(--border);
+                  "
+                >
+                  <div>
+                    <div
+                      style="
+                        font-size: 12px;
+                        font-weight: 600;
+                        color: var(--text);
+                      "
+                    >
+                      Starting balance
+                    </div>
+                    <div style="font-size: 10px; color: var(--muted)">
+                      Default cash on new account
+                    </div>
+                  </div>
+                  <div class="wf-input sm" style="width: 120px"></div>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 12px 0;
+                    border-bottom: 1px solid var(--border);
+                  "
+                >
+                  <div>
+                    <div
+                      style="
+                        font-size: 12px;
+                        font-weight: 600;
+                        color: var(--text);
+                      "
+                    >
+                      Dark mode
+                    </div>
+                    <div style="font-size: 10px; color: var(--muted)">
+                      Toggle app theme
+                    </div>
+                  </div>
+                  <div class="wf-switch"></div>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 12px 0;
+                    border-bottom: 1px solid var(--border);
+                  "
+                >
+                  <div>
+                    <div
+                      style="
+                        font-size: 12px;
+                        font-weight: 600;
+                        color: var(--text);
+                      "
+                    >
+                      Price alerts
+                    </div>
+                    <div style="font-size: 10px; color: var(--muted)">
+                      Notify on watchlist price moves
+                    </div>
+                  </div>
+                  <div class="wf-switch on"></div>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 12px 0;
+                    border-bottom: 1px solid var(--border);
+                  "
+                >
+                  <div>
+                    <div
+                      style="
+                        font-size: 12px;
+                        font-weight: 600;
+                        color: var(--text);
+                      "
+                    >
+                      Reset portfolio
+                    </div>
+                    <div style="font-size: 10px; color: var(--muted)">
+                      Clear all holdings and transactions
+                    </div>
+                  </div>
+                  <div
+                    class="wf-btn danger"
+                    style="width: 90px; font-size: 9px"
+                  >
+                    Reset
+                  </div>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 12px 0;
+                  "
+                >
+                  <div>
+                    <div
+                      style="
+                        font-size: 12px;
+                        font-weight: 600;
+                        color: var(--text);
+                      "
+                    >
+                      Change password
+                    </div>
+                    <div style="font-size: 10px; color: var(--muted)">
+                      Update your account password
+                    </div>
+                  </div>
+                  <div
+                    class="wf-btn secondary"
+                    style="width: 90px; font-size: 9px"
+                  >
+                    Change
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="page-break" />
+
+      <!-- ══ 7. DIAGRAMS ══ -->
+      <section class="section" id="diagrams">
+        <div class="section-header">
+          <div class="section-num">7</div>
+          <div class="section-title">Diagrams / documentation page</div>
+          <div class="section-note">/diagrams — AuthGuard protected</div>
+        </div>
+        <div class="screen-grid screen-grid-1">
+          <div class="screen-card">
+            <div class="screen-card-header">
+              <div class="dot" style="background: #e74c3c"></div>
+              <div class="dot" style="background: #f39c12"></div>
+              <div class="dot" style="background: #2ecc71"></div>
+              <span class="screen-name">Diagrams page</span>
+              <span class="screen-route">/diagrams</span>
+            </div>
+            <div class="screen-body">
+              <!-- Sticky section nav -->
+              <div
+                style="
+                  background: var(--surface2);
+                  border: 1px solid var(--border);
+                  border-radius: 6px;
+                  padding: 8px 12px;
+                  display: flex;
+                  gap: 16px;
+                  margin-bottom: 16px;
+                  flex-wrap: wrap;
+                "
+              >
+                <div
+                  style="
+                    font-size: 11px;
+                    color: var(--purple);
+                    font-weight: 600;
+                    border-bottom: 2px solid var(--purple);
+                    padding-bottom: 2px;
+                  "
+                >
+                  System architecture
+                </div>
+                <div style="font-size: 11px; color: var(--muted)">
+                  Auth flow
+                </div>
+                <div style="font-size: 11px; color: var(--muted)">
+                  Transaction workflow
+                </div>
+                <div style="font-size: 11px; color: var(--muted)">
+                  Database ERD
+                </div>
+              </div>
+
+              <!-- Diagram cards -->
+              <div style="display: flex; flex-direction: column; gap: 14px">
+                <div>
+                  <div class="wf-label" style="margin-bottom: 8px">
+                    Section: System architecture
+                  </div>
+                  <div
+                    class="wf-block"
+                    style="padding: 16px; background: var(--surface2)"
+                  >
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: center;
+                        gap: 12px;
+                        margin-bottom: 12px;
+                      "
+                    >
+                      <div
+                        class="wf-block purple"
+                        style="
+                          width: 100px;
+                          height: 36px;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                        "
+                      >
+                        <div
+                          class="wf-line purple"
+                          style="width: 60%; margin: 0"
+                        ></div>
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: center;
+                        gap: 6px;
+                        margin-bottom: 10px;
+                      "
+                    >
+                      <div
+                        style="
+                          height: 1px;
+                          width: 30px;
+                          background: var(--border2);
+                          margin-top: 8px;
+                        "
+                      ></div>
+                      <div style="font-size: 9px; color: var(--muted)">
+                        REST
+                      </div>
+                      <div
+                        style="
+                          height: 1px;
+                          width: 30px;
+                          background: var(--border2);
+                          margin-top: 8px;
+                        "
+                      ></div>
+                    </div>
+                    <div
+                      style="
+                        display: flex;
+                        gap: 8px;
+                        justify-content: center;
+                        flex-wrap: wrap;
+                      "
+                    >
+                      <div
+                        class="wf-block blue"
+                        style="width: 80px; height: 28px"
+                      ></div>
+                      <div
+                        class="wf-block blue"
+                        style="width: 80px; height: 28px"
+                      ></div>
+                      <div
+                        class="wf-block blue"
+                        style="width: 80px; height: 28px"
+                      ></div>
+                      <div
+                        class="wf-block blue"
+                        style="width: 80px; height: 28px"
+                      ></div>
+                      <div
+                        class="wf-block blue"
+                        style="width: 80px; height: 28px"
+                      ></div>
+                    </div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: center;
+                        gap: 6px;
+                        margin: 8px 0;
+                      "
+                    >
+                      <div
+                        style="
+                          height: 1px;
+                          width: 60px;
+                          background: var(--border2);
+                          margin-top: 8px;
+                        "
+                      ></div>
+                      <div style="font-size: 9px; color: var(--muted)">
+                        MySQL
+                      </div>
+                      <div
+                        style="
+                          height: 1px;
+                          width: 60px;
+                          background: var(--border2);
+                          margin-top: 8px;
+                        "
+                      ></div>
+                    </div>
+                    <div
+                      style="display: flex; gap: 8px; justify-content: center"
+                    >
+                      <div
+                        style="
+                          background: #fff8e1;
+                          border: 1px solid #f9a825;
+                          border-radius: 5px;
+                          width: 100px;
+                          height: 24px;
+                        "
+                      ></div>
+                      <div
+                        style="
+                          background: #fff8e1;
+                          border: 1px solid #f9a825;
+                          border-radius: 5px;
+                          width: 120px;
+                          height: 24px;
+                        "
+                      ></div>
+                      <div
+                        style="
+                          background: #fff8e1;
+                          border: 1px solid #f9a825;
+                          border-radius: 5px;
+                          width: 80px;
+                          height: 24px;
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="wf-anno">
+                    SVG responsive with width="100%". Renders in a white card
+                    with overflow-x: auto on small screens.
+                  </div>
+                </div>
+
+                <div>
+                  <div class="wf-label" style="margin-bottom: 8px">
+                    Section: Database ERD
+                  </div>
+                  <div
+                    class="wf-block"
+                    style="padding: 14px; background: var(--surface2)"
+                  >
+                    <div
+                      style="
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        gap: 8px;
+                      "
+                    >
+                      <div
+                        style="
+                          background: #e3f2fd;
+                          border: 1px solid #1e88e5;
+                          border-radius: 5px;
+                          height: 50px;
+                        "
+                      ></div>
+                      <div
+                        style="
+                          background: #e0f2f1;
+                          border: 1px solid #26a69a;
+                          border-radius: 5px;
+                          height: 50px;
+                        "
+                      ></div>
+                      <div
+                        style="
+                          background: #e0f2f1;
+                          border: 1px solid #26a69a;
+                          border-radius: 5px;
+                          height: 50px;
+                        "
+                      ></div>
+                      <div
+                        style="
+                          background: #fff8e1;
+                          border: 1px solid #f9a825;
+                          border-radius: 5px;
+                          height: 50px;
+                        "
+                      ></div>
+                    </div>
+                    <div
+                      style="
+                        margin: 8px 0;
+                        display: flex;
+                        gap: 16px;
+                        align-items: center;
+                        justify-content: center;
+                      "
+                    >
+                      <div
+                        style="height: 1px; flex: 1; background: var(--border2)"
+                      ></div>
+                      <div style="font-size: 9px; color: var(--muted)">
+                        1:1 · 1:many relationships
+                      </div>
+                      <div
+                        style="height: 1px; flex: 1; background: var(--border2)"
+                      ></div>
+                    </div>
+                    <div
+                      style="
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        gap: 8px;
+                      "
+                    >
+                      <div
+                        style="
+                          background: #e0f2f1;
+                          border: 1px solid #26a69a;
+                          border-radius: 5px;
+                          height: 50px;
+                        "
+                      ></div>
+                      <div
+                        style="
+                          background: #fff8e1;
+                          border: 1px solid #f9a825;
+                          border-radius: 5px;
+                          height: 50px;
+                        "
+                      ></div>
+                      <div
+                        style="
+                          background: #e0f2f1;
+                          border: 1px solid #26a69a;
+                          border-radius: 5px;
+                          height: 50px;
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <div>
+        <strong>PaperTrade</strong> — Mthree Capstone Wireframes — Initial
+        Design
+      </div>
+      <div>
+        Sakib Khan &amp; Jeter Gutierrez · Angular 21 + Spring Boot 4 + MySQL
+      </div>
+    </footer>
+  </body>
+</html>
