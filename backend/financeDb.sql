@@ -3,84 +3,82 @@ CREATE DATABASE IF NOT EXISTS financeDb;
 USE financeDb;
 
 CREATE TABLE
-    IF NOT EXISTS users (
-        id BIGINT NOT NULL AUTO_INCREMENT,
-        email VARCHAR(255) NOT NULL UNIQUE,
-        password VARCHAR(255) NOT NULL,
-        created_at DATETIME,
-        last_login DATETIME,
-        PRIMARY KEY (id)
+    IF NOT EXISTS `users` (
+        `id` bigint NOT NULL AUTO_INCREMENT,
+        `email` varchar(255) NOT NULL,
+        `password` varchar(255) NOT NULL,
+        `created_at` datetime (6) NOT NULL,
+        `last_login` datetime (6) DEFAULT NULL,
+        PRIMARY KEY (`id`),
+        UNIQUE KEY `UK_users_email` (`email`)
     );
 
 CREATE TABLE
-    IF NOT EXISTS accounts (
-        id BIGINT NOT NULL AUTO_INCREMENT,
-        user_id BIGINT NOT NULL UNIQUE,
-        first_name VARCHAR(255) NOT NULL,
-        last_name VARCHAR(255) NOT NULL,
-        cash_balance DECIMAL(10, 2) NOT NULL DEFAULT 10000.00,
-        PRIMARY KEY (id),
-        FOREIGN KEY (user_id) REFERENCES users (id)
+    IF NOT EXISTS `accounts` (
+        `id` bigint NOT NULL AUTO_INCREMENT,
+        `user_id` bigint NOT NULL,
+        `first_name` varchar(255) NOT NULL,
+        `last_name` varchar(255) NOT NULL,
+        `cash_balance` decimal(10, 2) NOT NULL,
+        PRIMARY KEY (`id`),
+        UNIQUE KEY `UK_accounts_user_id` (`user_id`)
     );
 
 CREATE TABLE
-    IF NOT EXISTS holdings (
-        id BIGINT NOT NULL AUTO_INCREMENT,
-        user_id BIGINT NOT NULL,
-        stock_symbol VARCHAR(10) NOT NULL,
-        quantity DECIMAL(10, 4) NOT NULL,
-        avg_buy_price DECIMAL(10, 2) NOT NULL,
-        purchased_at DATETIME,
-        PRIMARY KEY (id),
-        FOREIGN KEY (user_id) REFERENCES users (id)
+    IF NOT EXISTS `holdings` (
+        `id` bigint NOT NULL AUTO_INCREMENT,
+        `user_id` bigint NOT NULL,
+        `stock_symbol` varchar(255) NOT NULL,
+        `quantity` decimal(10, 4) NOT NULL,
+        `avg_buy_price` decimal(10, 2) NOT NULL,
+        `purchased_at` datetime (6) DEFAULT NULL,
+        PRIMARY KEY (`id`)
     );
 
 CREATE TABLE
-    IF NOT EXISTS transactions (
-        id BIGINT NOT NULL AUTO_INCREMENT,
-        stock_symbol VARCHAR(10) NOT NULL,
-        price DECIMAL(10, 2) NOT NULL,
-        quantity DECIMAL(10, 4) NOT NULL,
-        total_amount DECIMAL(10, 2) NOT NULL,
-        type ENUM ('BUY', 'SELL') NOT NULL,
-        user_id BIGINT NOT NULL,
-        created_at DATETIME NOT NULL,
-        PRIMARY KEY (id),
-        FOREIGN KEY (user_id) REFERENCES users (id)
+    IF NOT EXISTS `transactions` (
+        `id` bigint NOT NULL AUTO_INCREMENT,
+        `user_id` bigint NOT NULL,
+        `stock_symbol` varchar(255) NOT NULL,
+        `price` decimal(10, 2) NOT NULL,
+        `quantity` decimal(10, 4) NOT NULL,
+        `total_amount` decimal(10, 2) DEFAULT NULL,
+        `type` enum ('BUY', 'SELL') NOT NULL,
+        `created_at` datetime (6) DEFAULT NULL,
+        PRIMARY KEY (`id`)
     );
 
 CREATE TABLE
-    IF NOT EXISTS watchlist (
-        id BIGINT NOT NULL AUTO_INCREMENT,
-        user_id BIGINT NOT NULL,
-        stock_symbol VARCHAR(10) NOT NULL,
-        added_at DATETIME,
-        PRIMARY KEY (id),
-        UNIQUE KEY unique_user_symbol (user_id, stock_symbol),
-        FOREIGN KEY (user_id) REFERENCES users (id)
+    IF NOT EXISTS `watchlist` (
+        `id` bigint NOT NULL AUTO_INCREMENT,
+        `user_id` bigint NOT NULL,
+        `stock_symbol` varchar(255) NOT NULL,
+        `added_at` datetime (6) DEFAULT NULL,
+        PRIMARY KEY (`id`),
+        UNIQUE KEY `UK_watchlist_user_symbol` (`user_id`, `stock_symbol`)
     );
 
 CREATE TABLE
-    IF NOT EXISTS stock_cache (
-        symbol VARCHAR(10) NOT NULL,
-        company_name VARCHAR(255),
-        current_price DECIMAL(10, 2),
-        open_price DECIMAL(10, 2),
-        high_price DECIMAL(10, 2),
-        low_price DECIMAL(10, 2),
-        updated_at DATETIME,
-        volume BIGINT DEFAULT 0,
-        PRIMARY KEY (symbol)
+    IF NOT EXISTS `stock_cache` (
+        `symbol` varchar(255) NOT NULL,
+        `company_name` varchar(255) DEFAULT NULL,
+        `current_price` decimal(10, 2) DEFAULT NULL,
+        `open_price` decimal(10, 2) DEFAULT NULL,
+        `high_price` decimal(10, 2) DEFAULT NULL,
+        `low_price` decimal(10, 2) DEFAULT NULL,
+        `volume` bigint DEFAULT NULL,
+        `updated_at` datetime (6) DEFAULT NULL,
+        PRIMARY KEY (`symbol`)
     );
 
 CREATE TABLE
-    IF NOT EXISTS stock_history_cache (
-        id BIGINT NOT NULL AUTO_INCREMENT,
-        symbol VARCHAR(10),
-        time_interval VARCHAR(20),
-        history_json LONGTEXT,
-        cached_at DATETIME,
-        expires_at DATETIME,
-        PRIMARY KEY (id),
-        UNIQUE KEY unique_symbol_interval (symbol, time_interval)
+    IF NOT EXISTS `stock_history_cache` (
+        `id` bigint NOT NULL AUTO_INCREMENT,
+        `symbol` varchar(255) NOT NULL,
+        `time_interval` varchar(255) NOT NULL,
+        `history_json` longtext,
+        `cached_at` datetime (6) DEFAULT NULL,
+        `expires_at` datetime (6) DEFAULT NULL,
+        PRIMARY KEY (`id`),
+        UNIQUE KEY `UK_history_symbol_interval` (`symbol`, `time_interval`)
     );

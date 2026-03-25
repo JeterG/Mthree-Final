@@ -96,41 +96,62 @@ Final Capstone Project for Sakib and Jeter
 
 # Database
 
-- financeDB
+- financeDb
   - Schemas
     - Users
-      - id : BIGINT , auto generated, primary key, not null
-      - email : VARCHAR(255), non-repeatable, not null
+      - id : BIGINT, auto generated, primary key, not null
+      - email : VARCHAR(255), unique, not null
       - password : VARCHAR(255), not null
-      - created_at : DATE, not null
-      - last_login : DATE
-    - Transactions
-      - id : BIGINT, primary key, not null auto generated
-      - stock_symbol : VARCHAR(10), not null
-      - price : DECIMAL(10,2), not null
-      - quantity : DECIMAL(10,2), not null
-      - total_amount : DECIMAL(10,2), not null
-      - type : ENUM(BUY, SELL), not null
-      - user_id : BIGINT, foreign key references users(id), not null
-      - created_at : DATETIME, not null persistent
+      - created_at : DATETIME, not null
+      - last_login : DATETIME
+
     - Accounts
       - id : BIGINT, auto generated, primary key, not null
-      - user_id : BIGINT, foreign key references users(id), not null
+      - user_id : BIGINT, foreign key references users(id), unique, not null
       - first_name : VARCHAR(255), not null
       - last_name : VARCHAR(255), not null
       - cash_balance : DECIMAL(10,2), not null, default 10000.00
+
+    - Holdings
+      - id : BIGINT, auto generated, primary key, not null
+      - user_id : BIGINT, foreign key references users(id), not null
+      - stock_symbol : VARCHAR(255), not null
+      - quantity : DECIMAL(10,4), not null
+      - avg_buy_price : DECIMAL(10,2), not null
+      - purchased_at : DATETIME
+
+    - Transactions
+      - id : BIGINT, auto generated, primary key, not null
+      - user_id : BIGINT, foreign key references users(id), not null
+      - stock_symbol : VARCHAR(255), not null
+      - price : DECIMAL(10,2), not null
+      - quantity : DECIMAL(10,4), not null
+      - total_amount : DECIMAL(10,2), auto computed on insert
+      - type : ENUM('BUY', 'SELL'), not null
+      - created_at : DATETIME
+
+    - Watchlist
+      - id : BIGINT, auto generated, primary key, not null
+      - user_id : BIGINT, foreign key references users(id), not null
+      - stock_symbol : VARCHAR(255), not null
+      - added_at : DATETIME
+      - unique constraint on (user_id, stock_symbol)
+
     - Stock Cache
-      - symbol       : VARCHAR(10), primary key, not null
+      - symbol : VARCHAR(255), primary key, not null
+      - company_name : VARCHAR(255)
       - current_price : DECIMAL(10,2)
-      - open_price    : DECIMAL(10,2)
-      - high_price    : DECIMAL(10,2)
-      - low_price     : DECIMAL(10,2)
-      - updated_at    : DATETIME
+      - open_price : DECIMAL(10,2)
+      - high_price : DECIMAL(10,2)
+      - low_price : DECIMAL(10,2)
+      - volume : BIGINT
+      - updated_at : DATETIME
 
     - Stock History Cache
-      - id            : BIGINT, auto generated, primary key, not null
-      - symbol        : VARCHAR(10), not null
-      - time_interval : VARCHAR(20), not null
-      - history_json  : LONGTEXT, not null
-      - cached_at     : DATETIME, not null
-      - expires_at    : DATETIME, not null
+      - id : BIGINT, auto generated, primary key, not null
+      - symbol : VARCHAR(255), not null
+      - time_interval : VARCHAR(255), not null
+      - history_json : LONGTEXT
+      - cached_at : DATETIME
+      - expires_at : DATETIME
+      - unique constraint on (symbol, time_interval)
