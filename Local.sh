@@ -17,6 +17,15 @@ for arg in "$@"; do
     fi
 done
 
+# Cross-platform sed in-place edit
+sed_inplace() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sed -i '' "$1" "$2"
+    else
+        sed -i "$1" "$2"
+    fi
+}
+
 commands() {
     echo ""
     echo "📜 Commands:"
@@ -38,7 +47,7 @@ cleanup() {
     lsof -ti:4200 | xargs kill -9 2>/dev/null || true
     # Restore environment.ts
     if [ -f "$ENV_TS" ]; then
-        sed -i '' "s|apiUrl: '.*'|apiUrl: 'http://localhost:8080'|" "$ENV_TS"
+        sed_inplace "s|apiUrl: '.*'|apiUrl: 'http://localhost:8080'|" "$ENV_TS"
         echo "♻️  environment.ts restored to localhost:8080"
     fi
     echo "🧹 Done."
@@ -65,7 +74,7 @@ fi
 rm -f "$BACKEND_LOG" "$FRONTEND_LOG"
 
 # Patch environment.ts to localhost
-sed -i '' "s|apiUrl: '.*'|apiUrl: 'http://localhost:8080'|" "$ENV_TS"
+sed_inplace "s|apiUrl: '.*'|apiUrl: 'http://localhost:8080'|" "$ENV_TS"
 echo "✅ environment.ts → http://localhost:8080"
 
 # Start backend with root credentials

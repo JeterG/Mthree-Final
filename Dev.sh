@@ -16,6 +16,15 @@ for arg in "$@"; do
     fi
 done
 
+# Cross-platform sed in-place edit
+sed_inplace() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sed -i '' "$1" "$2"
+    else
+        sed -i "$1" "$2"
+    fi
+}
+
 commands() {
     echo ""
     echo "📜 Commands:"
@@ -48,7 +57,7 @@ cleanup() {
     lsof -ti:8080 | xargs kill -9 2>/dev/null || true
     lsof -ti:4200 | xargs kill -9 2>/dev/null || true
     if [ -f "$ENV_TS" ]; then
-        sed -i '' "s|apiUrl: '.*'|apiUrl: 'http://localhost:8080'|" "$ENV_TS"
+        sed_inplace "s|apiUrl: '.*'|apiUrl: 'http://localhost:8080'|" "$ENV_TS"
         echo "♻️  environment.ts restored to localhost:8080"
     fi
     echo "🧹 Done."
@@ -151,14 +160,14 @@ echo "🌐 Cloudflare URL: $BACKEND_URL"
 
 # ── STEP 2: Patch .env and environment.ts ──
 if grep -q "^BACKEND_URL=" "$ROOT_ENV"; then
-    sed -i '' "s|^BACKEND_URL=.*|BACKEND_URL=$BACKEND_URL|" "$ROOT_ENV"
+    sed_inplace "s|^BACKEND_URL=.*|BACKEND_URL=$BACKEND_URL|" "$ROOT_ENV"
 else
     echo "BACKEND_URL=$BACKEND_URL" >> "$ROOT_ENV"
 fi
 echo "✅ .env → BACKEND_URL=$BACKEND_URL"
 
 if [ -f "$ENV_TS" ]; then
-    sed -i '' "s|apiUrl: '.*'|apiUrl: '$BACKEND_URL'|" "$ENV_TS"
+    sed_inplace "s|apiUrl: '.*'|apiUrl: '$BACKEND_URL'|" "$ENV_TS"
     echo "✅ environment.ts → apiUrl: '$BACKEND_URL'"
 else
     echo "⚠️  $ENV_TS not found"

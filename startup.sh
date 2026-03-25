@@ -4,6 +4,13 @@ BACKEND_DIR="./backend"
 FRONTEND_DIR="./frontend"
 
 CLEANED_UP=false
+RESET_DB=false
+
+for arg in "$@"; do
+    if [ "$arg" = "--reset-db" ]; then
+        RESET_DB=true
+    fi
+done
 
 cleanup() {
     if [ "$CLEANED_UP" = true ]; then return; fi
@@ -23,6 +30,13 @@ echo "Clearing ports 8080 and 4200..."
 lsof -ti:8080 | xargs kill -9 2>/dev/null
 lsof -ti:4200 | xargs kill -9 2>/dev/null
 sleep 1
+
+# Reset DB
+if [ "$RESET_DB" = true ]; then
+    echo "Resetting database — dropping financeDb..."
+    mysql -u root -proot -e "DROP DATABASE IF EXISTS financeDb;" 2>/dev/null || true
+    echo "Database dropped — Spring Boot will recreate on startup"
+fi
 
 echo "Installing backend dependencies..."
 cd "$BACKEND_DIR"
