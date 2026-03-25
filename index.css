@@ -1,0 +1,99 @@
+.diagrams-wrapper {
+  padding: 40px 24px;
+  background: #f4f4f4;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Force diagram cards to never exceed viewport */
+.diagrams-wrapper .diagram-card {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.diagrams-wrapper section {
+  margin-bottom: 60px;
+}
+
+.diagrams-wrapper section h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a2e;
+  border-left: 4px solid #3f51b5;
+  padding-left: 12px;
+  margin-bottom: 8px;
+}
+
+.diagrams-wrapper section p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.diagrams-wrapper .diagram-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  overflow: visible;
+}
+
+/* SVG scales with its container — viewBox handles the internal layout */
+.diagrams-wrapper svg {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* Text classes */
+.diagrams-wrapper .lb {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  fill: #222;
+}
+
+.diagrams-wrapper .ls {
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  fill: #555;
+}
+
+.diagrams-wrapper .lh {
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  fill: #1a1a2e;
+}
+
+.diagrams-wrapper .sec {
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  fill: #888;
+}
+
+/* =========================
+     🌙 DARK MODE — DIAGRAMS
+     ViewEncapsulation.None required on component
+  ========================= */
+
+.dark-mode .diagrams-wrapper {
+  background: #1a1a1a !important;
+}
+
+.dark-mode .diagrams-wrapper section h2 {
+  color: #ffffff !important;
+}
+
+.dark-mode .diagrams-wrapper section p {
+  color: #cccccc !important;
+}
+
+.dark-mode .diagrams-wrapper .diagram-card {
+  background: #2a2a2a !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6) !important;
+}

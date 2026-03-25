@@ -3,183 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PaperTrade — System Documentation</title>
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      body {
-        font-family: Arial, sans-serif;
-        background: #f4f4f4;
-        color: #222;
-      }
-      header {
-        background: #1a1a2e;
-        color: white;
-        padding: 24px 40px;
-      }
-      header h1 {
-        font-size: 28px;
-        font-weight: 700;
-      }
-      header p {
-        font-size: 14px;
-        color: #aaa;
-        margin-top: 4px;
-      }
-      nav {
-        background: #16213e;
-        padding: 12px 40px;
-        display: flex;
-        gap: 24px;
-        flex-wrap: wrap;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-      }
-      nav a {
-        color: #90caf9;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 500;
-      }
-      nav a:hover {
-        color: white;
-      }
-      main {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 40px 24px;
-      }
-      section {
-        margin-bottom: 60px;
-      }
-      section h2 {
-        font-size: 22px;
-        font-weight: 700;
-        color: #1a1a2e;
-        border-left: 4px solid #3f51b5;
-        padding-left: 12px;
-        margin-bottom: 8px;
-      }
-      section p {
-        font-size: 14px;
-        color: #555;
-        margin-bottom: 16px;
-        line-height: 1.6;
-      }
-      .diagram-card {
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-        padding: 24px;
-        overflow-x: auto;
-      }
-      svg {
-        width: 100%;
-        height: auto;
-        display: block;
-      }
-      .lb {
-        font-family: Arial, sans-serif;
-        font-size: 12px;
-        font-weight: 700;
-        fill: #222;
-      }
-      .ls {
-        font-family: Arial, sans-serif;
-        font-size: 10px;
-        fill: #555;
-      }
-      .lh {
-        font-family: Arial, sans-serif;
-        font-size: 13px;
-        font-weight: 700;
-        fill: #1a1a2e;
-      }
-      .sec {
-        font-family: Arial, sans-serif;
-        font-size: 11px;
-        fill: #888;
-      }
-      footer {
-        background: #1a1a2e;
-        color: #aaa;
-        text-align: center;
-        padding: 20px;
-        font-size: 13px;
-        margin-top: 60px;
-      }
-    </style>
+    <link rel="stylesheet" href="index.css" />
+    <title>Document</title>
   </head>
   <body>
-    <div
-      style="
-        background: #16213e;
-        padding: 10px 40px;
-        display: flex;
-        gap: 24px;
-        flex-wrap: wrap;
-      "
-    >
-      <a
-        href="#architecture"
-        style="
-          color: #90caf9;
-          text-decoration: none;
-          font-size: 14px;
-          font-weight: 500;
-        "
-        >System Architecture</a
-      >
-      <a
-        href="#auth-flow"
-        style="
-          color: #90caf9;
-          text-decoration: none;
-          font-size: 14px;
-          font-weight: 500;
-        "
-        >Auth &amp; Registration</a
-      >
-      <a
-        href="#transaction-flow"
-        style="
-          color: #90caf9;
-          text-decoration: none;
-          font-size: 14px;
-          font-weight: 500;
-        "
-        >Transaction Workflow</a
-      >
-      <a
-        href="#erd"
-        style="
-          color: #90caf9;
-          text-decoration: none;
-          font-size: 14px;
-          font-weight: 500;
-        "
-        >Database ERD</a
-      >
-      <a
-        href="logs.html"
-        style="
-          color: #58a6ff;
-          text-decoration: none;
-          font-size: 14px;
-          font-weight: 500;
-        "
-        >📋 Logs</a
-      >
-    </div>
+    <div class="diagrams-wrapper">
+      <div class="diagrams-nav">
+        <a href="#architecture">System Architecture</a>
+        <a href="#auth-flow">Auth &amp; Registration</a>
+        <a href="#transaction-flow">Transaction Workflow</a>
+        <a href="#erd">Database ERD</a>
+      </div>
 
-    <main>
-      <!-- ══════════════════════════════════════════ -->
-      <!-- 1. SYSTEM ARCHITECTURE -->
-      <!-- ══════════════════════════════════════════ -->
       <section id="architecture">
         <h2>System Architecture</h2>
         <p>
@@ -188,7 +23,7 @@
           prices and Yahoo Finance for historical data. All stock prices are
           cached to reduce API calls.
         </p>
-        <div class="diagram-card">
+        <div class="diagram-card" ngNonBindable>
           <svg viewBox="0 0 1100 870">
             <defs>
               <marker
@@ -209,8 +44,6 @@
                 />
               </marker>
             </defs>
-
-            <!-- Angular Frontend -->
             <rect
               x="380"
               y="20"
@@ -224,9 +57,11 @@
             <text x="550" y="43" text-anchor="middle" class="lh">
               Angular 21 Frontend
             </text>
-            <text x="550" y="60" text-anchor="middle" class="ls">
-              Home · Portfolio · Search · Settings — standalone components,
-              Bootstrap 5, Chart.js
+            <text x="550" y="57" text-anchor="middle" class="ls">
+              Home · Portfolio · Search · Settings
+            </text>
+            <text x="550" y="69" text-anchor="middle" class="ls">
+              Standalone components · Bootstrap 5 · Chart.js
             </text>
             <line
               x1="550"
@@ -238,8 +73,6 @@
               marker-end="url(#a1)"
             />
             <text x="562" y="94" class="ls">HTTP REST / JSON</text>
-
-            <!-- Spring Boot outer box -->
             <rect
               x="50"
               y="108"
@@ -260,8 +93,6 @@
             >
               Spring Boot 4 — REST Controllers + Services
             </text>
-
-            <!-- Controllers row -->
             <rect
               x="70"
               y="142"
@@ -362,8 +193,6 @@
             <text x="955" y="175" text-anchor="middle" class="ls">
               quote · history · seed
             </text>
-
-            <!-- Services row -->
             <rect
               x="70"
               y="210"
@@ -454,19 +283,23 @@
               stroke="#1e88e5"
               stroke-width="0.5"
             />
-            <text x="938" y="230" text-anchor="middle" class="lb">
+            <text
+              x="938"
+              y="230"
+              text-anchor="middle"
+              class="lb"
+              style="font-size: 11px"
+            >
               YahooFinanceService
             </text>
             <text x="938" y="243" text-anchor="middle" class="ls">
               1yr OHLC history
             </text>
-
-            <!-- StockDataSeeder -->
             <rect
               x="70"
               y="278"
               width="960"
-              height="48"
+              height="64"
               rx="8"
               fill="#fff8e1"
               stroke="#f9a825"
@@ -475,12 +308,13 @@
             <text x="550" y="298" text-anchor="middle" class="lb">
               StockDataSeeder
             </text>
-            <text x="550" y="313" text-anchor="middle" class="ls">
-              GET /market/seed — Finnhub × 131 symbols (1100ms delay) · GET
-              /market/seed/history — Yahoo Finance × 131 symbols (1000ms delay)
+            <text x="550" y="311" text-anchor="middle" class="ls">
+              GET /market/seed — Finnhub ×131 symbols (1100ms delay)
             </text>
-
-            <!-- Arrow down to MySQL -->
+            <text x="550" y="326" text-anchor="middle" class="ls">
+              GET /market/seed/history — Yahoo Finance ×131 symbols (1000ms
+              delay)
+            </text>
             <line
               x1="550"
               y1="438"
@@ -490,8 +324,6 @@
               stroke-width="1.5"
               marker-end="url(#a1)"
             />
-
-            <!-- MySQL outer box -->
             <rect
               x="50"
               y="468"
@@ -512,8 +344,6 @@
             >
               MySQL — financeDb
             </text>
-
-            <!-- DB Tables row 1 -->
             <rect
               x="70"
               y="500"
@@ -528,7 +358,6 @@
             <text x="134" y="531" text-anchor="middle" class="ls">
               id · email · password
             </text>
-
             <rect
               x="212"
               y="500"
@@ -545,7 +374,6 @@
             <text x="276" y="531" text-anchor="middle" class="ls">
               cash_balance
             </text>
-
             <rect
               x="354"
               y="500"
@@ -562,7 +390,6 @@
             <text x="418" y="531" text-anchor="middle" class="ls">
               qty · avg_buy_price
             </text>
-
             <rect
               x="496"
               y="500"
@@ -579,7 +406,6 @@
             <text x="565" y="531" text-anchor="middle" class="ls">
               BUY/SELL · total
             </text>
-
             <rect
               x="648"
               y="500"
@@ -596,7 +422,6 @@
             <text x="712" y="531" text-anchor="middle" class="ls">
               symbol per user
             </text>
-
             <rect
               x="790"
               y="500"
@@ -613,8 +438,6 @@
             <text x="910" y="531" text-anchor="middle" class="ls">
               current · open · high · low
             </text>
-
-            <!-- DB Tables row 2 -->
             <rect
               x="212"
               y="558"
@@ -632,8 +455,6 @@
               symbol · time_interval · history_json LONGTEXT · cached_at ·
               expires_at (240 min TTL)
             </text>
-
-            <!-- Arrow down to External APIs -->
             <line
               x1="760"
               y1="258"
@@ -654,8 +475,6 @@
               stroke-dasharray="4 3"
               marker-end="url(#a1)"
             />
-
-            <!-- External APIs -->
             <rect
               x="70"
               y="720"
@@ -672,7 +491,6 @@
             <text x="200" y="756" text-anchor="middle" class="ls">
               Free tier · 60 req/min · /quote?symbol=
             </text>
-
             <rect
               x="770"
               y="720"
@@ -693,19 +511,15 @@
         </div>
       </section>
 
-      <!-- ══════════════════════════════════════════ -->
-      <!-- 2. AUTH FLOW -->
-      <!-- ══════════════════════════════════════════ -->
       <section id="auth-flow">
         <h2>Authentication &amp; Registration Flow</h2>
         <p>
           Full swimlane showing login with all alternative paths — user not
-          found (redirect to signup), wrong password (error), and successful
-          authentication. Also covers the registration flow with success and
-          failure outcomes including auto-account creation with $10,000 starting
-          balance.
+          found, wrong password, and successful authentication. Also covers
+          registration with success and failure outcomes including auto-account
+          creation with $10,000 starting balance.
         </p>
-        <div class="diagram-card">
+        <div class="diagram-card" ngNonBindable>
           <svg viewBox="0 0 1100 860">
             <defs>
               <marker
@@ -726,7 +540,6 @@
                 />
               </marker>
             </defs>
-            <!-- Swimlane backgrounds -->
             <rect x="0" y="0" width="275" height="860" fill="#f9f9f9" />
             <rect x="275" y="0" width="275" height="860" fill="#fafcff" />
             <rect x="550" y="0" width="275" height="860" fill="#f9f9f9" />
@@ -764,7 +577,6 @@
               Spring Boot
             </text>
             <text x="962" y="20" text-anchor="middle" class="lh">MySQL</text>
-            <!-- Row 1: Open app -->
             <rect
               x="15"
               y="40"
@@ -798,7 +610,6 @@
             <text x="412" y="61" text-anchor="middle" class="lb">
               Show Login page (/login)
             </text>
-            <!-- Row 2: Enter credentials -->
             <rect
               x="15"
               y="86"
@@ -875,10 +686,15 @@
               stroke="#ef6c00"
               stroke-width="0.5"
             />
-            <text x="962" y="103" text-anchor="middle" class="lb">
+            <text
+              x="962"
+              y="103"
+              text-anchor="middle"
+              class="lb"
+              style="font-size: 10px"
+            >
               SELECT * FROM users WHERE email=?
             </text>
-            <!-- ALT header 1 -->
             <line
               x1="0"
               y1="132"
@@ -976,7 +792,6 @@
             <text x="137" y="227" text-anchor="middle" class="lb">
               Redirect to /signup
             </text>
-            <!-- ALT header 2 -->
             <line
               x1="0"
               y1="252"
@@ -1030,7 +845,6 @@
             <text x="412" y="289" text-anchor="middle" class="lb">
               Details incorrect error shown
             </text>
-            <!-- ALT header 3 -->
             <line
               x1="0"
               y1="318"
@@ -1060,7 +874,7 @@
               stroke-width="0.5"
             />
             <text x="687" y="359" text-anchor="middle" class="lb">
-              Return {userId, email} 200
+              Return &#123;userId, email&#125; 200
             </text>
             <line
               x1="565"
@@ -1122,7 +936,6 @@
             <text x="137" y="423" text-anchor="middle" class="lb">
               Redirect to /home dashboard
             </text>
-            <!-- SIGNUP SECTION -->
             <line
               x1="0"
               y1="450"
@@ -1135,7 +948,6 @@
             <text x="550" y="466" text-anchor="middle" class="lh">
               Registration Flow
             </text>
-            <!-- Signup row 1 -->
             <rect
               x="15"
               y="484"
@@ -1215,7 +1027,6 @@
             <text x="962" y="501" text-anchor="middle" class="lb">
               existsByEmail?
             </text>
-            <!-- ALT email exists -->
             <line
               x1="0"
               y1="530"
@@ -1269,7 +1080,6 @@
             <text x="412" y="567" text-anchor="middle" class="lb">
               Registration failed — check details
             </text>
-            <!-- ALT success -->
             <line
               x1="0"
               y1="596"
@@ -1422,20 +1232,15 @@
         </div>
       </section>
 
-      <!-- ══════════════════════════════════════════ -->
-      <!-- 3. FULL TRANSACTION WORKFLOW -->
-      <!-- ══════════════════════════════════════════ -->
       <section id="transaction-flow">
         <h2>Full Transaction Workflow</h2>
         <p>
-          Complete swimlane diagram covering all portfolio interactions: loading
-          portfolio data, buying stocks (with cache price), selling stocks (with
-          live Finnhub price), watchlist add/remove, market data with cache
-          hit/miss, and the 20-second live price polling loop. Also includes
-          admin seeding endpoints.
+          Complete swimlane covering portfolio load, buy, sell, watchlist
+          management, market data with cache hit/miss, 20-second live polling,
+          and admin seeding endpoints.
         </p>
-        <div class="diagram-card">
-          <svg viewBox="0 0 1100 1860">
+        <div class="diagram-card" ngNonBindable>
+          <svg viewBox="0 0 1100 1660">
             <defs>
               <marker
                 id="a3"
@@ -1455,17 +1260,16 @@
                 />
               </marker>
             </defs>
-            <!-- Swimlanes -->
-            <rect x="0" y="0" width="220" height="1860" fill="#f9f9f9" />
-            <rect x="220" y="0" width="220" height="1860" fill="#fafcff" />
-            <rect x="440" y="0" width="220" height="1860" fill="#f9f9f9" />
-            <rect x="660" y="0" width="220" height="1860" fill="#fafcff" />
-            <rect x="880" y="0" width="220" height="1860" fill="#f9f9f9" />
+            <rect x="0" y="0" width="220" height="1660" fill="#f9f9f9" />
+            <rect x="220" y="0" width="220" height="1660" fill="#fafcff" />
+            <rect x="440" y="0" width="220" height="1660" fill="#f9f9f9" />
+            <rect x="660" y="0" width="220" height="1660" fill="#fafcff" />
+            <rect x="880" y="0" width="220" height="1660" fill="#f9f9f9" />
             <line
               x1="220"
               y1="0"
               x2="220"
-              y2="1860"
+              y2="1660"
               stroke="#e0e0e0"
               stroke-width="0.5"
             />
@@ -1473,7 +1277,7 @@
               x1="440"
               y1="0"
               x2="440"
-              y2="1860"
+              y2="1660"
               stroke="#e0e0e0"
               stroke-width="0.5"
             />
@@ -1481,7 +1285,7 @@
               x1="660"
               y1="0"
               x2="660"
-              y2="1860"
+              y2="1660"
               stroke="#e0e0e0"
               stroke-width="0.5"
             />
@@ -1489,7 +1293,7 @@
               x1="880"
               y1="0"
               x2="880"
-              y2="1860"
+              y2="1660"
               stroke="#e0e0e0"
               stroke-width="0.5"
             />
@@ -1501,8 +1305,7 @@
               External API
             </text>
             <text x="990" y="20" text-anchor="middle" class="lh">Database</text>
-
-            <!-- ─ LOAD PORTFOLIO ─ -->
+            <!-- LOAD PORTFOLIO -->
             <rect x="0" y="30" width="1100" height="24" fill="#e8eaf6" />
             <text
               x="550"
@@ -1546,7 +1349,7 @@
               stroke-width="0.5"
             />
             <text x="330" y="82" text-anchor="middle" class="lb">
-              GET /account/{userId}
+              GET /account/&#123;userId&#125;
             </text>
             <line
               x1="430"
@@ -1603,7 +1406,7 @@
               stroke-width="0.5"
             />
             <text x="330" y="124" text-anchor="middle" class="lb">
-              GET /holdings/{userId}
+              GET /holdings/&#123;userId&#125;
             </text>
             <line
               x1="430"
@@ -1660,7 +1463,7 @@
               stroke-width="0.5"
             />
             <text x="330" y="162" text-anchor="middle" class="lb">
-              GET /market/quote/{sym} × n
+              GET /market/quote/&#123;sym&#125; x n
             </text>
             <line
               x1="430"
@@ -1728,8 +1531,7 @@
             <text x="330" y="208" text-anchor="middle" class="lb">
               Render dashboard + charts
             </text>
-
-            <!-- ─ BUY STOCK ─ -->
+            <!-- BUY -->
             <line
               x1="0"
               y1="234"
@@ -1981,8 +1783,7 @@
             <text x="330" y="494" text-anchor="middle" class="lb">
               Success + portfolio reloads
             </text>
-
-            <!-- ─ SELL STOCK ─ -->
+            <!-- SELL -->
             <line
               x1="0"
               y1="520"
@@ -2012,7 +1813,7 @@
               stroke-width="0.5"
             />
             <text x="110" y="572" text-anchor="middle" class="lb">
-              Enter qty → click Sell
+              Enter qty — click Sell
             </text>
             <line
               x1="210"
@@ -2078,7 +1879,7 @@
               stroke-width="0.5"
             />
             <text x="770" y="568" text-anchor="middle" class="lb">
-              Finnhub /quote live price
+              Finnhub live price
             </text>
             <line
               x1="0"
@@ -2234,8 +2035,7 @@
             <text x="330" y="780" text-anchor="middle" class="lb">
               Portfolio reloads
             </text>
-
-            <!-- ─ WATCHLIST ─ -->
+            <!-- WATCHLIST -->
             <line
               x1="0"
               y1="806"
@@ -2461,7 +2261,6 @@
             <text x="330" y="978" text-anchor="middle" class="lb">
               Added to watchlist!
             </text>
-            <!-- Remove watchlist -->
             <rect
               x="10"
               y="1004"
@@ -2495,7 +2294,7 @@
               stroke-width="0.5"
             />
             <text x="330" y="1020" text-anchor="middle" class="lb">
-              DELETE /watchlist/{id}
+              DELETE /watchlist/&#123;id&#125;
             </text>
             <line
               x1="430"
@@ -2541,8 +2340,7 @@
             <text x="990" y="1020" text-anchor="middle" class="lb">
               DELETE FROM watchlist
             </text>
-
-            <!-- ─ MARKET DATA ─ -->
+            <!-- MARKET DATA -->
             <line
               x1="0"
               y1="1050"
@@ -2559,7 +2357,7 @@
               class="lh"
               style="fill: #3f51b5"
             >
-              Market Data — Chart History
+              Market Data
             </text>
             <rect
               x="10"
@@ -2572,7 +2370,7 @@
               stroke-width="0.5"
             />
             <text x="110" y="1102" text-anchor="middle" class="lb">
-              Select symbol → view chart
+              Select symbol — view chart
             </text>
             <line
               x1="210"
@@ -2594,7 +2392,7 @@
               stroke-width="0.5"
             />
             <text x="330" y="1098" text-anchor="middle" class="lb">
-              GET /market/history/{sym}
+              GET /market/history/&#123;sym&#125;
             </text>
             <line
               x1="430"
@@ -2658,7 +2456,7 @@
               opacity="0.5"
             />
             <text x="8" y="1136" class="sec">
-              alt [cache miss / expired (240 min TTL)]
+              alt [cache miss / expired 240 min]
             </text>
             <rect
               x="450"
@@ -2693,7 +2491,7 @@
               stroke-width="0.5"
             />
             <text x="770" y="1160" text-anchor="middle" class="lb">
-              Yahoo Finance /v8/finance/chart
+              Yahoo Finance API
             </text>
             <line
               x1="770"
@@ -2778,8 +2576,7 @@
             <text x="330" y="1262" text-anchor="middle" class="lb">
               Render Chart.js line graph
             </text>
-
-            <!-- ─ POLLING LOOP ─ -->
+            <!-- POLLING -->
             <line
               x1="0"
               y1="1292"
@@ -2809,7 +2606,7 @@
               stroke-width="0.5"
             />
             <text x="330" y="1344" text-anchor="middle" class="lb">
-              GET /market/quote/{symbol}
+              GET /market/quote/&#123;symbol&#125;
             </text>
             <line
               x1="430"
@@ -2902,8 +2699,7 @@
             <text x="330" y="1406" text-anchor="middle" class="lb">
               Update price display + chart
             </text>
-
-            <!-- ─ ADMIN SEED ─ -->
+            <!-- SEED -->
             <line
               x1="0"
               y1="1432"
@@ -2920,7 +2716,7 @@
               class="lh"
               style="fill: #3f51b5"
             >
-              Admin — Seed Stock Cache (one-time setup)
+              Admin — Seed Stock Cache
             </text>
             <rect
               x="230"
@@ -2977,7 +2773,7 @@
               stroke-width="0.5"
             />
             <text x="770" y="1480" text-anchor="middle" class="lb">
-              Finnhub /quote × 131 symbols
+              Finnhub x 131 symbols
             </text>
             <line
               x1="770"
@@ -3041,8 +2837,23 @@
               stroke="#26a69a"
               stroke-width="0.5"
             />
-            <text x="550" y="1564" text-anchor="middle" class="lb">
-              StockDataSeeder.seedHistory()
+            <text
+              x="550"
+              y="1560"
+              text-anchor="middle"
+              class="lb"
+              style="font-size: 10px"
+            >
+              StockDataSeeder
+            </text>
+            <text
+              x="550"
+              y="1574"
+              text-anchor="middle"
+              class="lb"
+              style="font-size: 10px"
+            >
+              .seedHistory()
             </text>
             <line
               x1="650"
@@ -3063,8 +2874,14 @@
               stroke="#f9a825"
               stroke-width="0.5"
             />
-            <text x="770" y="1564" text-anchor="middle" class="lb">
-              Yahoo Finance × 131 symbols
+            <text
+              x="770"
+              y="1564"
+              text-anchor="middle"
+              class="lb"
+              style="font-size: 10px"
+            >
+              Yahoo Finance ×131 symbols
             </text>
             <line
               x1="770"
@@ -3100,23 +2917,22 @@
         </div>
       </section>
 
-      <!-- ══════════════════════════════════════════ -->
-      <!-- 4. ERD -->
-      <!-- ══════════════════════════════════════════ -->
       <section id="erd">
         <h2>Database ERD</h2>
         <p>
           All 7 tables with fields, primary keys, foreign keys, and
           relationships. USERS is the central entity — accounts, holdings,
-          transactions, and watchlist all link via user_id. stock_cache is
-          referenced by holdings, transactions, and watchlist, and has a
-          one-to-many relationship with stock_history_cache.
+          transactions, and watchlist all link via user_id.
         </p>
-        <div class="diagram-card">
-          <svg viewBox="0 0 1100 740">
+        <div class="diagram-card" ngNonBindable>
+          <svg
+            width="100%"
+            viewBox="0 0 1100 800"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <defs>
               <marker
-                id="a4"
+                id="ar"
                 viewBox="0 0 10 10"
                 refX="8"
                 refY="5"
@@ -3133,7 +2949,7 @@
                 />
               </marker>
               <marker
-                id="a4dash"
+                id="ardash"
                 viewBox="0 0 10 10"
                 refX="8"
                 refY="5"
@@ -3149,18 +2965,608 @@
                   stroke-linecap="round"
                 />
               </marker>
+              <mask id="imagine-text-gaps-vw56nr" maskUnits="userSpaceOnUse">
+                <rect x="0" y="0" width="1100" height="800" fill="white" />
+                <rect
+                  x="523.6071166992188"
+                  y="23.51752281188965"
+                  width="52.78575897216797"
+                  height="19.603095054626465"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="406.439697265625"
+                  y="49.517520904541016"
+                  width="184.6319122314453"
+                  height="21.16340446472168"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="408"
+                  y="68.63813781738281"
+                  width="205.18411254882812"
+                  height="15.463403701782227"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="408"
+                  y="84.63813781738281"
+                  width="182.43772888183594"
+                  height="15.463403701782227"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="408"
+                  y="100.63813781738281"
+                  width="177.4398651123047"
+                  height="15.463403701782227"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="408"
+                  y="116.63813781738281"
+                  width="120.46418762207031"
+                  height="15.46339225769043"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="119.17424011230469"
+                  y="23.51752281188965"
+                  width="81.6514892578125"
+                  height="19.603095054626465"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="26.43968963623047"
+                  y="49.517520904541016"
+                  width="184.63192749023438"
+                  height="21.16340446472168"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="26.43968963623047"
+                  y="65.51752471923828"
+                  width="192.6041259765625"
+                  height="21.16340446472168"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="28"
+                  y="84.63813781738281"
+                  width="186.33851623535156"
+                  height="15.463403701782227"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="28"
+                  y="100.63813781738281"
+                  width="185.7777862548828"
+                  height="15.463403701782227"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="28"
+                  y="116.63813781738281"
+                  width="200.4056854248047"
+                  height="15.463403701782227"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="898.5769653320312"
+                  y="23.51752281188965"
+                  width="82.84609985351562"
+                  height="19.603095054626465"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="806.4396362304688"
+                  y="49.517520904541016"
+                  width="184.6319122314453"
+                  height="21.16340446472168"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="806.4396362304688"
+                  y="65.51752471923828"
+                  width="150.9877471923828"
+                  height="21.16340446472168"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="84.63813781738281"
+                  width="200.21063232421875"
+                  height="15.463403701782227"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="100.63813781738281"
+                  width="119.92782592773438"
+                  height="15.46339225769043"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="116.63813781738281"
+                  width="152.27987670898438"
+                  height="15.463403701782227"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="121.69755554199219"
+                  y="253.51751708984375"
+                  width="76.6048583984375"
+                  height="19.603095054626465"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="26.43968963623047"
+                  y="279.51751708984375"
+                  width="184.63192749023438"
+                  height="21.16340446472168"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="26.43968963623047"
+                  y="295.51751708984375"
+                  width="150.9877471923828"
+                  height="21.16340446472168"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="28"
+                  y="314.6381530761719"
+                  width="200.2106475830078"
+                  height="15.463379859924316"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="28"
+                  y="330.63812255859375"
+                  width="173.75851440429688"
+                  height="15.463379859924316"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="28"
+                  y="346.63812255859375"
+                  width="203.74571228027344"
+                  height="15.463379859924316"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="28"
+                  y="362.6381530761719"
+                  width="138.79782104492188"
+                  height="15.463403701782227"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="104.36349487304688"
+                  y="503.51751708984375"
+                  width="111.27298736572266"
+                  height="19.603095054626465"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="26.43968963623047"
+                  y="529.5175170898438"
+                  width="184.63192749023438"
+                  height="21.16340446472168"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="26.43968963623047"
+                  y="545.5175170898438"
+                  width="150.9877471923828"
+                  height="21.16340446472168"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="28"
+                  y="564.63818359375"
+                  width="200.2106475830078"
+                  height="15.463379859924316"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="28"
+                  y="580.6381225585938"
+                  width="160.42274475097656"
+                  height="15.463379859924316"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="28"
+                  y="596.6381225585938"
+                  width="173.75851440429688"
+                  height="15.463379859924316"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="28"
+                  y="612.6381225585938"
+                  width="173.4171905517578"
+                  height="15.463427543640137"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="28"
+                  y="628.6381225585938"
+                  width="178.610107421875"
+                  height="15.463379859924316"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="28"
+                  y="644.6381225585938"
+                  width="125.46205139160156"
+                  height="15.463427543640137"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="886.64306640625"
+                  y="253.51751708984375"
+                  width="106.71395874023438"
+                  height="19.603095054626465"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="806.4396362304688"
+                  y="279.51751708984375"
+                  width="152.27987670898438"
+                  height="21.16340446472168"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="298.6381530761719"
+                  width="158.78929138183594"
+                  height="15.463403701782227"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="314.6381530761719"
+                  width="145.0878143310547"
+                  height="15.463403701782227"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="330.63812255859375"
+                  width="136.21356201171875"
+                  height="15.463403701782227"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="346.63812255859375"
+                  width="132.8979034423828"
+                  height="15.463403701782227"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="362.6381530761719"
+                  width="128.99713134765625"
+                  height="15.463403701782227"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="378.6381530761719"
+                  width="81.8221435546875"
+                  height="14.92216682434082"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="394.63812255859375"
+                  width="128.26573181152344"
+                  height="15.463379859924316"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="867.126953125"
+                  y="554.6381225585938"
+                  width="145.74607849121094"
+                  height="15.534090995788574"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="806.4396362304688"
+                  y="577.5175170898438"
+                  width="184.6319122314453"
+                  height="21.16340446472168"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="596.6381225585938"
+                  width="171.34490966796875"
+                  height="15.463379859924316"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="612.6381225585938"
+                  width="196.3098602294922"
+                  height="15.463379859924316"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="628.6381225585938"
+                  width="123.43852233886719"
+                  height="15.463379859924316"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="644.6381225585938"
+                  width="124.36495971679688"
+                  height="15.463427543640137"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="660.6381225585938"
+                  width="124.36495971679688"
+                  height="15.463427543640137"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="808"
+                  y="676.6381225585938"
+                  width="147.28201293945312"
+                  height="15.463379859924316"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="337.00384521484375"
+                  y="62.198455810546875"
+                  width="25.992319107055664"
+                  height="13.361857414245605"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="289.29254150390625"
+                  y="73.19844818115234"
+                  width="121.41500091552734"
+                  height="13.587620735168457"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="727.7638549804688"
+                  y="62.198455810546875"
+                  width="44.47223663330078"
+                  height="13.692936897277832"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="690.04833984375"
+                  y="73.19844818115234"
+                  width="119.90345001220703"
+                  height="13.587620735168457"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="303.7638854980469"
+                  y="212.19845581054688"
+                  width="44.47223663330078"
+                  height="13.692936897277832"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="300.5213623046875"
+                  y="224.19845581054688"
+                  width="50.957271575927734"
+                  height="13.361857414245605"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="289.27008056640625"
+                  y="236.19845581054688"
+                  width="73.4598617553711"
+                  height="13.692936897277832"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="357.76385498046875"
+                  y="460.1984558105469"
+                  width="44.47223663330078"
+                  height="13.692889213562012"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="354.5213623046875"
+                  y="472.19842529296875"
+                  width="50.957271575927734"
+                  height="13.361857414245605"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="335.77325439453125"
+                  y="484.1984558105469"
+                  width="88.45346069335938"
+                  height="13.587608337402344"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="453.3322448730469"
+                  y="338.1984558105469"
+                  width="193.33551025390625"
+                  height="13.692936897277832"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="623.290771484375"
+                  y="500.19842529296875"
+                  width="113.41841125488281"
+                  height="13.692936897277832"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="629.7879638671875"
+                  y="512.198486328125"
+                  width="100.42395782470703"
+                  height="13.692936897277832"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="957.9999389648438"
+                  y="196.19845581054688"
+                  width="99.42438507080078"
+                  height="13.692936897277832"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="957.9999389648438"
+                  y="208.19845581054688"
+                  width="100.42395782470703"
+                  height="13.692936897277832"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="957.9999389648438"
+                  y="496.19842529296875"
+                  width="44.47223663330078"
+                  height="13.692889213562012"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="957.9999389648438"
+                  y="508.1984558105469"
+                  width="100.42395782470703"
+                  height="13.692936897277832"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="957.9999389648438"
+                  y="520.1984252929688"
+                  width="94.42652130126953"
+                  height="13.692936897277832"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="451.9999694824219"
+                  y="749.1984252929688"
+                  width="101.9111328125"
+                  height="13.692936897277832"
+                  fill="black"
+                  rx="2"
+                />
+                <rect
+                  x="451.9999694824219"
+                  y="767.198486328125"
+                  width="150.89022827148438"
+                  height="13.692936897277832"
+                  fill="black"
+                  rx="2"
+                />
+              </mask>
             </defs>
 
-            <!-- USERS (center top) -->
+            <!-- ══ USERS (center top) ══ -->
             <rect
               x="400"
               y="20"
               width="300"
-              height="164"
+              height="148"
               rx="8"
               fill="#e3f2fd"
               stroke="#1e88e5"
               stroke-width="1"
+              style="
+                fill: rgb(227, 242, 253);
+                stroke: rgb(30, 136, 229);
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
             <rect
               x="400"
@@ -3169,32 +3575,194 @@
               height="28"
               rx="8"
               fill="#1e88e5"
+              style="
+                fill: rgb(30, 136, 229);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
-            <rect x="400" y="36" width="300" height="12" fill="#1e88e5" />
+            <rect
+              x="400"
+              y="36"
+              width="300"
+              height="12"
+              fill="#1e88e5"
+              style="
+                fill: rgb(30, 136, 229);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
             <text
               x="550"
               y="38"
               text-anchor="middle"
-              class="lb"
-              style="fill: white; font-size: 13px"
+              style="
+                font-family: Arial;
+                font-size: 13px;
+                font-weight: 700;
+                fill: white;
+                fill: rgb(255, 255, 255);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 13px;
+                font-weight: 700;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
             >
               USERS
             </text>
-            <text x="412" y="64" class="ls">
+            <text
+              x="412"
+              y="64"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
               🔑 id : BIGINT AUTO_INCREMENT PK
             </text>
-            <text x="412" y="80" class="ls">
+            <text
+              x="412"
+              y="80"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
               email : VARCHAR(255) UNIQUE NOT NULL
             </text>
-            <text x="412" y="96" class="ls">
+            <text
+              x="412"
+              y="96"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
               password : VARCHAR(255) NOT NULL
             </text>
-            <text x="412" y="112" class="ls">
-              created_at : DATETIME (@PrePersist)
+            <text
+              x="412"
+              y="112"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              created_at : DATETIME(6) NOT NULL
             </text>
-            <text x="412" y="128" class="ls">last_login : DATETIME</text>
+            <text
+              x="412"
+              y="128"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              last_login : DATETIME(6)
+            </text>
 
-            <!-- ACCOUNTS -->
+            <!-- ══ ACCOUNTS (left top) ══ -->
             <rect
               x="20"
               y="20"
@@ -3204,34 +3772,221 @@
               fill="#e0f2f1"
               stroke="#26a69a"
               stroke-width="1"
+              style="
+                fill: rgb(224, 242, 241);
+                stroke: rgb(38, 166, 154);
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
-            <rect x="20" y="20" width="280" height="28" rx="8" fill="#26a69a" />
-            <rect x="20" y="36" width="280" height="12" fill="#26a69a" />
+            <rect
+              x="20"
+              y="20"
+              width="280"
+              height="28"
+              rx="8"
+              fill="#26a69a"
+              style="
+                fill: rgb(38, 166, 154);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
+            <rect
+              x="20"
+              y="36"
+              width="280"
+              height="12"
+              fill="#26a69a"
+              style="
+                fill: rgb(38, 166, 154);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
             <text
               x="160"
               y="38"
               text-anchor="middle"
-              class="lb"
-              style="fill: white; font-size: 13px"
+              style="
+                font-family: Arial;
+                font-size: 13px;
+                font-weight: 700;
+                fill: white;
+                fill: rgb(255, 255, 255);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 13px;
+                font-weight: 700;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
             >
               ACCOUNTS
             </text>
-            <text x="32" y="64" class="ls">
+            <text
+              x="32"
+              y="64"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
               🔑 id : BIGINT AUTO_INCREMENT PK
             </text>
-            <text x="32" y="80" class="ls">
-              🔗 user_id : BIGINT FK → users.id UNIQUE
+            <text
+              x="32"
+              y="80"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              🔗 user_id : BIGINT UNIQUE NOT NULL
             </text>
-            <text x="32" y="96" class="ls">
+            <text
+              x="32"
+              y="96"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
               first_name : VARCHAR(255) NOT NULL
             </text>
-            <text x="32" y="112" class="ls">
+            <text
+              x="32"
+              y="112"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
               last_name : VARCHAR(255) NOT NULL
             </text>
-            <text x="32" y="128" class="ls">cash_balance : DECIMAL(10,2)</text>
-            <text x="32" y="144" class="ls">DEFAULT 10000.00</text>
+            <text
+              x="32"
+              y="128"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              cash_balance : DECIMAL(10,2) NOT NULL
+            </text>
 
-            <!-- WATCHLIST -->
+            <!-- ══ WATCHLIST (right top) ══ -->
             <rect
               x="800"
               y="20"
@@ -3241,6 +3996,25 @@
               fill="#e0f2f1"
               stroke="#26a69a"
               stroke-width="1"
+              style="
+                fill: rgb(224, 242, 241);
+                stroke: rgb(38, 166, 154);
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
             <rect
               x="800"
@@ -3249,395 +4023,2283 @@
               height="28"
               rx="8"
               fill="#26a69a"
+              style="
+                fill: rgb(38, 166, 154);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
-            <rect x="800" y="36" width="280" height="12" fill="#26a69a" />
+            <rect
+              x="800"
+              y="36"
+              width="280"
+              height="12"
+              fill="#26a69a"
+              style="
+                fill: rgb(38, 166, 154);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
             <text
               x="940"
               y="38"
               text-anchor="middle"
-              class="lb"
-              style="fill: white; font-size: 13px"
+              style="
+                font-family: Arial;
+                font-size: 13px;
+                font-weight: 700;
+                fill: white;
+                fill: rgb(255, 255, 255);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 13px;
+                font-weight: 700;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
             >
               WATCHLIST
             </text>
-            <text x="812" y="64" class="ls">
+            <text
+              x="812"
+              y="64"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
               🔑 id : BIGINT AUTO_INCREMENT PK
             </text>
-            <text x="812" y="80" class="ls">
-              🔗 user_id : BIGINT FK → users.id
+            <text
+              x="812"
+              y="80"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              🔗 user_id : BIGINT NOT NULL
             </text>
-            <text x="812" y="96" class="ls">
-              stock_symbol : VARCHAR(10) NOT NULL
+            <text
+              x="812"
+              y="96"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              stock_symbol : VARCHAR(255) NOT NULL
             </text>
-            <text x="812" y="112" class="ls">
-              added_at : DATETIME (@PrePersist)
+            <text
+              x="812"
+              y="112"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              added_at : DATETIME(6)
             </text>
-            <text x="812" y="128" class="ls">
+            <text
+              x="812"
+              y="128"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
               UNIQUE(user_id, stock_symbol)
             </text>
 
-            <!-- HOLDINGS -->
+            <!-- ══ HOLDINGS (left mid) ══ -->
             <rect
               x="20"
-              y="240"
-              width="280"
-              height="196"
-              rx="8"
-              fill="#e0f2f1"
-              stroke="#26a69a"
-              stroke-width="1"
-            />
-            <rect
-              x="20"
-              y="240"
-              width="280"
-              height="28"
-              rx="8"
-              fill="#26a69a"
-            />
-            <rect x="20" y="256" width="280" height="12" fill="#26a69a" />
-            <text
-              x="160"
-              y="258"
-              text-anchor="middle"
-              class="lb"
-              style="fill: white; font-size: 13px"
-            >
-              HOLDINGS
-            </text>
-            <text x="32" y="284" class="ls">
-              🔑 id : BIGINT AUTO_INCREMENT PK
-            </text>
-            <text x="32" y="300" class="ls">
-              🔗 user_id : BIGINT FK → users.id
-            </text>
-            <text x="32" y="316" class="ls">
-              stock_symbol : VARCHAR(10) NOT NULL
-            </text>
-            <text x="32" y="332" class="ls">
-              quantity : DECIMAL(10,4) NOT NULL
-            </text>
-            <text x="32" y="348" class="ls">
-              avg_buy_price : DECIMAL(10,2) NOT NULL
-            </text>
-            <text x="32" y="364" class="ls">
-              purchased_at : DATETIME (@PrePersist)
-            </text>
-
-            <!-- TRANSACTIONS -->
-            <rect
-              x="20"
-              y="490"
-              width="280"
-              height="212"
-              rx="8"
-              fill="#e0f2f1"
-              stroke="#26a69a"
-              stroke-width="1"
-            />
-            <rect
-              x="20"
-              y="490"
-              width="280"
-              height="28"
-              rx="8"
-              fill="#26a69a"
-            />
-            <rect x="20" y="506" width="280" height="12" fill="#26a69a" />
-            <text
-              x="160"
-              y="508"
-              text-anchor="middle"
-              class="lb"
-              style="fill: white; font-size: 13px"
-            >
-              TRANSACTIONS
-            </text>
-            <text x="32" y="534" class="ls">
-              🔑 id : BIGINT AUTO_INCREMENT PK
-            </text>
-            <text x="32" y="550" class="ls">
-              🔗 user_id : BIGINT FK → users.id
-            </text>
-            <text x="32" y="566" class="ls">
-              stock_symbol : VARCHAR(10) NOT NULL
-            </text>
-            <text x="32" y="582" class="ls">
-              price : DECIMAL(10,2) NOT NULL
-            </text>
-            <text x="32" y="598" class="ls">
-              quantity : DECIMAL(10,4) NOT NULL
-            </text>
-            <text x="32" y="614" class="ls">
-              total_amount : DECIMAL(10,2) (@PrePersist)
-            </text>
-            <text x="32" y="630" class="ls">
-              type : ENUM('BUY','SELL') NOT NULL
-            </text>
-            <text x="32" y="646" class="ls">
-              created_at : DATETIME (@PrePersist)
-            </text>
-
-            <!-- STOCK_CACHE -->
-            <rect
-              x="800"
-              y="240"
+              y="250"
               width="280"
               height="180"
               rx="8"
+              fill="#e0f2f1"
+              stroke="#26a69a"
+              stroke-width="1"
+              style="
+                fill: rgb(224, 242, 241);
+                stroke: rgb(38, 166, 154);
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
+            <rect
+              x="20"
+              y="250"
+              width="280"
+              height="28"
+              rx="8"
+              fill="#26a69a"
+              style="
+                fill: rgb(38, 166, 154);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
+            <rect
+              x="20"
+              y="266"
+              width="280"
+              height="12"
+              fill="#26a69a"
+              style="
+                fill: rgb(38, 166, 154);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
+            <text
+              x="160"
+              y="268"
+              text-anchor="middle"
+              style="
+                font-family: Arial;
+                font-size: 13px;
+                font-weight: 700;
+                fill: white;
+                fill: rgb(255, 255, 255);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 13px;
+                font-weight: 700;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
+            >
+              HOLDINGS
+            </text>
+            <text
+              x="32"
+              y="294"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              🔑 id : BIGINT AUTO_INCREMENT PK
+            </text>
+            <text
+              x="32"
+              y="310"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              🔗 user_id : BIGINT NOT NULL
+            </text>
+            <text
+              x="32"
+              y="326"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              stock_symbol : VARCHAR(255) NOT NULL
+            </text>
+            <text
+              x="32"
+              y="342"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              quantity : DECIMAL(10,4) NOT NULL
+            </text>
+            <text
+              x="32"
+              y="358"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              avg_buy_price : DECIMAL(10,2) NOT NULL
+            </text>
+            <text
+              x="32"
+              y="374"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              purchased_at : DATETIME(6)
+            </text>
+
+            <!-- ══ TRANSACTIONS (left bottom) ══ -->
+            <rect
+              x="20"
+              y="500"
+              width="280"
+              height="244"
+              rx="8"
+              fill="#e0f2f1"
+              stroke="#26a69a"
+              stroke-width="1"
+              style="
+                fill: rgb(224, 242, 241);
+                stroke: rgb(38, 166, 154);
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
+            <rect
+              x="20"
+              y="500"
+              width="280"
+              height="28"
+              rx="8"
+              fill="#26a69a"
+              style="
+                fill: rgb(38, 166, 154);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
+            <rect
+              x="20"
+              y="516"
+              width="280"
+              height="12"
+              fill="#26a69a"
+              style="
+                fill: rgb(38, 166, 154);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
+            <text
+              x="160"
+              y="518"
+              text-anchor="middle"
+              style="
+                font-family: Arial;
+                font-size: 13px;
+                font-weight: 700;
+                fill: white;
+                fill: rgb(255, 255, 255);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 13px;
+                font-weight: 700;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
+            >
+              TRANSACTIONS
+            </text>
+            <text
+              x="32"
+              y="544"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              🔑 id : BIGINT AUTO_INCREMENT PK
+            </text>
+            <text
+              x="32"
+              y="560"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              🔗 user_id : BIGINT NOT NULL
+            </text>
+            <text
+              x="32"
+              y="576"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              stock_symbol : VARCHAR(255) NOT NULL
+            </text>
+            <text
+              x="32"
+              y="592"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              price : DECIMAL(10,2) NOT NULL
+            </text>
+            <text
+              x="32"
+              y="608"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              quantity : DECIMAL(10,4) NOT NULL
+            </text>
+            <text
+              x="32"
+              y="624"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              total_amount : DECIMAL(10,2) (auto)
+            </text>
+            <text
+              x="32"
+              y="640"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              type : ENUM('BUY','SELL') NOT NULL
+            </text>
+            <text
+              x="32"
+              y="656"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              created_at : DATETIME(6)
+            </text>
+
+            <!-- ══ STOCK_CACHE (right mid) ══ -->
+            <rect
+              x="800"
+              y="250"
+              width="280"
+              height="228"
+              rx="8"
               fill="#fff8e1"
               stroke="#f9a825"
               stroke-width="1"
+              style="
+                fill: rgb(255, 248, 225);
+                stroke: rgb(249, 168, 37);
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
             <rect
               x="800"
-              y="240"
+              y="250"
               width="280"
               height="28"
               rx="8"
               fill="#f9a825"
+              style="
+                fill: rgb(249, 168, 37);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
-            <rect x="800" y="256" width="280" height="12" fill="#f9a825" />
+            <rect
+              x="800"
+              y="266"
+              width="280"
+              height="12"
+              fill="#f9a825"
+              style="
+                fill: rgb(249, 168, 37);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
             <text
               x="940"
-              y="258"
+              y="268"
               text-anchor="middle"
-              class="lb"
-              style="fill: white; font-size: 13px"
+              style="
+                font-family: Arial;
+                font-size: 13px;
+                font-weight: 700;
+                fill: white;
+                fill: rgb(255, 255, 255);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 13px;
+                font-weight: 700;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
             >
               STOCK_CACHE
             </text>
-            <text x="812" y="284" class="ls">🔑 symbol : VARCHAR(10) PK</text>
-            <text x="812" y="300" class="ls">
+            <text
+              x="812"
+              y="294"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              🔑 symbol : VARCHAR(255) PK
+            </text>
+            <text
+              x="812"
+              y="310"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              company_name : VARCHAR(255)
+            </text>
+            <text
+              x="812"
+              y="326"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
               current_price : DECIMAL(10,2)
             </text>
-            <text x="812" y="316" class="ls">open_price : DECIMAL(10,2)</text>
-            <text x="812" y="332" class="ls">high_price : DECIMAL(10,2)</text>
-            <text x="812" y="348" class="ls">low_price : DECIMAL(10,2)</text>
-            <text x="812" y="364" class="ls">updated_at : DATETIME</text>
+            <text
+              x="812"
+              y="342"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              open_price : DECIMAL(10,2)
+            </text>
+            <text
+              x="812"
+              y="358"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              high_price : DECIMAL(10,2)
+            </text>
+            <text
+              x="812"
+              y="374"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              low_price : DECIMAL(10,2)
+            </text>
+            <text
+              x="812"
+              y="390"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              volume : BIGINT
+            </text>
+            <text
+              x="812"
+              y="406"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              updated_at : DATETIME(6)
+            </text>
 
-            <!-- STOCK_HISTORY_CACHE -->
+            <!-- ══ STOCK_HISTORY_CACHE (right bottom) ══ -->
             <rect
               x="800"
-              y="480"
+              y="548"
               width="280"
-              height="196"
+              height="212"
               rx="8"
               fill="#fff8e1"
               stroke="#f9a825"
               stroke-width="1"
+              style="
+                fill: rgb(255, 248, 225);
+                stroke: rgb(249, 168, 37);
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
             <rect
               x="800"
-              y="480"
+              y="548"
               width="280"
               height="28"
               rx="8"
               fill="#f9a825"
+              style="
+                fill: rgb(249, 168, 37);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
-            <rect x="800" y="496" width="280" height="12" fill="#f9a825" />
+            <rect
+              x="800"
+              y="564"
+              width="280"
+              height="12"
+              fill="#f9a825"
+              style="
+                fill: rgb(249, 168, 37);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
             <text
               x="940"
-              y="498"
+              y="566"
               text-anchor="middle"
-              class="lb"
-              style="fill: white; font-size: 13px"
+              style="
+                font-family: Arial;
+                font-size: 11px;
+                font-weight: 700;
+                fill: white;
+                fill: rgb(255, 255, 255);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 11px;
+                font-weight: 700;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
             >
               STOCK_HISTORY_CACHE
             </text>
-            <text x="812" y="524" class="ls">
+            <text
+              x="812"
+              y="592"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
               🔑 id : BIGINT AUTO_INCREMENT PK
             </text>
-            <text x="812" y="540" class="ls">
-              symbol : VARCHAR(10) NOT NULL
+            <text
+              x="812"
+              y="608"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              symbol : VARCHAR(255) NOT NULL
             </text>
-            <text x="812" y="556" class="ls">
-              time_interval : VARCHAR(20) NOT NULL
+            <text
+              x="812"
+              y="624"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              time_interval : VARCHAR(255) NOT NULL
             </text>
-            <text x="812" y="572" class="ls">
-              history_json : LONGTEXT NOT NULL
+            <text
+              x="812"
+              y="640"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              history_json : LONGTEXT
             </text>
-            <text x="812" y="588" class="ls">
-              cached_at : DATETIME NOT NULL
+            <text
+              x="812"
+              y="656"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              cached_at : DATETIME(6)
             </text>
-            <text x="812" y="604" class="ls">
-              expires_at : DATETIME NOT NULL
+            <text
+              x="812"
+              y="672"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              expires_at : DATETIME(6)
             </text>
-            <text x="812" y="620" class="ls">
+            <text
+              x="812"
+              y="688"
+              style="
+                font-family: Arial;
+                font-size: 10px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 10px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
               UNIQUE(symbol, time_interval)
             </text>
 
-            <!-- Relationships -->
-            <!-- users → accounts (1:1) -->
+            <!-- ══ RELATIONSHIPS ══ -->
+
+            <!-- USERS.id → ACCOUNTS.user_id (1:1) -->
             <line
               x1="400"
-              y1="80"
+              y1="82"
               x2="300"
-              y2="80"
+              y2="82"
               stroke="#1e88e5"
               stroke-width="1.5"
-              marker-end="url(#a4)"
+              marker-end="url(#ar)"
+              mask="url(#imagine-text-gaps-vw56nr)"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(30, 136, 229);
+                color: rgb(255, 255, 255);
+                stroke-width: 1.5px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
             <text
-              x="345"
-              y="74"
+              x="350"
+              y="72"
               text-anchor="middle"
-              class="ls"
-              style="fill: #1e88e5"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 700;
+                fill: #1e88e5;
+                fill: rgb(30, 136, 229);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 700;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
             >
-              1:1
+              1 : 1
+            </text>
+            <text
+              x="350"
+              y="83"
+              text-anchor="middle"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                fill: #1e88e5;
+                fill: rgb(30, 136, 229);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 400;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
+            >
+              users.id → accounts.user_id
             </text>
 
-            <!-- users → watchlist (1:many) -->
+            <!-- USERS.id → WATCHLIST.user_id (1:many) -->
             <line
               x1="700"
-              y1="80"
+              y1="82"
               x2="800"
-              y2="80"
+              y2="82"
               stroke="#1e88e5"
               stroke-width="1.5"
-              marker-end="url(#a4)"
+              marker-end="url(#ar)"
+              mask="url(#imagine-text-gaps-vw56nr)"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(30, 136, 229);
+                color: rgb(255, 255, 255);
+                stroke-width: 1.5px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
             <text
-              x="755"
-              y="74"
+              x="750"
+              y="72"
               text-anchor="middle"
-              class="ls"
-              style="fill: #1e88e5"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 700;
+                fill: #1e88e5;
+                fill: rgb(30, 136, 229);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 700;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
             >
-              1:many
+              1 : many
+            </text>
+            <text
+              x="750"
+              y="83"
+              text-anchor="middle"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                fill: #1e88e5;
+                fill: rgb(30, 136, 229);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 400;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
+            >
+              users.id → watchlist.user_id
             </text>
 
-            <!-- users → holdings (1:many) -->
+            <!-- USERS.id → HOLDINGS.user_id (1:many) -->
             <line
               x1="400"
-              y1="120"
-              x2="340"
-              y2="120"
+              y1="114"
+              x2="345"
+              y2="114"
               stroke="#1e88e5"
               stroke-width="1.5"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(30, 136, 229);
+                color: rgb(255, 255, 255);
+                stroke-width: 1.5px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
             <line
-              x1="340"
-              y1="120"
-              x2="340"
-              y2="338"
+              x1="345"
+              y1="114"
+              x2="345"
+              y2="342"
               stroke="#1e88e5"
               stroke-width="1.5"
+              mask="url(#imagine-text-gaps-vw56nr)"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(30, 136, 229);
+                color: rgb(255, 255, 255);
+                stroke-width: 1.5px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
             <line
-              x1="340"
-              y1="338"
+              x1="345"
+              y1="342"
               x2="300"
-              y2="338"
+              y2="342"
               stroke="#1e88e5"
               stroke-width="1.5"
-              marker-end="url(#a4)"
-            />
-            <text x="320" y="240" class="ls" style="fill: #1e88e5">1:many</text>
-
-            <!-- users → transactions (1:many) -->
-            <line
-              x1="400"
-              y1="140"
-              x2="360"
-              y2="140"
-              stroke="#1e88e5"
-              stroke-width="1.5"
-            />
-            <line
-              x1="360"
-              y1="140"
-              x2="360"
-              y2="596"
-              stroke="#1e88e5"
-              stroke-width="1.5"
-            />
-            <line
-              x1="360"
-              y1="596"
-              x2="300"
-              y2="596"
-              stroke="#1e88e5"
-              stroke-width="1.5"
-              marker-end="url(#a4)"
-            />
-            <text x="340" y="440" class="ls" style="fill: #1e88e5">1:many</text>
-
-            <!-- holdings → stock_cache (reference, dashed) -->
-            <line
-              x1="300"
-              y1="340"
-              x2="760"
-              y2="340"
-              stroke="#bbb"
-              stroke-width="1"
-              stroke-dasharray="4 3"
-              marker-end="url(#a4dash)"
+              marker-end="url(#ar)"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(30, 136, 229);
+                color: rgb(255, 255, 255);
+                stroke-width: 1.5px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
             <text
-              x="540"
-              y="334"
+              x="326"
+              y="222"
               text-anchor="middle"
-              class="ls"
-              style="fill: #bbb"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 700;
+                fill: #1e88e5;
+                fill: rgb(30, 136, 229);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 700;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
             >
-              priced by
+              1 : many
+            </text>
+            <text
+              x="326"
+              y="234"
+              text-anchor="middle"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                fill: #1e88e5;
+                fill: rgb(30, 136, 229);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 400;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
+            >
+              users.id →
+            </text>
+            <text
+              x="326"
+              y="246"
+              text-anchor="middle"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                fill: #1e88e5;
+                fill: rgb(30, 136, 229);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 400;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
+            >
+              holdings.user_id
             </text>
 
-            <!-- transactions → stock_cache (reference, dashed) -->
+            <!-- USERS.id → TRANSACTIONS.user_id (1:many) -->
+            <line
+              x1="400"
+              y1="132"
+              x2="364"
+              y2="132"
+              stroke="#1e88e5"
+              stroke-width="1.5"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(30, 136, 229);
+                color: rgb(255, 255, 255);
+                stroke-width: 1.5px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
+            <line
+              x1="364"
+              y1="132"
+              x2="364"
+              y2="622"
+              stroke="#1e88e5"
+              stroke-width="1.5"
+              mask="url(#imagine-text-gaps-vw56nr)"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(30, 136, 229);
+                color: rgb(255, 255, 255);
+                stroke-width: 1.5px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
+            <line
+              x1="364"
+              y1="622"
+              x2="300"
+              y2="622"
+              stroke="#1e88e5"
+              stroke-width="1.5"
+              marker-end="url(#ar)"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(30, 136, 229);
+                color: rgb(255, 255, 255);
+                stroke-width: 1.5px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
+            <text
+              x="380"
+              y="470"
+              text-anchor="middle"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 700;
+                fill: #1e88e5;
+                fill: rgb(30, 136, 229);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 700;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
+            >
+              1 : many
+            </text>
+            <text
+              x="380"
+              y="482"
+              text-anchor="middle"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                fill: #1e88e5;
+                fill: rgb(30, 136, 229);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 400;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
+            >
+              users.id →
+            </text>
+            <text
+              x="380"
+              y="494"
+              text-anchor="middle"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                fill: #1e88e5;
+                fill: rgb(30, 136, 229);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 400;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
+            >
+              transactions.user_id
+            </text>
+
+            <!-- HOLDINGS.stock_symbol → STOCK_CACHE.symbol (logical, dashed) -->
             <line
               x1="300"
-              y1="580"
-              x2="760"
-              y2="580"
+              y1="358"
+              x2="800"
+              y2="358"
               stroke="#bbb"
               stroke-width="1"
               stroke-dasharray="4 3"
+              marker-end="url(#ardash)"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(187, 187, 187);
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-dasharray: 4px, 3px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
+            <text
+              x="550"
+              y="348"
+              text-anchor="middle"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                fill: #999;
+                fill: rgb(153, 153, 153);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 400;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
+            >
+              holdings.stock_symbol → stock_cache.symbol
+            </text>
+
+            <!-- TRANSACTIONS.stock_symbol → STOCK_CACHE.symbol (logical, dashed) -->
+            <line
+              x1="300"
+              y1="608"
+              x2="770"
+              y2="608"
+              stroke="#bbb"
+              stroke-width="1"
+              stroke-dasharray="4 3"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(187, 187, 187);
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-dasharray: 4px, 3px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
             <line
-              x1="760"
-              y1="580"
-              x2="760"
-              y2="360"
+              x1="770"
+              y1="608"
+              x2="770"
+              y2="420"
               stroke="#bbb"
               stroke-width="1"
               stroke-dasharray="4 3"
-              marker-end="url(#a4dash)"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(187, 187, 187);
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-dasharray: 4px, 3px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
+            <line
+              x1="770"
+              y1="420"
+              x2="800"
+              y2="420"
+              stroke="#bbb"
+              stroke-width="1"
+              stroke-dasharray="4 3"
+              marker-end="url(#ardash)"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(187, 187, 187);
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-dasharray: 4px, 3px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
+            <text
+              x="680"
+              y="510"
+              text-anchor="middle"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                fill: #999;
+                fill: rgb(153, 153, 153);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 400;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
+            >
+              transactions.stock_symbol
+            </text>
+            <text
+              x="680"
+              y="522"
+              text-anchor="middle"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                fill: #999;
+                fill: rgb(153, 153, 153);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 400;
+                text-anchor: middle;
+                dominant-baseline: auto;
+              "
+            >
+              → stock_cache.symbol
+            </text>
 
-            <!-- watchlist → stock_cache (reference, dashed) -->
+            <!-- WATCHLIST.stock_symbol → STOCK_CACHE.symbol (logical, dashed) -->
             <line
               x1="940"
               y1="184"
               x2="940"
-              y2="240"
+              y2="250"
               stroke="#bbb"
               stroke-width="1"
               stroke-dasharray="4 3"
-              marker-end="url(#a4dash)"
+              marker-end="url(#ardash)"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(187, 187, 187);
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-dasharray: 4px, 3px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
-            <text x="950" y="214" class="ls" style="fill: #bbb">tracks</text>
+            <text
+              x="962"
+              y="206"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                fill: #999;
+                fill: rgb(153, 153, 153);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              watchlist.stock_symbol
+            </text>
+            <text
+              x="962"
+              y="218"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                fill: #999;
+                fill: rgb(153, 153, 153);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              → stock_cache.symbol
+            </text>
 
-            <!-- stock_cache → stock_history_cache (1:many) -->
+            <!-- STOCK_CACHE.symbol → STOCK_HISTORY_CACHE.symbol (1:many) -->
             <line
               x1="940"
-              y1="420"
+              y1="478"
               x2="940"
-              y2="480"
+              y2="548"
               stroke="#f9a825"
               stroke-width="1.5"
-              marker-end="url(#a4)"
+              marker-end="url(#ar)"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(249, 168, 37);
+                color: rgb(255, 255, 255);
+                stroke-width: 1.5px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
             />
-            <text x="952" y="452" class="ls" style="fill: #e65100">1:many</text>
+            <text
+              x="962"
+              y="506"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 700;
+                fill: #e65100;
+                fill: rgb(230, 81, 0);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 700;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              1 : many
+            </text>
+            <text
+              x="962"
+              y="518"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                fill: #e65100;
+                fill: rgb(230, 81, 0);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              stock_cache.symbol →
+            </text>
+            <text
+              x="962"
+              y="530"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                fill: #e65100;
+                fill: rgb(230, 81, 0);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              history_cache.symbol
+            </text>
+
+            <!-- Legend -->
+            <rect
+              x="400"
+              y="740"
+              width="300"
+              height="44"
+              rx="6"
+              fill="#f8f8f8"
+              stroke="#ddd"
+              stroke-width="0.5"
+              style="
+                fill: rgb(248, 248, 248);
+                stroke: rgb(221, 221, 221);
+                color: rgb(255, 255, 255);
+                stroke-width: 0.5px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
+            <line
+              x1="416"
+              y1="756"
+              x2="450"
+              y2="756"
+              stroke="#1e88e5"
+              stroke-width="1.5"
+              marker-end="url(#ar)"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(30, 136, 229);
+                color: rgb(255, 255, 255);
+                stroke-width: 1.5px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
+            <text
+              x="456"
+              y="759"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              FK relationship (logical)
+            </text>
+            <line
+              x1="416"
+              y1="774"
+              x2="450"
+              y2="774"
+              stroke="#bbb"
+              stroke-width="1"
+              stroke-dasharray="4 3"
+              marker-end="url(#ardash)"
+              style="
+                fill: rgb(0, 0, 0);
+                stroke: rgb(187, 187, 187);
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-dasharray: 4px, 3px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family:
+                  &quot;Anthropic Sans&quot;,
+                  -apple-system,
+                  &quot;system-ui&quot;,
+                  &quot;Segoe UI&quot;,
+                  sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            />
+            <text
+              x="456"
+              y="777"
+              style="
+                font-family: Arial;
+                font-size: 9px;
+                fill: #555;
+                fill: rgb(85, 85, 85);
+                stroke: none;
+                color: rgb(255, 255, 255);
+                stroke-width: 1px;
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+                opacity: 1;
+                font-family: Arial;
+                font-size: 9px;
+                font-weight: 400;
+                text-anchor: start;
+                dominant-baseline: auto;
+              "
+            >
+              Logical reference (no FK constraint)
+            </text>
           </svg>
         </div>
       </section>
-    </main>
-
-    <footer>
-      PaperTrade — Mthree Capstone — Sakib Khan &amp; Jeter Gutierrez — Spring
-      Boot 4.0.3 + Angular 21 + MySQL
-    </footer>
+    </div>
   </body>
 </html>
