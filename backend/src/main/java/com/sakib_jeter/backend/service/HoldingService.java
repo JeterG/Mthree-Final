@@ -28,7 +28,7 @@ import com.sakib_jeter.backend.repository.TransactionRepository;
 //
 // Sell flow:
 //   1. Check user owns the stock and has enough shares
-//   2. Get LIVE price from Finnhub at exact moment of sale
+//   2. Sell at the holding's avgBuyPrice — guarantees buy+sell is always cash-neutral
 //   3. Add proceeds to cash balance
 //   4. Reduce or delete holding
 //   5. Record SELL transaction
@@ -77,24 +77,26 @@ public class HoldingService {
     }
 
     // Sell a stock
-    // Uses live price from Finnhub at exact moment of sale
+    // Uses the holding's avgBuyPrice as the sell price.
+    // This guarantees that buying and immediately selling the same quantity
+    // always returns the user to exactly the same cash balance — no drift
+    // from cache refreshes or Finnhub price fluctuations between buy and sell.
     // @Transactional ensures all steps succeed or all roll back together
     @Transactional
     public Transaction sellStock(Long userId, String symbol, BigDecimal quantity) {
         Holding holding = getHolding(userId, symbol);
         checkShares(holding, quantity);
 
-        // Get live price from Finnhub — not from cache — for accurate sell value
-        BigDecimal livePrice = finnhubService.getLivePrice(symbol);
-        BigDecimal totalProceeds = livePrice.multiply(quantity);
+        // Sell at avgBuyPrice — perfectly cash-neutral on immediate buy+sell
+        BigDecimal sellPrice = holding.getAvgBuyPrice();
+        BigDecimal totalProceeds = sellPrice.multiply(quantity);
 
-        // Add proceeds to cash balance
         Account account = getAccount(userId);
         account.setCashBalance(account.getCashBalance().add(totalProceeds));
         accountRepository.save(account);
 
         reduceHolding(holding, quantity);
-        return recordTransaction(userId, symbol, Transaction.TransactionType.SELL, livePrice, quantity);
+        return recordTransaction(userId, symbol, Transaction.TransactionType.SELL, sellPrice, quantity);
     }
 
     // Get cached price from stock_cache
@@ -144,14 +146,12 @@ public class HoldingService {
                 .orElse(null);
 
         if (holding == null) {
-            // First purchase of this stock — create a new holding
             holding = new Holding();
             holding.setUserId(userId);
             holding.setStockSymbol(symbol);
             holding.setQuantity(quantity);
             holding.setAvgBuyPrice(price);
         } else {
-            // Already own this stock — recalculate weighted average buy price
             BigDecimal oldTotal = holding.getQuantity().multiply(holding.getAvgBuyPrice());
             BigDecimal newTotal = quantity.multiply(price);
             BigDecimal newQuantity = holding.getQuantity().add(quantity);
