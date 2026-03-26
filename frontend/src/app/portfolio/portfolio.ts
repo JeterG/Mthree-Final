@@ -24,8 +24,6 @@ import { ToastService } from '../toast/toast.service';
 })
 export class Portfolio implements OnInit {
   Math = Math;
-  readonly STARTING_BALANCE = 10000;
-
   selectedSymbol = 'TSLA';
   activeTab: 'holdings' | 'transactions' | 'watchlist' | 'analytics' = 'holdings';
   refreshTrigger = 0;
@@ -33,10 +31,9 @@ export class Portfolio implements OnInit {
   transactionsReady = false;
 
   cashBalance = 0;
-  holdingsValue = 0; // market value of current holdings ONLY
-  totalGainLoss = 0; // unrealized gain/loss on current holdings
-  overallGainLoss = 0; // (cash + holdings) - $10,000
-  overallGainLossPct = 0; // overallGainLoss / 10000 * 100
+  holdingsValue = 0;
+  totalPortfolioValue = 0;
+  totalGainLoss = 0;
   holdingsCount = 0;
   holdings: any[] = [];
   transactions: any[] = [];
@@ -61,7 +58,6 @@ export class Portfolio implements OnInit {
   onSymbolSelected(symbol: string): void {
     this.selectedSymbol = symbol;
   }
-
   loadPortfolio(): void {
     this.loadAccount();
   }
@@ -71,19 +67,12 @@ export class Portfolio implements OnInit {
       next: (account) => {
         this.ngZone.run(() => {
           this.cashBalance = account.cashBalance;
-          this.recomputeOverall();
           this.cdr.detectChanges();
         });
         this.loadHoldings();
       },
       error: (err) => console.error('Account load error:', err),
     });
-  }
-
-  /** Overall gain/loss = (cash + holdings) vs $10,000 starting balance */
-  private recomputeOverall(): void {
-    this.overallGainLoss = this.cashBalance + this.holdingsValue - this.STARTING_BALANCE;
-    this.overallGainLossPct = (this.overallGainLoss / this.STARTING_BALANCE) * 100;
   }
 
   loadHoldings(): void {
@@ -95,7 +84,7 @@ export class Portfolio implements OnInit {
             this.holdingsCount = 0;
             this.holdingsValue = 0;
             this.totalGainLoss = 0;
-            this.recomputeOverall();
+            this.totalPortfolioValue = 0;
             this.holdingsReady = true;
             if (this.transactionsReady) this.computeAnalytics();
             this.cdr.detectChanges();
@@ -124,8 +113,9 @@ export class Portfolio implements OnInit {
                   this.holdings = [...enriched];
                   this.holdingsCount = holdings.reduce((sum, h) => sum + +h.quantity, 0);
                   this.holdingsValue = totalValue;
+                  // ✅ FIX: set totalGainLoss BEFORE computeAnalytics reads it
                   this.totalGainLoss = totalGain;
-                  this.recomputeOverall();
+                  this.totalPortfolioValue = totalValue;
                   this.holdingsReady = true;
                   if (this.transactionsReady) this.computeAnalytics();
                   this.cdr.detectChanges();
@@ -146,7 +136,7 @@ export class Portfolio implements OnInit {
                   this.holdingsCount = holdings.reduce((sum, h) => sum + +h.quantity, 0);
                   this.holdingsValue = totalValue;
                   this.totalGainLoss = totalGain;
-                  this.recomputeOverall();
+                  this.totalPortfolioValue = totalValue;
                   this.holdingsReady = true;
                   if (this.transactionsReady) this.computeAnalytics();
                   this.cdr.detectChanges();
@@ -269,35 +259,21 @@ export class Portfolio implements OnInit {
     return value >= 0;
   }
 
-  /**
-   * Builds chart data representing cash balance over time.
-   *
-   * Starting from $10,000:
-   *   - BUY transaction → cash goes DOWN (you spent money)
-   *   - SELL transaction → cash goes UP (you received money)
-   *
-   * Each point's `close` = running cash balance at that moment.
-   * This means the chart never goes negative (cash can't drop below 0
-   * because the backend blocks insufficient-fund purchases).
-   */
   get transactionsForChart(): any[] {
     const sorted = [...this.transactions].sort(
       (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
-
-    let cash = this.STARTING_BALANCE;
-
+    let runningBalance = 0;
     return sorted.map((t) => {
       const amount = +t.totalAmount;
-      if (t.type === 'BUY') cash -= amount;
-      else cash += amount;
-      const val = +cash.toFixed(2);
+      if (t.type === 'BUY') runningBalance += amount;
+      else runningBalance -= amount;
       return {
         date: t.createdAt,
-        close: val,
-        open: val,
-        high: val,
-        low: val,
+        close: +runningBalance.toFixed(2),
+        open: +runningBalance.toFixed(2),
+        high: +runningBalance.toFixed(2),
+        low: +runningBalance.toFixed(2),
       };
     });
   }
@@ -314,7 +290,6 @@ export class Portfolio implements OnInit {
     const buys = transactions.filter((t) => t.type === 'BUY');
     const sells = transactions.filter((t) => t.type === 'SELL');
 
-    // Unrealized P&L on current holdings
     const currentHoldingsValue = this.holdingsValue;
     const totalGainLoss = this.totalGainLoss;
     const costBasis = currentHoldingsValue - totalGainLoss;
@@ -328,16 +303,11 @@ export class Portfolio implements OnInit {
       ? withGain.reduce((a, b) => (b.gainLoss < a.gainLoss ? b : a))
       : null;
 
-    // Profitable sells: compare sell price vs avg buy price for buys prior to each sell
-    const sellsWithGain = sells.filter((sellTx) => {
-      const priorBuys = buys.filter(
-        (b) =>
-          b.stockSymbol === sellTx.stockSymbol &&
-          new Date(b.createdAt).getTime() <= new Date(sellTx.createdAt).getTime(),
-      );
-      if (!priorBuys.length) return false;
-      const avgBuyPrice = priorBuys.reduce((s, b) => s + +b.price, 0) / priorBuys.length;
-      return +sellTx.price > avgBuyPrice;
+    const sellsWithGain = sells.filter((t) => {
+      const matchingBuys = buys.filter((b) => b.stockSymbol === t.stockSymbol);
+      if (!matchingBuys.length) return false;
+      const avgBuyPrice = matchingBuys.reduce((s, b) => s + +b.price, 0) / matchingBuys.length;
+      return +t.price > avgBuyPrice;
     });
 
     const symbolCounts: { [sym: string]: number } = {};
@@ -346,36 +316,30 @@ export class Portfolio implements OnInit {
     });
     const mostTraded = Object.entries(symbolCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '—';
 
-    // Max drawdown on cash balance over time
     const sorted = [...transactions].sort(
       (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
-    let cash = this.STARTING_BALANCE;
-    const cashValues = sorted.map((t) => {
-      if (t.type === 'BUY') cash -= +t.totalAmount;
-      else cash += +t.totalAmount;
-      return cash;
+    let running = 0;
+    const portfolioValues = sorted.map((t) => {
+      if (t.type === 'BUY') running += +t.totalAmount;
+      else running -= +t.totalAmount;
+      return running;
     });
     let maxDrawdown = 0;
-    let peak = cashValues[0] ?? this.STARTING_BALANCE;
-    for (const val of cashValues) {
+    let peak = portfolioValues[0] ?? 0;
+    for (const val of portfolioValues) {
       if (val > peak) peak = val;
       const dd = peak > 0 ? ((peak - val) / peak) * 100 : 0;
       if (dd > maxDrawdown) maxDrawdown = dd;
     }
 
     this.analyticsData = {
-      startingBalance: this.STARTING_BALANCE,
-      // Holdings only
       currentHoldingsValue,
       costBasis,
       totalGainLoss,
       totalReturnPct,
-      // Overall account (cash + holdings vs $10k)
       cashBalance: this.cashBalance,
-      overallGainLoss: this.overallGainLoss,
-      overallGainLossPct: this.overallGainLossPct,
-      // Trade stats
+      totalPortfolioValue: this.totalPortfolioValue,
       totalTransactions: transactions.length,
       buyCount: buys.length,
       sellCount: sells.length,

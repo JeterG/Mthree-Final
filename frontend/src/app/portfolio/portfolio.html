@@ -4,8 +4,7 @@
     <div class="col-6 col-md-3">
       <div class="card border-0 shadow-sm h-100 p-3">
         <p class="text-muted small mb-1">Portfolio Value</p>
-        <h4 class="fw-bold mb-0">${{ holdingsValue | number: '1.2-2' }}</h4>
-        <p class="text-muted mb-0" style="font-size: 10px">Current holdings market value</p>
+        <h4 class="fw-bold mb-0">${{ totalPortfolioValue | number: '1.2-2' }}</h4>
       </div>
     </div>
     <div class="col-6 col-md-3">
@@ -19,15 +18,11 @@
         <p class="text-muted small mb-1">Total Gain / Loss</p>
         <h4
           class="fw-bold mb-0"
-          [class.text-success]="isPositive(overallGainLoss)"
-          [class.text-danger]="!isPositive(overallGainLoss)"
+          [class.text-success]="isPositive(totalGainLoss)"
+          [class.text-danger]="!isPositive(totalGainLoss)"
         >
-          {{ isPositive(overallGainLoss) ? '+' : '' }}{{ overallGainLossPct | number: '1.2-2' }}%
+          {{ isPositive(totalGainLoss) ? '+' : '' }}${{ totalGainLoss | number: '1.2-2' }}
         </h4>
-        <p class="text-muted mb-0" style="font-size: 10px">
-          {{ isPositive(overallGainLoss) ? '+' : '' }}${{ overallGainLoss | number: '1.2-2' }} vs
-          $10,000 start
-        </p>
       </div>
     </div>
     <div class="col-6 col-md-3">
@@ -40,7 +35,7 @@
 
   <!-- Charts Row -->
   <div class="row g-4 mb-4 align-items-stretch">
-    <!-- Left: stock chart -->
+    <!-- Left: stock chart — fills full height of row -->
     <div class="col-12 col-lg-6 d-flex flex-column">
       <div class="card border-0 shadow-sm p-3 flex-grow-1 d-flex flex-column">
         <app-stock-chart
@@ -156,6 +151,7 @@
                   <th>Current Price</th>
                   <th>Current Value</th>
                   <th>Gain / Loss</th>
+                  <th>Total</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -178,6 +174,7 @@
                   >
                     {{ isPositive(h.gainLoss) ? '+' : '' }}${{ h.gainLoss | number: '1.2-2' }}
                   </td>
+                  <td class="fw-semibold">${{ h.currentValue | number: '1.2-2' }}</td>
                   <td (click)="$event.stopPropagation()">
                     <div class="d-flex gap-2 align-items-center">
                       <input
@@ -196,7 +193,7 @@
                   </td>
                 </tr>
                 <tr *ngIf="holdings.length === 0">
-                  <td colspan="7" class="text-center text-muted py-4">No holdings yet</td>
+                  <td colspan="8" class="text-center text-muted py-4">No holdings yet</td>
                 </tr>
               </tbody>
             </table>
@@ -287,66 +284,10 @@
               No data yet — make some trades to see analytics.
             </div>
             <div *ngIf="analyticsData">
-              <!-- Overall Account Performance -->
+              <!-- Portfolio Overview -->
               <div class="row g-3 mb-4">
                 <div class="col-12">
-                  <p class="text-muted small fw-semibold mb-2">Overall Account Performance</p>
-                </div>
-                <div class="col-6 col-md-3">
-                  <div class="card border-0 bg-light p-3 h-100">
-                    <p class="text-muted small mb-1">Starting Balance</p>
-                    <h5 class="fw-bold mb-0">
-                      ${{ analyticsData.startingBalance | number: '1.2-2' }}
-                    </h5>
-                  </div>
-                </div>
-                <div class="col-6 col-md-3">
-                  <div class="card border-0 bg-light p-3 h-100">
-                    <p class="text-muted small mb-1">Portfolio Now</p>
-                    <h5 class="fw-bold mb-0">
-                      ${{
-                        analyticsData.cashBalance + analyticsData.currentHoldingsValue
-                          | number: '1.2-2'
-                      }}
-                    </h5>
-                    <p class="text-muted mb-0" style="font-size: 10px">Cash + holdings value</p>
-                  </div>
-                </div>
-                <div class="col-6 col-md-3">
-                  <div class="card border-0 bg-light p-3 h-100">
-                    <p class="text-muted small mb-1">Overall Gain / Loss</p>
-                    <h5
-                      class="fw-bold mb-0"
-                      [class.text-success]="analyticsData.overallGainLoss >= 0"
-                      [class.text-danger]="analyticsData.overallGainLoss < 0"
-                    >
-                      {{ analyticsData.overallGainLoss >= 0 ? '+' : '' }}${{
-                        analyticsData.overallGainLoss | number: '1.2-2'
-                      }}
-                    </h5>
-                    <p class="text-muted mb-0" style="font-size: 10px">vs $10,000 starting</p>
-                  </div>
-                </div>
-                <div class="col-6 col-md-3">
-                  <div class="card border-0 bg-light p-3 h-100">
-                    <p class="text-muted small mb-1">Overall Return %</p>
-                    <h5
-                      class="fw-bold mb-0"
-                      [class.text-success]="analyticsData.overallGainLossPct >= 0"
-                      [class.text-danger]="analyticsData.overallGainLossPct < 0"
-                    >
-                      {{ analyticsData.overallGainLossPct >= 0 ? '+' : ''
-                      }}{{ analyticsData.overallGainLossPct | number: '1.2-2' }}%
-                    </h5>
-                    <p class="text-muted mb-0" style="font-size: 10px">of $10,000</p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Current Holdings Performance -->
-              <div class="row g-3 mb-4">
-                <div class="col-12">
-                  <p class="text-muted small fw-semibold mb-2">Current Holdings Performance</p>
+                  <p class="text-muted small fw-semibold mb-2">Portfolio Overview</p>
                 </div>
                 <div class="col-6 col-md-3">
                   <div class="card border-0 bg-light p-3 h-100">
@@ -367,7 +308,7 @@
                 </div>
                 <div class="col-6 col-md-3">
                   <div class="card border-0 bg-light p-3 h-100">
-                    <p class="text-muted small mb-1">Unrealized Gain</p>
+                    <p class="text-muted small mb-1">Unrealized Gain / Loss</p>
                     <h5
                       class="fw-bold mb-0"
                       [class.text-success]="analyticsData.totalGainLoss >= 0"
@@ -377,12 +318,11 @@
                         analyticsData.totalGainLoss | number: '1.2-2'
                       }}
                     </h5>
-                    <p class="text-muted mb-0" style="font-size: 10px">vs cost basis</p>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div class="card border-0 bg-light p-3 h-100">
-                    <p class="text-muted small mb-1">Unrealized Return %</p>
+                    <p class="text-muted small mb-1">Return %</p>
                     <h5
                       class="fw-bold mb-0"
                       [class.text-success]="analyticsData.totalReturnPct >= 0"
