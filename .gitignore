@@ -38,3 +38,4 @@ ngrok.log
 .bloop/
 metals.sbt
 metals.lock.db
+./metals.lock.db
