@@ -33,3 +33,8 @@ backend.log
 frontend.log
 cloudflare.log
 ngrok.log
+/.metals/
+.metals/
+.bloop/
+metals.sbt
+metals.lock.db
