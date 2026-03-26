@@ -108,7 +108,6 @@ public class StockDataSeeder {
             if (open.compareTo(BigDecimal.ZERO) == 0)
                 open = prevClose;
 
-            // Finnhub "v" = current day volume
             Long volume = toLong(r.get("v"));
 
             String companyName = getCompanyName(symbol);

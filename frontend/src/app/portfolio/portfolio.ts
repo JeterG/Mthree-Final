@@ -113,7 +113,6 @@ export class Portfolio implements OnInit {
                   this.holdings = [...enriched];
                   this.holdingsCount = holdings.reduce((sum, h) => sum + +h.quantity, 0);
                   this.holdingsValue = totalValue;
-                  // ✅ FIX: set totalGainLoss BEFORE computeAnalytics reads it
                   this.totalGainLoss = totalGain;
                   this.totalPortfolioValue = totalValue;
                   this.holdingsReady = true;

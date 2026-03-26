@@ -39,7 +39,7 @@ cleanup() {
     if [ "$CLEANED_UP" = true ]; then return; fi
     CLEANED_UP=true
     echo ""
-    echo "🛑 Shutting down..."
+    echo "Shutting down..."
     kill "$BACKEND_PID" "$FRONTEND_PID" 2>/dev/null || true
     pkill -f "spring-boot:run" 2>/dev/null || true
     pkill -f "ng serve" 2>/dev/null || true
@@ -48,16 +48,16 @@ cleanup() {
     # Restore environment.ts
     if [ -f "$ENV_TS" ]; then
         sed_inplace "s|apiUrl: '.*'|apiUrl: 'http://localhost:8080'|" "$ENV_TS"
-        echo "♻️  environment.ts restored to localhost:8080"
+        echo " environment.ts restored to localhost:8080"
     fi
-    echo "🧹 Done."
+    echo "Done."
     exit 0
 }
 
 trap cleanup INT TERM
 
 # Free ports
-echo "🧹 Freeing ports 8080 and 4200..."
+echo "Freeing ports 8080 and 4200..."
 lsof -ti:8080 | xargs kill -9 2>/dev/null || true
 lsof -ti:4200 | xargs kill -9 2>/dev/null || true
 pkill -f "spring-boot:run" 2>/dev/null || true
@@ -66,19 +66,19 @@ sleep 1
 
 # Reset DB
 if [ "$RESET_DB" = true ]; then
-    echo "♻️  Resetting database..."
+    echo "  Resetting database..."
     mysql -u root -proot -e "DROP DATABASE IF EXISTS financeDb;" 2>/dev/null || true
-    echo "✅ Database dropped — Spring Boot will recreate on startup"
+    echo " Database dropped — Spring Boot will recreate on startup"
 fi
 
 rm -f "$BACKEND_LOG" "$FRONTEND_LOG"
 
 # Patch environment.ts to localhost
 sed_inplace "s|apiUrl: '.*'|apiUrl: 'http://localhost:8080'|" "$ENV_TS"
-echo "✅ environment.ts → http://localhost:8080"
+echo " environment.ts → http://localhost:8080"
 
 # Start backend with root credentials
-echo "🚀 Starting backend..."
+echo " Starting backend..."
 (
     cd backend
     ./mvnw spring-boot:run \
@@ -87,7 +87,7 @@ echo "🚀 Starting backend..."
 ) &
 BACKEND_PID=$!
 
-echo "⏳ Waiting for backend on :8080..."
+echo " Waiting for backend on :8080..."
 MAX_WAIT=90
 COUNT=0
 until lsof -i tcp:8080 -sTCP:LISTEN > /dev/null 2>&1; do
@@ -99,14 +99,14 @@ until lsof -i tcp:8080 -sTCP:LISTEN > /dev/null 2>&1; do
         cleanup
     fi
 done
-echo "✅ Backend is up"
+echo " Backend is up"
 
 # Start frontend
-echo "🚀 Starting frontend..."
+echo " Starting frontend..."
 (cd frontend && ng serve > "../$FRONTEND_LOG" 2>&1) &
 FRONTEND_PID=$!
 
-echo "⏳ Waiting for frontend on :4200..."
+echo " Waiting for frontend on :4200..."
 MAX_WAIT=120
 COUNT=0
 until lsof -i tcp:4200 -sTCP:LISTEN > /dev/null 2>&1; do
@@ -118,12 +118,12 @@ until lsof -i tcp:4200 -sTCP:LISTEN > /dev/null 2>&1; do
         cleanup
     fi
 done
-echo "✅ Frontend is up"
+echo " Frontend is up"
 
 echo ""
-echo "✅ LOCAL ENVIRONMENT RUNNING"
-echo "🏠 Frontend: http://localhost:4200"
-echo "🏠 Backend:  http://localhost:8080"
+echo " LOCAL ENVIRONMENT RUNNING"
+echo " Frontend: http://localhost:4200"
+echo " Backend:  http://localhost:8080"
 
 commands
 

@@ -35,7 +35,6 @@ public class WatchlistController {
         this.userRepository = userRepository;
     }
 
-    // ✅ NEW JWT endpoint
     @Operation(summary = "Get current user's watchlist")
     @GetMapping("/me")
     public List<Watchlist> getMyWatchlist(Authentication authentication) {
@@ -48,14 +47,12 @@ public class WatchlistController {
         return watchlistRepository.findByUserId(user.getId());
     }
 
-    // (optional: keep for testing)
     @Operation(summary = "Get watchlist by user")
     @GetMapping("/{userId}")
     public List<Watchlist> getWatchlist(@PathVariable Long userId) {
         return watchlistRepository.findByUserId(userId);
     }
 
-    // ✅ FIXED (no userId from frontend anymore)
     @Operation(summary = "Add stock to watchlist")
     @PostMapping
     public ResponseEntity<Watchlist> addToWatchlist(@RequestBody Map<String, Object> body,
@@ -68,7 +65,6 @@ public class WatchlistController {
 
         String symbol = body.get("stockSymbol").toString().toUpperCase();
 
-        // prevent duplicates
         if (watchlistRepository.existsByUserIdAndStockSymbol(user.getId(), symbol)) {
             return ResponseEntity.badRequest().build();
         }
@@ -80,7 +76,6 @@ public class WatchlistController {
         return ResponseEntity.ok(watchlistRepository.save(entry));
     }
 
-    // ✅ unchanged
     @Operation(summary = "Remove from watchlist")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeFromWatchlist(@PathVariable Long id) {

@@ -39,7 +39,7 @@ cleanup() {
     if [ "$CLEANED_UP" = true ]; then return; fi
     CLEANED_UP=true
     echo ""
-    echo "🛑 Shutting down..."
+    echo "Shutting down..."
     for sock in "/var/run/docker.sock" "$HOME/.docker/run/docker.sock"; do
         if [ -S "$sock" ]; then export DOCKER_HOST="unix://$sock"; break; fi
     done
@@ -58,9 +58,9 @@ cleanup() {
     lsof -ti:4200 | xargs kill -9 2>/dev/null || true
     if [ -f "$ENV_TS" ]; then
         sed_inplace "s|apiUrl: '.*'|apiUrl: 'http://localhost:8080'|" "$ENV_TS"
-        echo "♻️  environment.ts restored to localhost:8080"
+        echo " environment.ts restored to localhost:8080"
     fi
-    echo "🧹 Done."
+    echo "Done."
     exit 0
 }
 
@@ -73,14 +73,14 @@ for sock in "/var/run/docker.sock" "$HOME/.docker/run/docker.sock" "$HOME/.docke
         export DOCKER_HOST="unix://$sock"
         if docker info > /dev/null 2>&1; then
             DOCKER_FOUND=true
-            echo "🐳 Docker is running ($sock)"
+            echo " Docker is running ($sock)"
             break
         fi
     fi
 done
 
 if [ "$DOCKER_FOUND" = false ]; then
-    echo "⚠️  Docker not reachable — attempting to start Docker Desktop..."
+    echo "  Docker not reachable — attempting to start Docker Desktop..."
     open -a Docker 2>/dev/null || true
     for i in $(seq 1 30); do
         for sock in "/var/run/docker.sock" "$HOME/.docker/run/docker.sock"; do
@@ -88,7 +88,7 @@ if [ "$DOCKER_FOUND" = false ]; then
                 export DOCKER_HOST="unix://$sock"
                 if docker info > /dev/null 2>&1; then
                     DOCKER_FOUND=true
-                    echo "🐳 Docker started ($sock)"
+                    echo " Docker started ($sock)"
                     break 2
                 fi
             fi
@@ -100,7 +100,7 @@ if [ "$DOCKER_FOUND" = false ]; then
 fi
 
 if [ "$DOCKER_FOUND" = false ]; then
-    echo "❌ Docker still not reachable — open Docker Desktop manually and try again"
+    echo " Docker still not reachable — open Docker Desktop manually and try again"
     exit 1
 fi
 
@@ -114,7 +114,7 @@ ALL=$(docker ps -aq 2>/dev/null)
 if [ -n "$ALL" ]; then
     echo "$ALL" | xargs docker rm 2>/dev/null || true
 fi
-echo "✅ Containers cleared"
+echo "Containers cleared"
 
 # ── Free ports ──
 echo "🧹 Freeing ports 8080 and 4200..."
@@ -126,25 +126,25 @@ sleep 1
 
 # ── Reset DB — only wipes named volume when explicitly requested ──
 if [ "$RESET_DB" = true ]; then
-    echo "♻️  Resetting database — removing named volume financeDb..."
+    echo "  Resetting database — removing named volume financeDb..."
     docker volume rm financeDb 2>/dev/null || echo "  (volume didn't exist, skipping)"
-    echo "✅ Volume wiped — fresh database will be created on next start"
+    echo " Volume wiped — fresh database will be created on next start"
 else
-    echo "💾 Keeping existing financeDb volume (use --reset-db to wipe)"
+    echo " Keeping existing financeDb volume (use --reset-db to wipe)"
 fi
 
 # ── Prune dangling images to avoid buildup ──
-echo "🧹 Pruning dangling images..."
+echo "Pruning dangling images..."
 docker image prune -f 2>/dev/null || true
 
 rm -f "$CLOUDFLARE_LOG" "$NGROK_LOG"
 
 # ── STEP 1: Cloudflare ──
-echo "🚀 Starting Cloudflare tunnel..."
+echo "Starting Cloudflare tunnel..."
 cloudflared tunnel --url http://localhost:8080 > "$CLOUDFLARE_LOG" 2>&1 &
 CLOUDFLARE_PID=$!
 
-echo "⏳ Waiting for Cloudflare URL..."
+echo "Waiting for Cloudflare URL..."
 BACKEND_URL=""
 for i in $(seq 1 30); do
     BACKEND_URL=$(grep -o 'https://[a-zA-Z0-9-]*\.trycloudflare\.com' "$CLOUDFLARE_LOG" | head -1)
@@ -156,7 +156,7 @@ if [ -z "$BACKEND_URL" ]; then
     echo "❌ Failed to get Cloudflare URL"
     cleanup
 fi
-echo "🌐 Cloudflare URL: $BACKEND_URL"
+echo "Cloudflare URL: $BACKEND_URL"
 
 # ── STEP 2: Patch .env and environment.ts ──
 if grep -q "^BACKEND_URL=" "$ROOT_ENV"; then
@@ -164,34 +164,34 @@ if grep -q "^BACKEND_URL=" "$ROOT_ENV"; then
 else
     echo "BACKEND_URL=$BACKEND_URL" >> "$ROOT_ENV"
 fi
-echo "✅ .env → BACKEND_URL=$BACKEND_URL"
+echo ".env → BACKEND_URL=$BACKEND_URL"
 
 if [ -f "$ENV_TS" ]; then
     sed_inplace "s|apiUrl: '.*'|apiUrl: '$BACKEND_URL'|" "$ENV_TS"
-    echo "✅ environment.ts → apiUrl: '$BACKEND_URL'"
+    echo "environment.ts → apiUrl: '$BACKEND_URL'"
 else
-    echo "⚠️  $ENV_TS not found"
+    echo " $ENV_TS not found"
 fi
 
 # ── STEP 3: ngrok ──
-echo "🚀 Starting ngrok..."
+echo "Starting ngrok..."
 ngrok http --url=unflecked-rhamnaceous-lynne.ngrok-free.dev 4200 > "$NGROK_LOG" 2>&1 &
 NGROK_PID=$!
 
 # ── STEP 4: Docker build and up ──
-echo "🐳 Building and starting Docker..."
+echo "Building and starting Docker..."
 docker compose up --build -d --remove-orphans
 
 # ── Prune dangling images created by this build ──
-echo "🧹 Pruning dangling images from build..."
+echo "Pruning dangling images from build..."
 docker image prune -f 2>/dev/null || true
 
 echo ""
-echo "✅ PRODUCTION ENVIRONMENT RUNNING"
-echo "🌐 Backend  (Cloudflare): $BACKEND_URL"
-echo "🌐 Frontend (ngrok):      https://unflecked-rhamnaceous-lynne.ngrok-free.dev"
-echo "🏠 Local frontend:        http://localhost:4200"
-echo "🏠 Local backend:         http://localhost:8080"
+echo " PRODUCTION ENVIRONMENT RUNNING"
+echo " Backend  (Cloudflare): $BACKEND_URL"
+echo " Frontend (ngrok):      https://unflecked-rhamnaceous-lynne.ngrok-free.dev"
+echo " Local frontend:        http://localhost:4200"
+echo " Local backend:         http://localhost:8080"
 
 commands
 

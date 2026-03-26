@@ -32,7 +32,6 @@ public class TransactionController {
         this.userRepository = userRepository;
     }
 
-    // NEW JWT endpoint
     @Operation(summary = "Get current user's transactions")
     @GetMapping("/me")
     public List<Transaction> getMyTransactions(Authentication authentication) {
@@ -45,7 +44,6 @@ public class TransactionController {
         return transactionService.getTransactionsByUser(user.getId());
     }
 
-    // (optional: keep)
     @GetMapping("/{userId}")
     public List<Transaction> getTransactions(@PathVariable Long userId) {
         return transactionService.getTransactionsByUser(userId);
