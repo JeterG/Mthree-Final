@@ -19,7 +19,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "users")
 public class User {
-
+    //creates a user table that gives them  id, email, password, createdAt and last login information. 
     public User() {
     }
 

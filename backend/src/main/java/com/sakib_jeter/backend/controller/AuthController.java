@@ -41,13 +41,13 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody SignupRequest request) {
 
-        // ✅ Validate user credentials
+        //Validate user credentials through SignupService 
         Long userId = service.login(request.getEmail(), request.getPassword());
 
-        // 🔐 Generate JWT token
+        //Generates JWT token
         String token = jwtService.generateToken(request.getEmail(), userId);
 
-        // ✅ Return token + user info
+        //Return token + user info for JWT purposes 
         return ResponseEntity.ok(Map.of(
                 "token", token,
                 "userId", userId,
@@ -59,17 +59,17 @@ public class AuthController {
             @RequestBody ChangePasswordRequest request,
             @RequestHeader("Authorization") String authHeader) {
 
-        service.changePassword(
-                authHeader,
-                request.getCurrentPassword(),
-                request.getNewPassword());
+            service.changePassword(
+                    authHeader,
+                    request.getCurrentPassword(),
+                    request.getNewPassword());
 
-        return ResponseEntity.ok("Password updated successfully");
+            return ResponseEntity.ok("Password updated successfully");
     }
     @GetMapping("/check-email")
-public ResponseEntity<Map<String, Boolean>> checkEmail(@RequestParam String email) {
-    boolean exists = service.emailExists(email);
-    return ResponseEntity.ok(Map.of("exists", exists));
+    public ResponseEntity<Map<String, Boolean>> checkEmail(@RequestParam String email) {
+        boolean exists = service.emailExists(email);
+        return ResponseEntity.ok(Map.of("exists", exists));
 }
 
 }

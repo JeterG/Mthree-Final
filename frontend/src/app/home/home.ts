@@ -14,14 +14,15 @@ import { StockChartComponent } from '../stock-chart.component/stock-chart.compon
 })
 export class HomeComponent implements OnInit, OnDestroy {
   selectedSymbol: string = 'SPY';
-
+//4 of the most popular stock index markets
+//S&P in particular tracks the 500 largest companies in the US
 symbols = [
   { name: 'S&P 500', symbol: 'SPY' },
   { name: 'Nasdaq', symbol: 'QQQ' },
   { name: 'Dow Jones', symbol: 'DIA' },
-  { name: 'Russell 2000', symbol: 'IWM' }, // ✅ ADD THIS
+  { name: 'Russell 2000', symbol: 'IWM' }, 
 ];
-
+  //hardcoded popular companies used for top movers (losers and winners) 
   topMoverSymbols = [
     'AAPL',
     'TSLA',
@@ -108,6 +109,7 @@ symbols = [
     const cached = localStorage.getItem('topMovers');
     if (cached) {
       const parsed = JSON.parse(cached);
+      //math for last 48 hours get data, if older then we skip this 
       if (Date.now() - parsed.timestamp < 48 * 60 * 60 * 1000) {
         this.topWinners = parsed.winners;
         this.topLosers = parsed.losers;
@@ -130,7 +132,7 @@ symbols = [
         const change = ((end - start) / start) * 100;
         results.push({ symbol, change });
       } catch {
-        // skip failed symbols
+        //skip failed symbols
       }
     }
 
@@ -173,7 +175,8 @@ symbols = [
         targetTime = openET;
       } else if (nowET >= openET && nowET < closeET) {
         this.isMarketOpen = true;
-        targetTime = closeET;
+        targetTime = closeET;  
+      // after market closes for that day 
       } else {
         this.isMarketOpen = false;
         const nextOpen = new Date(openET);
@@ -187,6 +190,7 @@ symbols = [
     const targetUser = new Date(targetTime.toLocaleString('en-US', { timeZone: userTimezone }));
     this.marketDayDisplay = targetUser.toLocaleDateString('en-US', { weekday: 'long' });
     this.marketTimeDisplay = targetUser.toLocaleTimeString([], {
+      //makes it look like 09:03AM for example 
       hour: '2-digit',
       minute: '2-digit',
     });
