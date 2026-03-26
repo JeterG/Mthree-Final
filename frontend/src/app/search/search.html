@@ -1,10 +1,11 @@
-<div class="container py-4">
-  <!-- SEARCH -->
+<div class="container py-4"> 
+  
   <h2 class="mt-4 text-center">Search Stocks</h2>
 
-  <!-- WRAPPED SEARCH -->
+  <!-- boostrap styling used -->
   <div class="search-wrapper">
-    <!-- ICON -->
+    
+    <!-- Search icon (visual only) -->
     <span class="search-icon">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -22,29 +23,34 @@
       </svg>
     </span>
 
-    <!-- SEARCH COMPONENT -->
-    <app-stock-search class="search-input" (symbolSelected)="onSymbolSelected($event)">
+    <!-- Stock search component input -->
+    <app-stock-search
+      class="search-input"
+      (symbolSelected)="onSymbolSelected($event)">
     </app-stock-search>
   </div>
 
-  <!-- SUGGESTED SEARCHES -->
+  <!-- Suggested quick search buttons -->
   <div class="suggestions">
     <span>Try:</span>
 
+    <!-- Calls navigation on click -->
     <button (click)="onSymbolSelected('AAPL')">AAPL</button>
     <button (click)="onSymbolSelected('TSLA')">TSLA</button>
     <button (click)="onSymbolSelected('NVDA')">NVDA</button>
     <button (click)="onSymbolSelected('MSFT')">MSFT</button>
   </div>
 
-  <!-- SIDE-BY-SIDE SECTION -->
+  <!-- Main content row layout -->
   <div class="content-row">
-    <!-- INFO PANEL -->
+    
+    <!-- Info panel section -->
     <div class="info-panel">
       <h4>How to Use Search</h4>
 
       <p>This page helps you explore stocks easily.</p>
 
+      <!-- Instructions list -->
       <ul>
         <li>Search by company name or ticker (e.g. Apple or AAPL)</li>
         <li>View price trends and performance</li>
@@ -55,10 +61,11 @@
       <p class="tip">Tip: Start with popular stocks if you're new to investing.</p>
     </div>
 
-    <!-- POPULAR STOCKS -->
+    <!-- Chart section for stocks -->
     <div class="chart-container">
       <h5 class="fw-bold mb-3 text-center">Popular Stocks (AAPL, NVDA, MSFT)</h5>
 
+      <!-- Symbol selection buttons -->
       <div class="d-flex justify-content-center gap-2 mb-3">
         <button
           *ngFor="let s of symbols"
@@ -71,7 +78,9 @@
         </button>
       </div>
 
+      <!-- Chart display card -->
       <div class="card custom-card shadow-sm p-3">
+        <!-- Pass selected symbol to chart -->
         <app-stock-chart [symbol]="selectedSymbol"></app-stock-chart>
       </div>
     </div>
