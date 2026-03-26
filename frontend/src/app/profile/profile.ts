@@ -11,30 +11,29 @@ import { ApiService } from '../services/api.services';
   styleUrls: ['./profile.css'],
 })
 export class ProfileComponent implements OnInit {
-  //  USER INFO
+  //USER INFO
   firstName: string = '';
   lastName: string = '';
   email: string = '';
 
-  //  SEPARATE SUCCESS MESSAGES
   nameSuccessMessage: string = '';
   onboardingSuccessMessage: string = '';
 
-  //  MODAL STATE
+  //MODAL STATE
   showOnboardingModal: boolean = false;
   currentStep: number = 0;
   showNameSuccess = false;
   nameSuccessTimeout: any;
   showOnboardingSuccess = false;
   onboardingSuccessTimeout: any;
-  selectedEmoji = '🙂'; // saved (real)
+  selectedEmoji = '🙂'; // saved aka real one 
   tempEmoji = '🙂'; // preview
   emojis = ['🙂', '😎', '', '🚀', '💰', '📈', '📊', '🐂', '🐻', '🧠', '💡'];
 
   showEmojiSuccess = false;
   emojiTimeout: any;
 
-  //  OPTIONS
+  //OPTIONS
   experienceOptions: string[] = [
     'Beginner (just getting started)',
     'Intermediate (some experience)',
@@ -131,7 +130,7 @@ export class ProfileComponent implements OnInit {
 
   //  OPEN MODAL
   openOnboarding() {
-    this.onboardingSuccessMessage = ''; // clear old message
+    this.onboardingSuccessMessage = ''; 
     this.showOnboardingModal = true;
     this.currentStep = 0;
   }
@@ -154,13 +153,13 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  //  FINISH ONBOARDING
+  //FINISH ONBOARDING
   finishOnboarding() {
-    // whatever logic you already have (saving data, etc.)
+    //closes the modal 
+    this.showOnboardingModal = false; 
+    
 
-    this.showOnboardingModal = false; //  CLOSE MODAL
-
-    // success message logic
+    //success message logic
     this.showOnboardingSuccess = true;
 
     if (this.onboardingSuccessTimeout) {
@@ -181,11 +180,11 @@ export class ProfileComponent implements OnInit {
   }
 
   selectEmoji(emoji: string) {
-    this.tempEmoji = emoji; //  ONLY preview
+    this.tempEmoji = emoji; //only given for preview
   }
 
   saveEmoji() {
-    this.selectedEmoji = this.tempEmoji; //  APPLY change
+    this.selectedEmoji = this.tempEmoji; 
 
     localStorage.setItem('userEmoji', this.selectedEmoji);
 
