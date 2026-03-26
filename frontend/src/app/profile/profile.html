@@ -33,7 +33,7 @@
     </div>
   </div>
 
-  <!-- NEW PREFERENCES CARD -->
+  <!-- Preferences card -->
   <div class="profile-card onboarding-card">
     <h3>Onboarding Form Survey</h3>
     <p class="card-description">
@@ -74,7 +74,7 @@
   <!-- MODAL -->
   <div class="modal-overlay" *ngIf="showOnboardingModal" (click)="closeOnboarding()">
     <div class="modal-box" (click)="$event.stopPropagation()">
-      <!-- STEP 1 -->
+      <!-- Page 1 -->
       <div *ngIf="currentStep === 0" class="modal-step">
         <div class="step-icon">🚀</div>
         <h2>Welcome to StockQuik</h2>
@@ -85,7 +85,7 @@
         </div>
       </div>
 
-      <!-- STEP 2 -->
+      <!-- Page 2 -->
       <div *ngIf="currentStep === 1" class="modal-step">
         <div class="step-icon">📊</div>
         <h2>Experience Level</h2>
@@ -109,7 +109,7 @@
         </div>
       </div>
 
-      <!-- STEP 3 -->
+      <!-- Page 3 -->
       <div *ngIf="currentStep === 2" class="modal-step">
         <div class="step-icon">📈</div>
         <h2>Trading Style</h2>
@@ -133,7 +133,7 @@
         </div>
       </div>
 
-      <!-- STEP 4 -->
+      <!-- Page 4 -->
       <div *ngIf="currentStep === 3" class="modal-step">
         <div class="step-icon">⏰</div>
         <h2>Market Preferences</h2>
@@ -157,7 +157,7 @@
         </div>
       </div>
 
-      <!-- STEP 5 -->
+      <!-- Page 5 -->
       <div *ngIf="currentStep === 4" class="modal-step">
         <div class="step-icon">🎯</div>
         <h2>Goals</h2>
@@ -176,7 +176,7 @@
         </div>
       </div>
 
-      <!-- STEP 6 -->
+      <!-- Page 6 -->
       <div *ngIf="currentStep === 5" class="modal-step">
         <div class="step-icon">✅</div>
         <h2>You’re all set</h2>

@@ -39,7 +39,7 @@ export class StockPageComponent implements OnInit {
       error: (err) => {
         console.error('API ERROR:', err);
 
-        this.data = {};
+        this.data = {}; // is able to safely still load the page but gives N/A values
 
         this.cd.detectChanges(); 
       },
