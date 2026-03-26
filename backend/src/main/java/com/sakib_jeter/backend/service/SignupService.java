@@ -15,18 +15,18 @@ public class SignupService {
     private final UserRepository repo;
     private final BCryptPasswordEncoder encoder;
     private final AccountRepository accountRepository;
-    private final JwtService jwtService; // NEW
+    private final JwtService jwtService; 
 
     public SignupService(
             UserRepository repo,
             BCryptPasswordEncoder encoder,
             AccountRepository accountRepository,
-            JwtService jwtService // NEW
+            JwtService jwtService 
     ) {
         this.repo = repo;
         this.encoder = encoder;
         this.accountRepository = accountRepository;
-        this.jwtService = jwtService; // NEW
+        this.jwtService = jwtService; 
     }
 
     public void register(String email, String password) {
