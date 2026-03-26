@@ -1,47 +1,126 @@
+/* =========================
+   TOKENS (from your design system)
+========================= */
+:root {
+  --bg: #f7f8fc;
+  --surface: #ffffff;
+  --surface2: #f0f1f7;
+  --border: #dde0f0;
+  --border2: #c8cce8;
+
+  --purple: #6c5ce7;
+  --purple-l: #ede9fc;
+
+  --text: #2d3436;
+  --muted: #8a9bb0;
+}
+
+/* =========================
+   GLOBAL
+========================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* =========================
+   NAV (MATCHES .toc STYLE)
+========================= */
+.nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 60px;
+
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+/* hover = pill highlight */
+.nav a:hover {
+  background: var(--purple-l);
+  color: var(--purple);
+  border-color: var(--purple);
+}
+
+/* active pill */
+.nav a.active {
+  background: var(--purple-l);
+  color: var(--purple);
+  border-color: var(--purple);
+  font-weight: 600;
+}
+
+/* =========================
+   DIAGRAMS WRAPPER
+========================= */
 .diagrams-wrapper {
-  padding: 40px 24px;
-  background: #f4f4f4;
+  padding: 40px 60px;
+  background: var(--bg);
   min-height: 100vh;
-  font-family: Arial, sans-serif;
   width: 100%;
-  box-sizing: border-box;
 }
 
-/* Force diagram cards to never exceed viewport */
-.diagrams-wrapper .diagram-card {
-  width: 100%;
-  box-sizing: border-box;
-}
-
+/* sections */
 .diagrams-wrapper section {
   margin-bottom: 60px;
+  scroll-margin-top: 80px;
 }
 
 .diagrams-wrapper section h2 {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
-  color: #1a1a2e;
-  border-left: 4px solid #3f51b5;
+  color: var(--text);
+  border-left: 4px solid var(--purple);
   padding-left: 12px;
   margin-bottom: 8px;
 }
 
 .diagrams-wrapper section p {
-  font-size: 14px;
-  color: #555;
+  font-size: 13px;
+  color: var(--muted);
   margin-bottom: 16px;
   line-height: 1.6;
 }
 
+/* cards */
 .diagrams-wrapper .diagram-card {
-  background: white;
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
   border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   padding: 24px;
   overflow: visible;
 }
 
-/* SVG scales with its container — viewBox handles the internal layout */
+/* SVG scaling */
 .diagrams-wrapper svg {
   display: block;
   width: 100% !important;
@@ -49,51 +128,53 @@
   height: auto !important;
 }
 
-/* Text classes */
+/* TEXT CLASSES */
 .diagrams-wrapper .lb {
-  font-family: Arial, sans-serif;
   font-size: 12px;
   font-weight: 700;
   fill: #222;
 }
 
 .diagrams-wrapper .ls {
-  font-family: Arial, sans-serif;
   font-size: 10px;
   fill: #555;
 }
 
 .diagrams-wrapper .lh {
-  font-family: Arial, sans-serif;
   font-size: 13px;
   font-weight: 700;
   fill: #1a1a2e;
 }
 
 .diagrams-wrapper .sec {
-  font-family: Arial, sans-serif;
   font-size: 11px;
   fill: #888;
 }
 
 /* =========================
-     🌙 DARK MODE — DIAGRAMS
-     ViewEncapsulation.None required on component
-  ========================= */
-
-.dark-mode .diagrams-wrapper {
-  background: #1a1a1a !important;
+   DARK MODE
+========================= */
+.dark-mode {
+  --bg: #1a1a1a;
+  --surface: #2a2a2a;
+  --surface2: #222;
+  --border: #333;
+  --text: #ffffff;
+  --muted: #bbbbbb;
 }
 
-.dark-mode .diagrams-wrapper section h2 {
-  color: #ffffff !important;
+.dark-mode .nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
 }
 
-.dark-mode .diagrams-wrapper section p {
-  color: #cccccc !important;
+.dark-mode .nav a:hover,
+.dark-mode .nav a.active {
+  background: rgba(108, 92, 231, 0.2);
+  border-color: var(--purple);
 }
 
-.dark-mode .diagrams-wrapper .diagram-card {
-  background: #2a2a2a !important;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6) !important;
+.dark-mode .diagram-card {
+  background: var(--surface);
+  border-color: var(--border);
 }
