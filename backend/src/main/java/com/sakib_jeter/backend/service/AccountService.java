@@ -29,7 +29,7 @@ public class AccountService {
                 .orElseThrow(() -> new RuntimeException("Account not found"));
     }
 
-    // NEW METHOD (JWT-based)
+    //(JWT-based)
     public Account getAccountByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
