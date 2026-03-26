@@ -699,7 +699,7 @@ updateChartWithLatestPrice(symbol: string): void {
       this.chart.data.labels.push(new Date().toLocaleDateString());
       this.chart.data.datasets[0].data.push(price);
 
-      // 🔥 Recalculate bounds
+      // Recalculate bounds
       const prices = this.chart.data.datasets[0].data as number[];
       const minPrice = Math.min(...prices);
       const maxPrice = Math.max(...prices);
