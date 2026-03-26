@@ -34,14 +34,14 @@ export class StockPageComponent implements OnInit {
 
         this.data = res;
 
-        this.cd.detectChanges(); // FORCE UI UPDATE
+        this.cd.detectChanges(); //refreshes ui on change 
       },
       error: (err) => {
         console.error('API ERROR:', err);
 
         this.data = {};
 
-        this.cd.detectChanges(); // ALSO HERE
+        this.cd.detectChanges(); 
       },
     });
   }
