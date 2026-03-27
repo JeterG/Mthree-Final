@@ -56,7 +56,7 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "allowedHosts": ["unflecked-rhamnaceous-lynne.ngrok-free.dev"]
+            "allowedHosts": ["kathartic-rylie-intercompany.ngrok-free.dev"]
           },
           "configurations": {
             "production": {

@@ -175,7 +175,7 @@ fi
 
 # ── STEP 3: ngrok ──
 echo "Starting ngrok..."
-ngrok http --url=unflecked-rhamnaceous-lynne.ngrok-free.dev 4200 > "$NGROK_LOG" 2>&1 &
+ngrok http --url=kathartic-rylie-intercompany.ngrok-free.dev 4200 > "$NGROK_LOG" 2>&1 &
 NGROK_PID=$!
 
 # ── STEP 4: Docker build and up ──
@@ -189,7 +189,7 @@ docker image prune -f 2>/dev/null || true
 echo ""
 echo " PRODUCTION ENVIRONMENT RUNNING"
 echo " Backend  (Cloudflare): $BACKEND_URL"
-echo " Frontend (ngrok):      https://unflecked-rhamnaceous-lynne.ngrok-free.dev"
+echo " Frontend (ngrok):      https://kathartic-rylie-intercompany.ngrok-free.dev"
 echo " Local frontend:        http://localhost:4200"
 echo " Local backend:         http://localhost:8080"
 

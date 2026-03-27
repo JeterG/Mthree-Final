@@ -68,7 +68,7 @@ public class SecurityConfig {
 
         // ✅ Explicitly allow your static ngrok domain and localhost
         config.setAllowedOrigins(List.of(
-                "https://unflecked-rhamnaceous-lynne.ngrok-free.dev",
+                "https://kathartic-rylie-intercompany.ngrok-free.dev",
                 "http://localhost:4200"));
 
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
